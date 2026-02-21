@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍴</text></svg>">
+    <title>Zamonaviy Restoran Menyusi</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-icon">🍴</div>
+            <h2>Restoran Menyu</h2>
+            <div class="loader-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Logo - bosilganda bosh sahifaga qaytadi -->
+    <div class="site-logo" onclick="showMainPage()">
+        <span>🍴</span>
+    </div>
+
+    <!-- Asosiy sahifa - Bo'limlar -->
+    <div class="slider-wrapper" id="mainPage">
+        <div class="menu-container">
+            <div class="logo">
+        <h1 class="menu-title">🍽️ Restoran Menyu</h1>
+    </div>
+            
+            <div class="category-grid">
+                <!-- Salatlar -->
+                <div class="category-card" onclick="openCategory('salads')">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" alt="Salatlar">
+                    <div class="category-overlay">
+                        <h2>🥗 Salatlar</h2>
+                        <p>Turli xil salatlar</p>
+                    </div>
+                </div>
+                
+                <!-- Asosiy Taomlar -->
+                <div class="category-card" onclick="openCategory('mains')">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Taomlar">
+                    <div class="category-overlay">
+                        <h2>🍖 Asosiy Taomlar</h2>
+                        <p>Asosiy taomlar va pishiriqlar</p>
+                    </div>
+                </div>
+                
+                <!-- Ichimliklar -->
+                <div class="category-card" onclick="openCategory('drinks')">
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Ichimliklar">
+                    <div class="category-overlay">
+                        <h2>🥤 Ichimliklar</h2>
+                        <p>Ichimliklar va soklar</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="back-btn" onclick="showMainPage()">Bosh Sahifa</button>
+        </div>
+    </div>
+
+    <!-- Salatlar Sahifasi -->
+    <div class="slider-wrapper category-page" id="saladsPage">
+        <div class="menu-container">
+            <h1 class="menu-title">🥗 Salatlar</h1>
+            
+            <div class="main-slider">
+                <div class="slide active" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500" alt="Salat">
+                    <div class="info">
+                        <h2>Fransuz Salati</h2>
+                        <p>Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.</p>
+                        <span class="price">50,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=500" alt="Salat">
+                    <div class="info">
+                        <h2>Sezer Salati</h2>
+                        <p>Romsalat, parmesan, croutons va caesar sousi bilan.</p>
+                        <span class="price">55,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500" alt="Salat">
+                    <div class="info">
+                        <h2>Kapus Salati</h2>
+                        <p>Yangi karam, sabzi va maxsus sous bilan.</p>
+                        <span class="price">38,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500" alt="Salat">
+                    <div class="info">
+                        <h2>Svejiy Salat</h2>
+                        <p>Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.</p>
+                        <span class="price">35,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="4">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" alt="Salat">
+                    <div class="info">
+                        <h2>Salyoni Salat</h2>
+                        <p>Svezhiy losos, mix-salot, avokado va sitrus sousi bilan.</p>
+                        <span class="price">65,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foydalanuvchi tanlashi uchun thumbnail'lar -->
+            <div class="thumbnail-container">
+                <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?w=100" class="thumb active" onclick="currentSlideCategory(0, 'salads')">
+                <img src="https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=100" class="thumb" onclick="currentSlideCategory(1, 'salads')">
+                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=100" class="thumb" onclick="currentSlideCategory(2, 'salads')">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=100" class="thumb" onclick="currentSlideCategory(3, 'salads')">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100" class="thumb" onclick="currentSlideCategory(4, 'salads')">
+            </div>
+
+            <button class="select-btn" onclick="openFullscreen('salads')">Tanlash va Batafsil</button>
+            <button class="back-btn" onclick="showMainPage()">Orqaga</button>
+        </div>
+    </div>
+
+    <!-- Asosiy Taomlar Sahifasi -->
+    <div class="slider-wrapper category-page" id="mainsPage">
+        <div class="menu-container">
+            <h1 class="menu-title">🍖 Asosiy Taomlar</h1>
+            
+            <div class="main-slider">
+                <div class="slide active" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=500" alt="Pasta">
+                    <div class="info">
+                        <h2>Kolbasali Pasta</h2>
+                        <p>Italyancha pasta, maxsus sous va mazali kolbasa bilan.</p>
+                        <span class="price">55,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" alt="Pizza">
+                    <div class="info">
+                        <h2>Margarita Pitsasi</h2>
+                        <p>Italyancha uslubda tayyorlangan, makkajo'xori va motsarella pishlog'i bilan.</p>
+                        <span class="price">75,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500" alt="Burger">
+                    <div class="info">
+                        <h2>Classic Burger</h2>
+                        <p>Juicy go'sht, yangi sabzavotlar va maxsus sous bilan.</p>
+                        <span class="price">65,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=500" alt="Pankeyk">
+                    <div class="info">
+                        <h2>Asalli Pankeyk</h2>
+                        <p>Yumshoq pankeyklar, yangi rezavor mevalar va tabiiy asal bilan.</p>
+                        <span class="price">35,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="4">
+                    <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=500" alt="Osh">
+                    <div class="info">
+                        <h2>Milliy Osh</h2>
+                        <p>Uzbek osh - jo'xori, go'sht va sabzavotlar bilan tayyorlangan milliy taom.</p>
+                        <span class="price">80,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="5">
+                    <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500" alt="Shashlik">
+                    <div class="info">
+                        <h2>Mol Go'shti Shashlik</h2>
+                        <p>Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik.</p>
+                        <span class="price">70,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="6">
+                    <img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=500" alt="Lavash">
+                    <div class="info">
+                        <h2>Lavash</h2>
+                        <p>Yangi non, go'sht, pomidor va maxsus sous bilan.</p>
+                        <span class="price">50,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="7">
+                    <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500" alt="Sho'rva">
+                    <div class="info">
+                        <h2>Uzbek Sho'rva</h2>
+                        <p>Guruch, go'sht va sabzavotlar bilan tayyorlangan mazali sho'rva.</p>
+                        <span class="price">45,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="8">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500" alt="Steyk">
+                    <div class="info">
+                        <h2>Bifshteks</h2>
+                        <p>Yuqori sifatli mol go'shtidan tayyorlangan nazik steak.</p>
+                        <span class="price">90,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foydalanuvchi tanlashi uchun thumbnail'lar -->
+            <div class="thumbnail-container">
+                <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=100" class="thumb active" onclick="currentSlideCategory(0, 'mains')">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=100" class="thumb" onclick="currentSlideCategory(1, 'mains')">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100" class="thumb" onclick="currentSlideCategory(2, 'mains')">
+                <img src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=100" class="thumb" onclick="currentSlideCategory(3, 'mains')">
+                <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=100" class="thumb" onclick="currentSlideCategory(4, 'mains')">
+                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=100" class="thumb" onclick="currentSlideCategory(5, 'mains')">
+                <img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=100" class="thumb" onclick="currentSlideCategory(6, 'mains')">
+                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=100" class="thumb" onclick="currentSlideCategory(7, 'mains')">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=100" class="thumb" onclick="currentSlideCategory(8, 'mains')">
+            </div>
+
+            <button class="select-btn" onclick="openFullscreen('mains')">Tanlash va Batafsil</button>
+            <button class="back-btn" onclick="showMainPage()">Orqaga</button>
+        </div>
+    </div>
+
+    <!-- Ichimliklar Sahifasi -->
+    <div class="slider-wrapper category-page" id="drinksPage">
+        <div class="menu-container">
+            <h1 class="menu-title">🥤 Ichimliklar</h1>
+            
+            <div class="main-slider">
+                <div class="slide active" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Cola">
+                    <div class="info">
+                        <h2>Coca Cola</h2>
+                        <p>Sovitilgan gazli ichimlik 0.5l</p>
+                        <span class="price">15,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500" alt="Choy">
+                    <div class="info">
+                        <h2>Yashil Choy</h2>
+                        <p>Issiq yashil choy lemon va asal bilan.</p>
+                        <span class="price">10,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500" alt="Sharbat">
+                    <div class="info">
+                        <h2>Apelsin Sharbati</h2>
+                        <p>Tabiiy siqilgan apelsin sharbati.</p>
+                        <span class="price">30,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500" alt="Choy">
+                    <div class="info">
+                        <h2>Qora Choy</h2>
+                        <p>Issiq qora choy suty bilan.</p>
+                        <span class="price">12,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="4">
+                    <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=500" alt="Kofe">
+                    <div class="info">
+                        <h2>Latte Kofe</h2>
+                        <p>Issiq latte kofe sut va qahva bilan.</p>
+                        <span class="price">30,000 so'm</span>
+                    </div>
+                </div>
+                <div class="slide" data-index="5">
+                    <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=500" alt="Moxito">
+                    <div class="info">
+                        <h2>Limон Moxito</h2>
+                        <p>Yangicha limон, мятa va gazli suv bilan.</p>
+                        <span class="price">35,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foydalanuvchi tanlashi uchun thumbnail'lar -->
+            <div class="thumbnail-container">
+                <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=100" class="thumb active" onclick="currentSlideCategory(0, 'drinks')">
+                <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=100" class="thumb" onclick="currentSlideCategory(1, 'drinks')">
+                <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=100" class="thumb" onclick="currentSlideCategory(2, 'drinks')">
+                <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=100" class="thumb" onclick="currentSlideCategory(3, 'drinks')">
+                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=100" class="thumb" onclick="currentSlideCategory(4, 'drinks')">
+                <img src="https://images.unsplash.com/photo-1551538827-9c037cb4f32a?w=100" class="thumb" onclick="currentSlideCategory(5, 'drinks')">
+            </div>
+
+            <button class="select-btn" onclick="openFullscreen('drinks')">Tanlash va Batafsil</button>
+            <button class="back-btn" onclick="showMainPage()">Orqaga</button>
+        </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div class="fullscreen-modal" id="fullscreenModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeFullscreen()">&times;</button>
+            <div class="modal-image">
+                <img id="modalImg" src="" alt="">
+            </div>
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDesc"></p>
+                <div class="modal-price">
+                    <span class="price-label">Narxi:</span>
+                    <span id="modalPrice"></span>
+                </div>
+                <a href="tel:+998914064111" class="order-btn">📞 Qo'ng'iroq qilish</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

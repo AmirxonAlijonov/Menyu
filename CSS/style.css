@@ -1,0 +1,886 @@
+/* Asosiy sozlamalar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+/* Loading Screen */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-content {
+    text-align: center;
+    color: white;
+}
+
+.loader-icon {
+    font-size: 80px;
+    animation: bounce 1s ease infinite;
+    margin-bottom: 20px;
+}
+
+.loader-content h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.loader-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #e94560;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Background overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(22, 33, 62, 0.85) 50%, rgba(15, 52, 96, 0.85) 100%);
+    z-index: -1;
+}
+
+/* Slider wrapper - to'liq ekran */
+.slider-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInPage 0.8s ease-out forwards;
+}
+
+.slider-wrapper.category-page {
+    display: none;
+}
+
+.slider-wrapper.active {
+    display: flex;
+}
+
+@keyframes fadeInPage {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.menu-container {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    width: 90%;
+    max-width: 900px;
+    animation: slideUp 0.8s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.menu-title {
+    color: #333;
+    font-size: 36px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Category Grid - Bosh sahifa uchun */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.category-card {
+    position: relative;
+    height: 280px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(230, 126, 34, 0.5);
+}
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.category-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px 15px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+    color: #fff;
+    text-align: center;
+}
+
+.category-overlay h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.category-overlay p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Logo styles */
+.site-logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 40px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.site-logo:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.5);
+}
+
+.logo {
+    margin-bottom: 20px;
+}
+
+/* Asosiy slider */
+.main-slider {
+    position: relative;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #f8f8f8;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.slide {
+    display: none;
+    animation: fadeInSlide 0.6s ease-in-out;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.info {
+    padding: 20px;
+}
+
+.info h2 {
+    margin: 10px 0;
+    color: #333;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.info p {
+    color: #777;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.price {
+    display: inline-block;
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 26px;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Thumbnail container */
+.thumbnail-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    border: 2px solid #ddd;
+}
+
+.thumb.active, .thumb:hover {
+    opacity: 1;
+    border-color: #e67e22;
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(230, 126, 34, 0.5);
+}
+
+/* Tanlash va Orqaga tugmalari */
+.select-btn {
+    margin-top: 25px;
+    margin-right: 10px;
+    padding: 18px 50px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.5);
+}
+
+.select-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(230, 126, 34, 0.7);
+}
+
+.back-btn {
+    margin-top: 25px;
+    padding: 18px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #e0e0e0;
+    transform: translateY(-4px);
+}
+
+@keyframes fadeInSlide {
+    from { 
+        opacity: 0; 
+        transform: translateX(30px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0);
+    }
+}
+
+/* Fullscreen Modal */
+.fullscreen-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: modalFadeIn 0.4s ease-out;
+}
+
+.fullscreen-modal.active {
+    display: flex;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    border-radius: 25px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    animation: modalSlideIn 0.5s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: scale(0.8) translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 30px;
+    color: #333;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    background: #e67e22;
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.modal-image {
+    width: 100%;
+    height: 200px;
+}
+
+.modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-info h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.modal-info p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal-price {
+    margin-bottom: 15px;
+}
+
+.price-label {
+    font-size: 16px;
+    color: #888;
+    margin-right: 10px;
+}
+
+#modalPrice {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e67e22;
+    background: linear-gradient(135deg, #e67e22, #f39c12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.order-btn {
+    padding: 14px 35px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+}
+
+.order-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(39, 174, 96, 0.6);
+}
+
+/* ========== RESPONSIVE MEDIA QUERIES ========== */
+
+/* Planshetlar uchun (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .site-logo {
+        width: 50px;
+        height: 50px;
+        font-size: 30px;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    
+    .category-card {
+        height: 220px;
+    }
+    
+    .menu-container {
+        padding: 30px;
+        width: 95%;
+    }
+
+    .menu-title {
+        font-size: 30px;
+    }
+
+    .main-slider {
+        height: 320px;
+    }
+
+    .slide img {
+        height: 160px;
+    }
+
+    .info h2 {
+        font-size: 24px;
+    }
+
+    .info p {
+        font-size: 14px;
+    }
+
+    .price {
+        font-size: 24px;
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+
+    .modal-image {
+        height: 180px;
+    }
+
+    .modal-info {
+        padding: 18px;
+    }
+
+    .modal-info h2 {
+        font-size: 22px;
+    }
+
+    .modal-info p {
+        font-size: 13px;
+    }
+
+    #modalPrice {
+        font-size: 26px;
+    }
+}
+
+/* Planshetlar uchun (max-width: 768px) */
+@media (max-width: 768px) {
+    .site-logo {
+        top: 10px;
+        left: 10px;
+        width: 45px;
+        height: 45px;
+        font-size: 25px;
+    }
+    
+    .category-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .category-card {
+        height: 200px;
+    }
+    
+    .category-overlay h2 {
+        font-size: 20px;
+    }
+    
+    .menu-container {
+        padding: 25px;
+        width: 95%;
+        border-radius: 25px;
+    }
+
+    .menu-title {
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
+
+    .main-slider {
+        height: 280px;
+        border-radius: 18px;
+    }
+
+    .slide img {
+        height: 140px;
+        border-radius: 12px;
+    }
+
+    .info {
+        padding: 15px;
+    }
+
+    .info h2 {
+        font-size: 22px;
+    }
+
+    .info p {
+        font-size: 13px;
+    }
+
+    .price {
+        font-size: 22px;
+    }
+
+    .thumbnail-container {
+        gap: 10px;
+    }
+
+    .thumb {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+    }
+
+    .select-btn, .back-btn {
+        padding: 14px 25px;
+        font-size: 16px;
+        margin-top: 15px;
+        margin-right: 5px;
+    }
+
+    .modal-image {
+        height: 160px;
+    }
+
+    .modal-info {
+        padding: 15px;
+    }
+
+    .modal-info h2 {
+        font-size: 20px;
+    }
+
+    .modal-info p {
+        font-size: 12px;
+        max-width: 100%;
+    }
+
+    #modalPrice {
+        font-size: 24px;
+    }
+
+    .order-btn {
+        padding: 12px 30px;
+        font-size: 14px;
+    }
+}
+
+/* Mobil telefonlar uchun (max-width: 480px) */
+@media (max-width: 480px) {
+    .site-logo {
+        top: 8px;
+        left: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+    }
+    
+    .slider-wrapper {
+        align-items: flex-end;
+        padding-bottom: 0;
+    }
+
+    .menu-container {
+        padding: 20px 15px;
+        width: 100%;
+        border-radius: 25px 25px 0 0;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .menu-title {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+    
+    .category-grid {
+        gap: 15px;
+    }
+    
+    .category-card {
+        height: 160px;
+    }
+    
+    .category-overlay {
+        padding: 15px 10px;
+    }
+    
+    .category-overlay h2 {
+        font-size: 18px;
+    }
+    
+    .category-overlay p {
+        font-size: 12px;
+    }
+
+    .main-slider {
+        height: 250px;
+        border-radius: 15px;
+    }
+
+    .slide img {
+        height: 120px;
+        border-radius: 10px;
+    }
+
+    .info h2 {
+        font-size: 20px;
+    }
+
+    .info p {
+        font-size: 12px;
+    }
+
+    .price {
+        font-size: 20px;
+    }
+
+    .thumbnail-container {
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+    .thumb {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+    }
+
+    .select-btn, .back-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+        margin-top: 12px;
+    }
+
+    .modal-image {
+        height: 150px;
+    }
+
+    .modal-info {
+        padding: 12px;
+    }
+
+    .modal-info h2 {
+        font-size: 18px;
+    }
+
+    .modal-info p {
+        font-size: 11px;
+    }
+
+    #modalPrice {
+        font-size: 20px;
+    }
+
+    .order-btn {
+        padding: 10px 25px;
+        font-size: 13px;
+    }
+
+    .close-btn {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        font-size: 25px;
+    }
+}
+
+/* juda kichik qurilmalar uchun (max-width: 320px) */
+@media (max-width: 320px) {
+    .site-logo {
+        top: 5px;
+        left: 5px;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+    
+    .menu-container {
+        padding: 15px 10px;
+        border-radius: 20px 20px 0 0;
+    }
+    
+    .menu-title {
+        font-size: 18px;
+    }
+    
+    .category-grid {
+        gap: 10px;
+    }
+    
+    .category-card {
+        height: 130px;
+    }
+    
+    .category-overlay h2 {
+        font-size: 14px;
+    }
+    
+    .category-overlay p {
+        font-size: 10px;
+    }
+    
+    .main-slider {
+        height: 220px;
+    }
+    
+    .slide img {
+        height: 100px;
+    }
+    
+    .info h2 {
+        font-size: 16px;
+    }
+    
+    .info p {
+        font-size: 11px;
+    }
+    
+    .price {
+        font-size: 16px;
+    }
+    
+    .thumbnail-container {
+        gap: 5px;
+        margin-top: 10px;
+    }
+    
+    .thumb {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .select-btn, .back-btn {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+    
+    .modal-image {
+        height: 120px;
+    }
+    
+    .modal-info h2 {
+        font-size: 16px;
+    }
+    
+    #modalPrice {
+        font-size: 18px;
+    }
+}
