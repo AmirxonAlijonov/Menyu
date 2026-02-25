@@ -110,10 +110,16 @@ const foodData = {
             image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800"
         },
         {
-            title: "Apelsin Sharbati",
-            description: "Tabiiy siqilgan apelsin sharbati. Vitamin C ga boy.",
-            price: "30,000 so'm",
-            image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800"
+            title: "Fanta",
+            description: "Gazli apelsinli ichimlik 0.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.",
+            price: "15,000 so'm",
+            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
+        },
+        {
+            title: "Pepsi",
+            description: "Gazli ichimlik 0.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.",
+            price: "15,000 so'm",
+            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
         },
         {
             title: "Qora Choy",
@@ -222,6 +228,10 @@ function openFullscreen(category) {
     document.getElementById('modalTitle').textContent = foodInfo.title;
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
+
+    // Buyurtma tugmasini yashirish (barcha kategoriyalar uchun)
+    const orderBtn = document.getElementById('modalOrderBtn');
+    orderBtn.style.display = 'none';
 
     // Modalni ko'rsatish
     modal.classList.add('active');
