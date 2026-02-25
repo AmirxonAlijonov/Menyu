@@ -694,7 +694,7 @@ body::before {
     
     .slider-wrapper {
         align-items: flex-end;
-        padding-bottom: 0;
+        padding: 15px;
     }
 
     .menu-container {
