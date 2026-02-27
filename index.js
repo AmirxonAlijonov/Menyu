@@ -241,6 +241,31 @@ function openFullscreen(category) {
     clearInterval(autoSlide);
 }
 
+// Mobile cardni ochish funksiyasi
+function openMobileCard(category, index) {
+    const items = foodData[category];
+    const foodInfo = items[index];
+
+    // Modal ma'lumotlarini to'ldirish
+    document.getElementById('modalImg').src = foodInfo.image;
+    document.getElementById('modalImg').alt = foodInfo.title;
+    document.getElementById('modalTitle').textContent = foodInfo.title;
+    document.getElementById('modalDesc').textContent = foodInfo.description;
+    document.getElementById('modalPrice').textContent = foodInfo.price;
+
+    // Buyurtma tugmasini yashirish
+    const orderBtn = document.getElementById('modalOrderBtn');
+    orderBtn.style.display = 'none';
+
+    // Modalni ko'rsatish
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Joriy indeksni yangilash
+    currentCategory = category;
+    currentIndexCategory = index;
+}
+
 // Fullscreen modalni yopish
 function closeFullscreen() {
     modal.classList.remove('active');
