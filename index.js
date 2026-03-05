@@ -38,7 +38,7 @@ const foodData = {
         {
             title: "Jiz",
             description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.",
-            price: "220,000 so'm",
+            price: "250,000 so'm",
             image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800"
         },
         {
@@ -56,7 +56,7 @@ const foodData = {
         {
             title: "Barbekyu",
             description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
-            price: "220,000 so'm",
+            price: "250,000 so'm",
             image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800"
         },
         {
@@ -104,7 +104,7 @@ const foodData = {
         {
             title: "Ko'za Sho'rva",
             description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.",
-            price: "80,000 so'm",
+            price: "70,000 so'm",
             image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800"
         }
     ],
