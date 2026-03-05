@@ -174,12 +174,6 @@ function openCategory(category) {
     // Joriy bo'limni saqlash
     currentCategory = category;
     currentIndexCategory = 0;
-    
-    // Slaydni ko'rsatish
-    // showSlideCategory(0);
-    
-    // Avtomatik aylanishni boshlash
-    // startAutoSlideCategory();
 }
 
 // Bosh sahifani ko'rsatish
@@ -288,9 +282,6 @@ function openMobileCard(category, index) {
 function closeFullscreen() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
-
-    // Avtomatik aylanishni qayta ishga tushirish
-    // startAutoSlideCategory();
 }
 
 // Buyurtma berish funksiyasi
@@ -306,19 +297,7 @@ document.addEventListener('keydown', (e) => {
             closeFullscreen();
         }
     } else {
-        if (e.key === 'ArrowLeft') {
-            // Oldingi slayd - OLD
-            // const items = foodData[currentCategory];
-            // currentIndexCategory = (currentIndexCategory - 1 + items.length) % items.length;
-            // showSlideCategory(currentIndexCategory);
-            // resetAutoSlideCategory();
-        } else if (e.key === 'ArrowRight') {
-            // Keyingi slayd - OLD
-            // const items = foodData[currentCategory];
-            // currentIndexCategory = (currentIndexCategory + 1) % items.length;
-            // showSlideCategory(currentIndexCategory);
-            // resetAutoSlideCategory();
-        } else if (e.key === 'Enter') {
+        if (e.key === 'Enter') {
             openFullscreen(currentCategory);
         }
     }
