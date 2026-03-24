@@ -10,7 +10,7 @@ const modal = document.getElementById('fullscreenModal');
 const foodData = {
     salads: [
         {
-            title: "Fransuz Salati",
+            title: "Chiroqchi Salati",
             description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.",
             price: "35,000 so'm",
             image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=800"
@@ -28,10 +28,10 @@ const foodData = {
             image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800"
         },
         {
-            title: "Salyoni Salat",
-            description: "Svezhiy losos, mix-salot, avokado va sitrus sousi bilan.",
-            price: "35,000 so'm",
-            image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800"
+            title: "Achchiq Chuchuk Salat",
+            description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.",
+            price: "40,000 so'm",
+            image: "https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600"
         }
     ],
     mains: [
@@ -99,13 +99,13 @@ const foodData = {
             title: "Grechka",
             description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.",
             price: "35,000 so'm",
-            image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800"
+            image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg"
         },
         {
             title: "Ko'za Sho'rva",
             description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.",
             price: "70,000 so'm",
-            image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800"
+            image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg"
         }
     ],
     drinks: [
@@ -125,13 +125,13 @@ const foodData = {
             title: "Fanta",
             description: "Gazli apelsinli ichimlik 1.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
-            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
+            image: "https://thumbs.dreamstime.com/b/can-fanta-orange-moscow-russia-april-coca-cola-company-soft-drink-ice-global-brand-fruit-flavored-carbonated-63824545.jpg"
         },
         {
             title: "Pepsi",
             description: "Gazli ichimlik 1.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
-            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5xpJ6WWLQZvHlDhrZrL5JtPZlf2Ul8CgbQ&s"
         },
         {
             title: "Qora Choy",
@@ -155,7 +155,7 @@ const foodData = {
             title: "Sprite",
             description: "Gazli limonato ichimlik 1.5l hajmda. Sovuq va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
-            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
+            image: "https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2609175503.jpg"
         }
     ]
 };
