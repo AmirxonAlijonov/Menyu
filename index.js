@@ -106,6 +106,12 @@ const foodData = {
             description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.",
             price: "70,000 so'm",
             image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg"
+        },
+        {
+            title: "Tushonka Sho'rva",
+            description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.",
+            price: "35,000 so'm",
+            image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg"
         }
     ],
     drinks: [
