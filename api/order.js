@@ -1,0 +1,55 @@
+/**
+ * Vercel API Route - Buyurtma yuborish
+ * Bu fayl Vercel'da /api/order marshruti sifatida ishlaydi
+ */
+
+require('dotenv').config();
+
+module.exports = async function handler(req, res) {
+    // CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed', success: false });
+    }
+
+    console.log('=== Buyurtma keldi ===');
+    console.log('Body:', req.body);
+
+    const axios = require('axios');
+
+    // Foydalanuvchi muhiti o'zgaruvchilari
+    const BOT_TOKEN = process.env.BOT_TOKEN || '8658618667:AAHiS_SKKpj6z6Y78nGf0zd456PBfa79Mbo';
+    const CHAT_ID = process.env.CHAT_ID || '5968349865';
+
+    const { product, quantity, price } = req.body;
+
+    if (!product || !quantity) {
+        console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
+        return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
+    }
+
+    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${product}\n📊 Miqdor: ${quantity}\n💰 Narx: ${price}\n\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+
+    console.log('Telegram ga yuborilmoqda...');
+
+    try {
+        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            chat_id: CHAT_ID,
+            text: orderText,
+            parse_mode: 'Markdown'
+        });
+
+        console.log('Buyurtma muvaffaqiyatli yuborildi');
+        res.json({ success: true, message: 'Buyurtma yuborildi!' });
+    } catch (error) {
+        console.error('❌ Telegram xato:', error.response?.data || error.message);
+        res.status(500).json({ success: false, error: 'Telegram ga yuborishda xatolik' });
+    }
+};
