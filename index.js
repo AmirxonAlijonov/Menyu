@@ -247,10 +247,6 @@ function openFullscreen(category) {
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
 
-    // Buyurtma tugmasini yashirish (barcha kategoriyalar uchun)
-    const orderBtn = document.getElementById('modalOrderBtn');
-    orderBtn.style.display = 'none';
-
     // Modalni ko'rsatish
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -271,10 +267,6 @@ function openMobileCard(category, index) {
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
 
-    // Buyurtma tugmasini yashirish
-    const orderBtn = document.getElementById('modalOrderBtn');
-    orderBtn.style.display = 'none';
-
     // Modalni ko'rsatish
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -288,6 +280,72 @@ function openMobileCard(category, index) {
 function closeFullscreen() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
+}
+
+// Buyurtma yuborish funksiyasi
+function submitOrder() {
+    const quantityInput = document.getElementById('modalQuantity');
+    let quantity = parseInt(quantityInput.value);
+    
+    // Miqdor tekshirish
+    if (isNaN(quantity) || quantity <= 0) {
+        showToast('❌ Xato!', 'Miqdorni faqat musbat sonlarda kiriting.', '#e74c3c');
+        return;
+    }
+    
+    const title = document.getElementById('modalTitle').textContent;
+    const price = document.getElementById('modalPrice').textContent;
+    
+    // Serverga buyurtma yuborish
+    fetch('/api/order', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            product: title,
+            quantity: quantity,
+            price: price
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nNarx: ${price}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
+        } else {
+            showToast('⚠️ Diqqat!', data.message || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
+        }
+    })
+    .catch(error => {
+        console.error('Buyurtma yuborish xatosi:', error);
+        showToast('⚠️ Diqqat!', 'Buyurtma yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.', '#e67e22');
+    });
+    
+    closeFullscreen();
+}
+
+// Bildirishnoma ko'rsatish funksiyasi
+function showToast(title, message, color) {
+    const notification = document.createElement('div');
+    notification.className = 'toast-notification';
+    notification.style.borderLeft = `5px solid ${color}`;
+    notification.innerHTML = `
+        <div class="toast-icon">${title.split(' ')[0]}</div>
+        <div class="toast-content">
+            <h3>${title.split(' ').slice(1).join(' ')}</h3>
+            <p style="white-space: pre-line;">${message}</p>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // 5 soniyadan so'ng bildirishnomani olib tashlash
+    setTimeout(() => {
+        notification.classList.add('toast-hide');
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 5000);
 }
 
 // Buyurtma berish funksiyasi

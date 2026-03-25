@@ -501,6 +501,33 @@ body::before {
     margin-bottom: 15px;
 }
 
+.modal-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.modal-quantity label {
+    font-size: 16px;
+    color: #888;
+}
+
+.modal-quantity input {
+    width: 60px;
+    padding: 8px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
+
+.modal-quantity input:focus {
+    border-color: #e67e22;
+}
+
 .price-label {
     font-size: 16px;
     color: #888;
@@ -528,11 +555,86 @@ body::before {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
 }
 
 .order-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(39, 174, 96, 0.6);
+}
+
+/* Toast Notification - Bildirishnoma */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border-radius: 16px;
+    padding: 20px 25px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    animation: toastSlideIn 0.4s ease;
+    max-width: 350px;
+    width: 90%;
+    border-left: 5px solid #27ae60;
+}
+
+.toast-notification.error {
+    border-left: 5px solid #e74c3c;
+}
+
+.toast-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-content h3 {
+    color: #2c3e50;
+    font-size: 16px;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.toast-content p {
+    color: #7f8c8d;
+    font-size: 13px;
+    margin: 4px 0;
+    line-height: 1.4;
+}
+
+.toast-hide {
+    animation: toastSlideOut 0.4s ease forwards;
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes toastSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
 }
 
 /* ========== RESPONSIVE MEDIA QUERIES ========== */
@@ -794,6 +896,7 @@ body::before {
         padding: 25px;
         width: 95%;
         border-radius: 25px;
+        overflow-y: auto;
     }
 
     .menu-title {

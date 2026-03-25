@@ -294,7 +294,11 @@
                     <span class="price-label">Narxi:</span>
                     <span id="modalPrice"></span>
                 </div>
-                <a href="tel:+998914064111" class="order-btn" id="modalOrderBtn">📞 Qo'ng'iroq qilish</a>
+                <div class="modal-quantity">
+                    <label for="quantity">Miqdor:</label>
+                    <input type="number" id="modalQuantity" value="1" min="1">
+                </div>
+                <button class="order-btn" id="modalOrderBtn" onclick="submitOrder()">📨 Buyurtma Yuborish</button>
             </div>
         </div>
     </div>
