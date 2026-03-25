@@ -3,23 +3,69 @@
  * Restoran menyusi uchun Telegram bot
  * 
  * O'rnatish uchun:
- * 1. Terminalda yozing: npm install express axios
+ * 1. Terminalda yozing: npm install
  * 2. Quyidagi o'zgaruvchilarni o'zingizning ma'lumotlaringizga o'zgartiring:
  *    - BOT_TOKEN: @BotFather dan olingan token
  *    - CHAT_ID: Sizning chat ID ngiz
+ * 3. Serverni ishga tushiring: node server.js
  */
 
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
+
+// CORS headers for all responses
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
+// Statik fayllarni serv qilish (barcha fayllar uchun)
+// 1. Root papka (index.html, index.js, CSS)
+app.use(express.static(__dirname));
+
+// 2. Agar public papkasi bo'lsa, u ham qo'shimcha
+const publicPath = path.join(__dirname, 'public');
+if (fs.existsSync(publicPath)) {
+    app.use(express.static(publicPath));
+}
+
+// index.html uchun alohida yo'l
+app.get('/', (req, res) => {
+    // Avval public papkasidan, keyin root dan izlash
+    const publicIndexPath = path.join(publicPath, 'index.html');
+    fs.access(publicIndexPath, fs.constants.F_OK, (err) => {
+        if (!err) {
+            res.sendFile(publicIndexPath);
+        } else {
+            res.sendFile(path.join(__dirname, 'index.html'));
+        }
+    });
+});
 
 // ============================================
 // KONFIGURATSIYA - BU YERDA O'ZGARTIRING!
 // ============================================
-const BOT_TOKEN = '8658618667:AAHiS_SKKpj6z6Y78nGf0zd456PBfa79Mbo'; // @BotFather dan olingan token
-const CHAT_ID = '5968349865';     // Sizning chat ID ngiz
+// Foydalanuvchi muhiti o'zgaruvchilardan foydalaning yoki default qiymatlarni o'rnating
+const BOT_TOKEN = process.env.BOT_TOKEN || '';
+const CHAT_ID = process.env.CHAT_ID || '';
+
+if (!BOT_TOKEN || !CHAT_ID) {
+    console.warn('⚠️ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
+    console.warn('   .env faylini yarating yoki server.js da qiymatlarni o\'rnating');
+}
 
 // Ovqatlar ma'lumotlari
 const foodData = {
@@ -80,62 +126,58 @@ function getCategoryName(category) {
 // Telegram ga xabar yuborish
 async function sendToTelegram(message) {
     try {
-        const response = await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             chat_id: CHAT_ID,
             text: message,
             parse_mode: 'Markdown'
         });
-        console.log('✅ Telegram ga xabar yuborildi:', message.substring(0, 50) + '...');
+        console.log('✅ Telegram ga xabar yuborildi');
         return true;
     } catch (error) {
-        console.error('❌ Telegram xato:');
-        console.error('Status:', error.response?.status);
-        console.error('Data:', error.response?.data);
-        console.error('Message:', error.message);
+        console.error('❌ Telegram xato:', error.response?.data || error.message);
         return false;
     }
-}
-
-// Buyurtma qabul qilish
-async function handleOrder(order) {
-    const message = `🛒 *YANGI BUYURTMA*\n\n${order}\n\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
-    return await sendToTelegram(message);
 }
 
 // ============================================
 // API ENDPOINTS
 // ============================================
 
-// Bosh sahifa
-app.get('/', (req, res) => {
-    res.send(`
-        <html>
-        <head>
-            <title>Restaurant Telegram Bot</title>
-            <style>
-                body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-                .info { background: #f0f0f0; padding: 20px; border-radius: 10px; }
-                code { background: #e0e0e0; padding: 2px 6px; border-radius: 4px; }
-            </style>
-        </head>
-        <body>
-            <h1>🍴 Restaurant Telegram Bot</h1>
-            <div class="info">
-                <h2>Bot ishlaydi!</h2>
-                <p>Botni sozlash uchun <code>server.js</code> faylida <code>BOT_TOKEN</code> va <code>CHAT_ID</code> o'zgartiring.</p>
-                <h3>Bot buyruqlari:</h3>
-                <ul>
-                    <li><code>/menu</code> - To'liq menyuni ko'rish</li>
-                    <li><code>/salads</code> - Salatlar</li>
-                    <li><code>/mains</code> - Asosiy taomlar</li>
-                    <li><code>/drinks</code> - Ichimliklar</li>
-                    <li><code>/deserts</code> - Desertlar</li>
-                    <li><code>/order</code> - Buyurtma berish</li>
-                </ul>
-            </div>
-        </body>
-        </html>
-    `);
+// Buyurtma yuborish API
+app.post('/api/order', async (req, res) => {
+    console.log('=== Buyurtma keldi ===');
+    console.log('Body:', req.body);
+    
+    const { product, quantity, price } = req.body;
+    
+    if (!product || !quantity) {
+        console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
+        return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
+    }
+    
+    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${product}\n📊 Miqdor: ${quantity}\n💰 Narx: ${price}\n\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+    
+    console.log('Telegram ga yuborilmoqda...');
+    
+    try {
+        const success = await sendToTelegram(orderText);
+        
+        if (success) {
+            console.log('Buyurtma muvaffaqiyatli yuborildi');
+            res.json({ success: true, message: 'Buyurtma yuborildi!' });
+        } else {
+            console.log('Telegram ga yuborish muvaffaqiyatsiz');
+            res.status(500).json({ success: false, error: 'Telegram ga yuborishda xatolik' });
+        }
+    } catch (error) {
+        console.error('Xato:', error);
+        res.status(500).json({ success: false, error: 'Server xatosi' });
+    }
+});
+
+// Menyu olish API
+app.get('/api/menu', (req, res) => {
+    res.json(foodData);
 });
 
 // Telegram webhook (ixtiyoriy)
@@ -184,12 +226,9 @@ app.post('/webhook', async (req, res) => {
             break;
             
         default:
-            // Agar buyurtma matni bo'lsa
             if (text.length > 5) {
-                await handleOrder(text);
-                response = `✅ Buyurtmangiz qabul qilindi!\n\n` +
-                           `Teportda adminlarga yuborildi. \n` +
-                           `Rahmat! 🍴`;
+                await sendToTelegram(`📝 Xabar: ${text}`);
+                response = `✅ Xabaringiz qabul qilindi!\n\nRahmat! 🍴`;
             } else {
                 response = `❌ Noma'lum buyruq.\n\n` +
                            `/menu - Menyuni ko'rish\n` +
@@ -210,37 +249,12 @@ app.post('/webhook', async (req, res) => {
     res.send('OK');
 });
 
-// Buyurtma yuborish API
-app.post('/api/order', async (req, res) => {
-    const { product, quantity, price } = req.body;
-    
-    if (!product || !quantity) {
-        return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
-    }
-    
-    const orderText = `📦 Mahsulot: ${product}\n📊 Miqdor: ${quantity}\n💰 Narx: ${price}`;
-    const success = await handleOrder(orderText);
-    
-    if (success) {
-        res.json({ success: true, message: 'Buyurtma yuborildi!' });
-    } else {
-        res.status(500).json({ success: false, error: 'Xatolik yuz berdi' });
-    }
-});
-
-// Menyu olish API
-app.get('/api/menu', (req, res) => {
-    res.json(foodData);
-});
-
 // Server ishga tushirish
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log('==========================================');
     console.log('🚀 Server ishga tushdi: http://localhost:' + PORT);
     console.log('📱 Telegram bot ishga tushirilmoqda...');
-    console.log('🔐 Bot Token:', BOT_TOKEN ? 'mavjud' : 'YO\'Q!');
-    console.log('👤 Chat ID:', CHAT_ID ? 'mavjud' : 'YO\'Q!');
     console.log('==========================================');
     
     // Bot ishga tushganligini tekshirish
@@ -252,8 +266,7 @@ app.listen(PORT, () => {
                 console.log('Bot username:', '@' + response.data.result.username);
             })
             .catch(error => {
-                console.error('❌ Bot ulanishda xato:');
-                console.error(error.response?.data || error.message);
+                console.error('❌ Bot ulanishda xato:', error.message);
             });
         
         // Chat ID ni tekshirish
@@ -263,8 +276,7 @@ app.listen(PORT, () => {
                 console.log('Chat nomi:', response.data.result.first_name || response.data.result.title);
             })
             .catch(error => {
-                console.error('⚠️ Chat ID xato yoki bot bu chatda emas:');
-                console.error(error.response?.data || error.message);
+                console.error('⚠️ Chat ID xato yoki bot bu chatda emas:', error.message);
             });
     }
 });

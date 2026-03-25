@@ -296,6 +296,10 @@ function submitOrder() {
     const title = document.getElementById('modalTitle').textContent;
     const price = document.getElementById('modalPrice').textContent;
     
+    // Loading ko'rsatish
+    const orderBtn = document.querySelector('.order-btn');
+    if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
+    
     // Serverga buyurtma yuborish
     fetch('/api/order', {
         method: 'POST',
@@ -310,15 +314,19 @@ function submitOrder() {
     })
     .then(response => response.json())
     .then(data => {
+        // Buyurtma tugagandan so'ng tugma matnini qayta tiklaymiz
+        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+        
         if (data.success) {
             showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nNarx: ${price}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
         } else {
-            showToast('⚠️ Diqqat!', data.message || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
+            showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
         }
     })
     .catch(error => {
+        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
         console.error('Buyurtma yuborish xatosi:', error);
-        showToast('⚠️ Diqqat!', 'Buyurtma yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko\'ring.', '#e67e22');
+        showToast('❌ Serverga ulanish mumkin emas!', 'Iltimos, server ishga tushirilganligini tekshiring (node server.js)', '#e74c3c');
     });
     
     closeFullscreen();
