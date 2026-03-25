@@ -294,7 +294,13 @@ function submitOrder() {
     }
     
     const title = document.getElementById('modalTitle').textContent;
-    const price = document.getElementById('modalPrice').textContent;
+    const priceText = document.getElementById('modalPrice').textContent;
+    
+    // Narxni hisoblash (miqdor * bitta narx)
+    // Narxdan "so'm" va vergullarni olib tashlash
+    const basePrice = parseInt(priceText.replace(/[^0-9]/g, ''));
+    const totalPrice = basePrice * quantity;
+    const totalPriceText = totalPrice.toLocaleString() + " so'm";
     
     // Loading ko'rsatish
     const orderBtn = document.querySelector('.order-btn');
@@ -309,7 +315,7 @@ function submitOrder() {
         body: JSON.stringify({
             product: title,
             quantity: quantity,
-            price: price
+            price: totalPriceText
         })
     })
     .then(response => response.json())
@@ -318,7 +324,7 @@ function submitOrder() {
         if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
         
         if (data.success) {
-            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nNarx: ${price}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
+            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nJami narx: ${totalPriceText}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
         } else {
             showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
         }
