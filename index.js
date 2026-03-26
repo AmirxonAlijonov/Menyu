@@ -30,7 +30,7 @@ const foodData = {
         {
             title: "Achchiq Chuchuk Salat",
             description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.",
-            price: "40,000 so'm",
+            price: "35,000 so'm",
             image: "https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600"
         }
     ],
