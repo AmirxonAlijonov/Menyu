@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
     // Escape Markdown special characters to prevent XSS
     function escapeMarkdown(str) {
         if (!str) return '';
-        return String(str).replace(/([_*`\[\]()~`>#+-|={}.!])/g, '\\$1');
+        return String(str).replace(/[-_*`\[\]()~`>#+\|={}.!]/g, '\\$1');
     }
 
     // Joylashuv matnini tayyorlash
