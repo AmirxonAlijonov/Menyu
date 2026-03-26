@@ -70,10 +70,10 @@ if (!BOT_TOKEN || !CHAT_ID) {
 // Ovqatlar ma'lumotlari
 const foodData = {
     salads: [
-        { title: "Chiroqchi Salati", description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.", price: "35,000 so'm" },
-        { title: "Sezer Salati", description: "Romsalat, parmesan, croutons va caesar sousi bilan.", price: "35,000 so'm" },
-        { title: "Svejiy Salat", description: "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.", price: "35,000 so'm" },
-        { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "35,000 so'm" }
+        { title: "Chiroqchi Salati", description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.", price: "20,000 so'm" },
+        { title: "Sezer Salati", description: "Romsalat, parmesan, croutons va caesar sousi bilan.", price: "30,000 so'm" },
+        { title: "Svejiy Salat", description: "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.", price: "15,000 so'm" },
+        { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "15,000 so'm" }
     ],
     mains: [
         { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom.", price: "250,000 so'm" },

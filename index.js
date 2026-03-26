@@ -12,25 +12,25 @@ const foodData = {
         {
             title: "Chiroqchi Salati",
             description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.",
-            price: "35,000 so'm",
+            price: "20,000 so'm",
             image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=800"
         },
         {
             title: "Sezer Salati",
             description: "Romsalat, parmesan, croutons va caesar sousi bilan.",
-            price: "35,000 so'm",
+            price: "30,000 so'm",
             image: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=800"
         },
         {
             title: "Svejiy Salat",
             description: "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.",
-            price: "35,000 so'm",
+            price: "15,000 so'm",
             image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800"
         },
         {
             title: "Achchiq Chuchuk Salat",
             description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.",
-            price: "35,000 so'm",
+            price: "15,000 so'm",
             image: "https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600"
         }
     ],
