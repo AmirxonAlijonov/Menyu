@@ -28,14 +28,39 @@ module.exports = async function handler(req, res) {
     const BOT_TOKEN = process.env.BOT_TOKEN || '8658618667:AAHiS_SKKpj6z6Y78nGf0zd456PBfa79Mbo';
     const CHAT_ID = process.env.CHAT_ID || '5968349865';
 
-    const { product, quantity, price } = req.body;
+    const { product, quantity, price, tableNumber, kabinaNumber } = req.body;
 
     if (!product || !quantity) {
         console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
         return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
     }
 
-    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${product}\n📊 Miqdor: ${quantity}\n💰 Narx: ${price}\n\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+    // Server-side validation for tableNumber and kabinaNumber
+    if (tableNumber && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
+        console.log('Xato: Stol raqami noto\'g\'ri');
+        return res.status(400).json({ error: 'Stol raqami 1 dan 16 gacha bo\'lishi kerak', success: false });
+    }
+
+    if (kabinaNumber && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
+        console.log('Xato: Kabina raqami noto\'g\'ri');
+        return res.status(400).json({ error: 'Kabina raqami 1 dan 3 gacha bo\'lishi kerak', success: false });
+    }
+
+    // Escape Markdown special characters to prevent XSS
+    function escapeMarkdown(str) {
+        if (!str) return '';
+        return String(str).replace(/([_*`\[\]()~`>#+-|={}.!])/g, '\\$1');
+    }
+
+    // Joylashuv matnini tayyorlash
+    let locationText = '';
+    if (kabinaNumber) {
+        locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
+    } else if (tableNumber) {
+        locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;
+    }
+
+    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${escapeMarkdown(product)}\n📊 Miqdor: ${escapeMarkdown(quantity)}\n💰 Narx: ${escapeMarkdown(price)}\n${locationText ? locationText + '\n' : ''}\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
 
     console.log('Telegram ga yuborilmoqda...');
 

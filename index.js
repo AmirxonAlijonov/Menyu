@@ -282,6 +282,21 @@ function closeFullscreen() {
     document.body.style.overflow = '';
 }
 
+// Stol/Kabina tanlash funksiyasi
+function toggleTableInput() {
+    const tableType = document.getElementById('tableType').value;
+    const stolContainer = document.getElementById('stolInputContainer');
+    const kabinaContainer = document.getElementById('kabinaInputContainer');
+    
+    if (tableType === 'stol') {
+        stolContainer.style.display = 'flex';
+        kabinaContainer.style.display = 'none';
+    } else {
+        stolContainer.style.display = 'none';
+        kabinaContainer.style.display = 'flex';
+    }
+}
+
 // Buyurtma yuborish funksiyasi
 function submitOrder() {
     const quantityInput = document.getElementById('modalQuantity');
@@ -290,6 +305,25 @@ function submitOrder() {
     // Miqdor tekshirish
     if (isNaN(quantity) || quantity <= 0) {
         showToast('❌ Xato!', 'Miqdorni faqat musbat sonlarda kiriting.', '#e74c3c');
+        return;
+    }
+    
+    // Stol raqamini tekshirish
+    const tableType = document.getElementById('tableType').value;
+    const tableNumberInput = document.getElementById('tableNumber');
+    const kabinaInput = document.getElementById('kabinaNumber');
+    const tableNumber = parseInt(tableNumberInput.value);
+    let kabinaNumber = kabinaInput.value ? parseInt(kabinaInput.value) : null;
+    
+    // Stol raqami tekshirish (faqat Stol tanlanganida)
+    if (tableType === 'stol' && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
+        showToast('❌ Xato!', 'Stol raqamini 1 dan 16 gacha kiriting.', '#e74c3c');
+        return;
+    }
+    
+    // Kabina raqamini tekshirish (faqat Kabina tanlanganida)
+    if (tableType === 'kabina' && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
+        showToast('❌ Xato!', 'Kabina raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
         return;
     }
     
@@ -315,7 +349,9 @@ function submitOrder() {
         body: JSON.stringify({
             product: title,
             quantity: quantity,
-            price: totalPriceText
+            price: totalPriceText,
+            tableNumber: tableType === 'stol' ? tableNumber : null,
+            kabinaNumber: tableType === 'kabina' ? kabinaNumber : null
         })
     })
     .then(response => response.json())
@@ -324,7 +360,7 @@ function submitOrder() {
         if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
         
         if (data.success) {
-            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nJami narx: ${totalPriceText}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
+            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nJami narx: ${totalPriceText}\n${kabinaNumber ? 'Kabina: ' + kabinaNumber : 'Stol: ' + tableNumber}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
         } else {
             showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
         }
