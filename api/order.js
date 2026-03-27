@@ -52,6 +52,14 @@ module.exports = async function handler(req, res) {
         return String(str).replace(/[-_*`\[\]()~`>#+\|={}.!]/g, '\\$1');
     }
 
+    // Bildirishnoma ovozini sozlash uchun qo'llanma:
+    // Telegram Bot API standart ovozdan boshqa ovoz yubora olmaydi.
+    // Lekin quyidagi usullardan birini ishlatishingiz mumkin:
+    // 1. Botni guruhga qo'shing va guruhda maxsus ovoz o'rnating
+    // 2. Telegram'da botning bildirishnoma ovozini o'zingiz o'zgartiring:
+    //    - Botga kiring
+    //    - Profil -> Bildirishnomalar va ovozlar -> Ovozni o'zgartirish
+
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (kabinaNumber) {
