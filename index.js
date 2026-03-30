@@ -154,7 +154,7 @@ const foodData = {
         {
             title: "Sok",
             description: "Tabiiy meva sharbati - aralash mevalar.",
-            price: "30,000 so'm",
+            price: "17,000 so'm",
             image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800"
         },
         {
