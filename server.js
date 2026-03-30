@@ -62,6 +62,10 @@ app.get('/', (req, res) => {
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const CHAT_ID = process.env.CHAT_ID || '';
 
+// Ruxsat etilgan foydalanuvchilar ro'yxati (faqat bu foydalanuvchilar botdan foydalanishi mumkin)
+// O'zingizning chat ID ngizni bu yerga qo'shing
+const ALLOWED_USERS = process.env.ALLOWED_USERS ? process.env.ALLOWED_USERS.split(',') : [];
+
 if (!BOT_TOKEN || !CHAT_ID) {
     console.warn('⚠️ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
     console.warn('   .env faylini yarating yoki server.js da qiymatlarni o\'rnating');
@@ -124,10 +128,10 @@ function getCategoryName(category) {
 }
 
 // Telegram ga xabar yuborish
-async function sendToTelegram(message) {
+async function sendToTelegram(message, chatId = CHAT_ID) {
     try {
         await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            chat_id: CHAT_ID,
+            chat_id: chatId,
             text: message,
             parse_mode: 'Markdown'
         });
@@ -137,6 +141,15 @@ async function sendToTelegram(message) {
         console.error('❌ Telegram xato:', error.response?.data || error.message);
         return false;
     }
+}
+
+// Foydalanuvchi ruxsatini tekshirish
+function isUserAllowed(userId) {
+    // Agar ALLOWED_USERS bo'sh bo'lsa, hamma foydalanuvchilarga ruxsat beriladi (developement uchun)
+    if (ALLOWED_USERS.length === 0) {
+        return true;
+    }
+    return ALLOWED_USERS.includes(userId.toString());
 }
 
 // ============================================
@@ -190,6 +203,13 @@ app.post('/webhook', async (req, res) => {
     
     const text = message.text;
     const chatId = message.chat.id;
+    const userId = message.from.id;
+    
+    // Foydalanuvchi ruxsatini tekshirish
+    if (!isUserAllowed(userId)) {
+        console.log(`❌ Ruxsatsiz foydalanuvchi kirishga urindi: ${userId}`);
+        return res.send('OK');
+    }
     
     let response = '';
     
