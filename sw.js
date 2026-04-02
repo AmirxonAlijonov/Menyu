@@ -8,8 +8,7 @@ const staticAssets = [
     '/index.html',
     '/index.js',
     '/CSS/style.css',
-    '/manifest.json',
-    '/sw.js'
+    '/manifest.json'
 ];
 
 // Install event - cache all static assets
@@ -51,21 +50,28 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch event - cache-first, then network
+// Fetch event - cache-first for static, network-only for API
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
+    const pathname = url.pathname;
     
     // Skip non-GET requests
     if (event.request.method !== 'GET') {
         return;
     }
     
-    // Skip API requests - network only
-    if (url.pathname.startsWith('/api/')) {
+    // API requests - ALWAYS go to network, never cache
+    if (pathname.startsWith('/api/')) {
+        console.log('[SW] API request - network only:', pathname);
         event.respondWith(
             fetch(event.request)
-                .catch(() => {
-                    return new Response(JSON.stringify({ error: 'Offline' }), {
+                .then((response) => {
+                    // Don't cache API responses
+                    return response;
+                })
+                .catch((err) => {
+                    console.log('[SW] API fetch failed:', err);
+                    return new Response(JSON.stringify({ error: 'Serverga ulanish mumkin emas' }), {
                         status: 503,
                         headers: { 'Content-Type': 'application/json' }
                     });
@@ -74,16 +80,28 @@ self.addEventListener('fetch', (event) => {
         return;
     }
     
-    // For all other requests - cache first, then network
+    // sw.js request - return current script
+    if (pathname === '/sw.js' || pathname.endsWith('/sw.js')) {
+        event.respondWith(
+            caches.match('/sw.js')
+                .then((response) => {
+                    return response || fetch('/sw.js');
+                })
+        );
+        return;
+    }
+    
+    // Static assets - cache first, then network
+    console.log('[SW] Static request - cache first:', pathname);
     event.respondWith(
         caches.match(event.request)
             .then((cachedResponse) => {
                 if (cachedResponse) {
-                    console.log('[SW] Serving from cache:', url.pathname);
+                    console.log('[SW] Serving from cache:', pathname);
                     return cachedResponse;
                 }
                 
-                console.log('[SW] Fetching from network:', url.pathname);
+                console.log('[SW] Fetching from network:', pathname);
                 return fetch(event.request)
                     .then((response) => {
                         // Don't cache non-successful responses

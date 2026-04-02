@@ -341,6 +341,7 @@ function submitOrder() {
     if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
     
     // Serverga buyurtma yuborish
+    console.log('Buyurtma yuborilmoqda...');
     fetch('/api/order', {
         method: 'POST',
         headers: {
