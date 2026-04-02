@@ -338,10 +338,35 @@
                 navigator.serviceWorker.register('/sw.js')
                     .then((registration) => {
                         console.log('SW registered:', registration.scope);
+                        
+                        // Update notification - yangi versiya mavjud bo'lsa
+                        registration.addEventListener('updatefound', () => {
+                            const newSW = registration.installing;
+                            newSW.addEventListener('statechange', () => {
+                                if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('New SW installed, refresh needed');
+                                    // Foydalanuvchiga xabar berish
+                                    if (confirm('Yangi menyu versiyasi mavjud! Yangilash uchun "OK" bosing.')) {
+                                        newSW.postMessage({ type: 'SKIP_WAITING' });
+                                        location.reload();
+                                    }
+                                }
+                            });
+                        });
                     })
                     .catch((error) => {
                         console.log('SW registration failed:', error);
                     });
+            });
+            
+            // Online/offline holatini kuzatish
+            window.addEventListener('online', () => {
+                console.log('Internetga ulanish tiklandi!');
+                location.reload();
+            });
+            
+            window.addEventListener('offline', () => {
+                console.log('Offline rejimi - cached versiya ishlamoqda');
             });
         }
     </script>

@@ -1,6 +1,7 @@
 // Service Worker - PWA uchun (cache-first strategiyasi)
 const CACHE_NAME = 'alsafar-menu-v1';
 const STATIC_CACHE = 'alsafar-static-v1';
+const IMAGE_CACHE = 'alsafar-images-v1';
 
 // Assets to cache immediately
 const staticAssets = [
@@ -8,7 +9,8 @@ const staticAssets = [
     '/index.html',
     '/index.js',
     '/CSS/style.css',
-    '/manifest.json'
+    '/manifest.json',
+    '/sw.js'
 ];
 
 // Install event - cache all static assets
@@ -37,7 +39,7 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE) {
+                    if (cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE && cacheName !== IMAGE_CACHE) {
                         console.log('[SW] Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
@@ -54,6 +56,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     const pathname = url.pathname;
+    const isImage = url.pathname.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i);
     
     // Skip non-GET requests
     if (event.request.method !== 'GET') {
@@ -86,6 +89,37 @@ self.addEventListener('fetch', (event) => {
             caches.match('/sw.js')
                 .then((response) => {
                     return response || fetch('/sw.js');
+                })
+        );
+        return;
+    }
+    
+    // Images - cache first with separate image cache
+    if (isImage) {
+        console.log('[SW] Image request - cache first:', pathname);
+        event.respondWith(
+            caches.open(IMAGE_CACHE)
+                .then((imageCache) => {
+                    return imageCache.match(event.request)
+                        .then((cachedResponse) => {
+                            if (cachedResponse) {
+                                console.log('[SW] Serving image from cache:', pathname);
+                                return cachedResponse;
+                            }
+                            
+                            console.log('[SW] Fetching image from network:', pathname);
+                            return fetch(event.request)
+                                .then((response) => {
+                                    if (response && response.status === 200) {
+                                        imageCache.put(event.request, response.clone());
+                                    }
+                                    return response;
+                                })
+                                .catch(() => {
+                                    // Return placeholder image if offline
+                                    return new Response('', { status: 503 });
+                                });
+                        });
                 })
         );
         return;
