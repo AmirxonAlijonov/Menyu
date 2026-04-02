@@ -7,6 +7,13 @@
     <title> Al-safar Restoran Menyusi</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#e94560">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Al-safar Menyu">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231a1a2e' width='180' height='180' rx='30'/><text x='90' y='130' font-size='100' text-anchor='middle'>🍴</text></svg>">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -301,7 +308,7 @@
                 <div class="modal-table-info">
                     <h3>📍 Joylashuv</h3>
                     <div class="table-kabina-type">
-                        <label for="tableType">Qayerda o'tirigansiz?</label>
+                        <label for="tableType">Qayerda o'tiribsiz?</label>
                         <select id="tableType" onchange="toggleTableInput()">
                             <option value="stol">🪑 Stol</option>
                             <option value="kabina">🚪 Kabina</option>
@@ -324,5 +331,19 @@
     </div>
 
     <script src="index.js"></script>
+    <!-- PWA Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('SW registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
