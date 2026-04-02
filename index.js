@@ -340,6 +340,16 @@ function submitOrder() {
     const orderBtn = document.querySelector('.order-btn');
     if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
     
+    // Buyurtma ma'lumotlarini tayyorlash
+    const orderData = {
+        product: title,
+        quantity: quantity,
+        price: totalPriceText,
+        tableNumber: tableType === 'stol' ? tableNumber : null,
+        kabinaNumber: tableType === 'kabina' ? kabinaNumber : null,
+        timestamp: new Date().toISOString()
+    };
+    
     // Serverga buyurtma yuborish
     console.log('Buyurtma yuborilmoqda...');
     fetch('/api/order', {
@@ -347,13 +357,7 @@ function submitOrder() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            product: title,
-            quantity: quantity,
-            price: totalPriceText,
-            tableNumber: tableType === 'stol' ? tableNumber : null,
-            kabinaNumber: tableType === 'kabina' ? kabinaNumber : null
-        })
+        body: JSON.stringify(orderData)
     })
     .then(response => response.json())
     .then(data => {
@@ -369,16 +373,113 @@ function submitOrder() {
     .catch(error => {
         if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
         console.error('Buyurtma yuborish xatosi:', error);
-        showToast('❌ Serverga ulanish mumkin emas!', 'Iltimos, server ishga tushirilganligini tekshiring (node server.js)', '#e74c3c');
+        
+        // Offline yoki server xatosini aniqlash
+        if (!navigator.onLine) {
+            // Offline holatda - buyurtmani saqlash
+            saveOrderToQueue(orderData);
+            showToast('📱 Offline holatda!', 'Internetga ulanish yo\'q. Buyurtmangiz saqlandi va internet tiklanganda avtomatik yuboriladi.', '#e67e22');
+        } else {
+            showToast('⚠️ Serverga ulanish mumkin emas!', 'Server ishlamayotgan bo\'lishi mumkin. Internetga ulanishni tekshiring yoki qayta urinib ko\'ring.', '#e74c3c');
+        }
     });
     
     closeFullscreen();
 }
 
-// Bildirishnoma ko'rsatish funksiyasi
+// ============================================
+// OFFLINE BUYURTMA QUEUE FUNKTSIYALARI
+// ============================================
+
+const ORDER_QUEUE_KEY = 'alsafar_order_queue';
+
+function saveOrderToQueue(orderData) {
+    try {
+        const queue = getOrderQueue();
+        queue.push(orderData);
+        localStorage.setItem(ORDER_QUEUE_KEY, JSON.stringify(queue));
+        console.log('Buyurtma queue ga saqlandi:', orderData);
+    } catch (error) {
+        console.error('Queue ga saqlash xatosi:', error);
+    }
+}
+
+function getOrderQueue() {
+    try {
+        const queue = localStorage.getItem(ORDER_QUEUE_KEY);
+        return queue ? JSON.parse(queue) : [];
+    } catch (error) {
+        console.error('Queue olish xatosi:', error);
+        return [];
+    }
+}
+
+function removeFromQueue(index) {
+    try {
+        const queue = getOrderQueue();
+        queue.splice(index, 1);
+        localStorage.setItem(ORDER_QUEUE_KEY, JSON.stringify(queue));
+    } catch (error) {
+        console.error('Queue dan olish xatosi:', error);
+    }
+}
+
+async function processOrderQueue() {
+    const queue = getOrderQueue();
+    if (queue.length === 0) {
+        console.log('Queue bo\'sh');
+        return;
+    }
+    console.log(`Queue da ${queue.length} ta buyurtma yuborilmoqda...`);
+    const failedOrders = [];
+    for (let i = 0; i < queue.length; i++) {
+        const order = queue[i];
+        try {
+            const response = await fetch('/api/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            });
+            const data = await response.json();
+            if (data.success) {
+                console.log(`Buyurtma ${i + 1} muvaffaqiyatli`);
+                removeFromQueue(i);
+                i--;
+            } else {
+                failedOrders.push(order);
+            }
+        } catch (error) {
+            console.error(`Buyurtma ${i + 1} xatosi:`, error);
+            failedOrders.push(order);
+        }
+    }
+    if (failedOrders.length > 0) {
+        localStorage.setItem(ORDER_QUEUE_KEY, JSON.stringify(failedOrders));
+    }
+    if (failedOrders.length === 0 && queue.length > 0) {
+        showToast('✅ Buyurtmalar yuborildi!', `Offline vaqtida saqlangan ${queue.length} ta buyurtma yuborildi!`, '#27ae60');
+    }
+}
+
+window.addEventListener('online', () => {
+    console.log('Internet tiklandi, queue ishga tushirilmoqda...');
+    processOrderQueue();
+});
+
+window.addEventListener('load', () => {
+    const queue = getOrderQueue();
+    if (queue.length > 0 && navigator.onLine) {
+        console.log(`Queue da ${queue.length} ta buyurtma bor`);
+        processOrderQueue();
+    }
+});
+
+// ============================================
+// BILDIRISHNOMA FUNKTSIYASI
+// ============================================
+
 function showToast(title, message, color) {
     const notification = document.createElement('div');
-    notification.className = 'toast-notification';
     notification.style.borderLeft = `5px solid ${color}`;
     notification.innerHTML = `
         <div class="toast-icon">${title.split(' ')[0]}</div>
