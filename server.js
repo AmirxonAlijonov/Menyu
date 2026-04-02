@@ -36,6 +36,18 @@ app.use((req, res, next) => {
 // 1. Root papka (index.html, index.js, CSS)
 app.use(express.static(__dirname));
 
+// 2. PWA fayllar uchun MIME type
+app.use((req, res, next) => {
+    if (req.url.endsWith('.webmanifest')) {
+        res.setHeader('Content-Type', 'application/manifest+json');
+    } else if (req.url.endsWith('.js') && !req.url.includes('node_modules')) {
+        res.setHeader('Content-Type', 'application/javascript');
+    } else if (req.url.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+    }
+    next();
+});
+
 // 2. Agar public papkasi bo'lsa, u ham qo'shimcha
 const publicPath = path.join(__dirname, 'public');
 if (fs.existsSync(publicPath)) {
