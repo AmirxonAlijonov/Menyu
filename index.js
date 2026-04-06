@@ -154,7 +154,7 @@ const foodData = {
         {
             title: "Sok",
             description: "Tabiiy meva sharbati - aralash mevalar.",
-            price: "17,000 so'm",
+            price: "20,000 so'm",
             image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800"
         },
         {
@@ -399,6 +399,24 @@ function saveOrderToQueue(orderData) {
         queue.push(orderData);
         localStorage.setItem(ORDER_QUEUE_KEY, JSON.stringify(queue));
         console.log('Buyurtma queue ga saqlandi:', orderData);
+        
+        // Telegram botga offline buyurtma xabar yuborish
+        if (!navigator.onLine) {
+            fetch('/api/notify-offline', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('📱 Offline buyurtma xabari telegram botga yuborildi');
+                }
+            })
+            .catch(error => {
+                console.log('Telegram botga xabar yuborish mumkin emas:', error);
+            });
+        }
     } catch (error) {
         console.error('Queue ga saqlash xatosi:', error);
     }

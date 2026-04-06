@@ -281,6 +281,45 @@ app.post('/webhook', async (req, res) => {
     res.send('OK');
 });
 
+// Offline buyurtma xabar endpointi - sayt offline rejimda buyurtma qilinganda telegram botga xabar yuboradi
+app.post('/api/notify-offline', async (req, res) => {
+    if (!BOT_TOKEN || !CHAT_ID) {
+        return res.json({ success: false, error: 'Bot konfiguratsiyasi topilmadi' });
+    }
+
+    const { product, quantity, price, tableNumber, kabinaNumber } = req.body;
+    const timestamp = new Date().toLocaleString('uz-UZ');
+
+    // Joylashuv matnini tayyorlash
+    let locationText = '';
+    if (kabinaNumber) {
+        locationText = `🚪 Kabina: ${kabinaNumber}`;
+    } else if (tableNumber) {
+        locationText = `🪑 Stol: ${tableNumber}`;
+    }
+
+    const message = `📦 *YANGI BUYURTMA (OFFLINE)*\n\n` +
+        `📦 Mahsulot: ${product}\n` +
+        `📊 Miqdor: ${quantity}\n` +
+        `💰 Narx: ${price}\n` +
+        `${locationText ? locationText + '\n' : ''}` +
+        `⏰ Vaqt: ${timestamp}\n\n` +
+        `_Al-safar Restoran Menyusi_`;
+
+    try {
+        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+        });
+        console.log('📱 Offline buyurtma xabari yuborildi:', product);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Offline buyurtma xabar xatosi:', error.message);
+        res.json({ success: false, error: error.message });
+    }
+});
+
 // Server ishga tushirish
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
