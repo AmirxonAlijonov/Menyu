@@ -2,6 +2,7 @@
 const CACHE_NAME = 'alsafar-menu-v1';
 const STATIC_CACHE = 'alsafar-static-v1';
 const IMAGE_CACHE = 'alsafar-images-v1';
+const API_CACHE = 'alsafar-api-cache-v1';
 
 // Assets to cache immediately
 const staticAssets = [
@@ -63,21 +64,47 @@ self.addEventListener('fetch', (event) => {
         return;
     }
     
-    // API requests - ALWAYS go to network, never cache
+    // API requests - cache-first with network fallback
     if (pathname.startsWith('/api/')) {
-        console.log('[SW] API request - network only:', pathname);
+        console.log('[SW] API request - cache first:', pathname);
         event.respondWith(
-            fetch(event.request)
-                .then((response) => {
-                    // Don't cache API responses
-                    return response;
-                })
-                .catch((err) => {
-                    console.log('[SW] API fetch failed:', err);
-                    return new Response(JSON.stringify({ error: 'Serverga ulanish mumkin emas' }), {
-                        status: 503,
-                        headers: { 'Content-Type': 'application/json' }
-                    });
+            caches.open(API_CACHE)
+                .then((apiCache) => {
+                    return apiCache.match(event.request)
+                        .then((cachedResponse) => {
+                            if (cachedResponse) {
+                                console.log('[SW] Serving API from cache:', pathname);
+                                return cachedResponse;
+                            }
+                            
+                            console.log('[SW] Fetching API from network:', pathname);
+                            return fetch(event.request)
+                                .then((response) => {
+                                    if (response && response.status === 200) {
+                                        apiCache.put(event.request, response.clone());
+                                    }
+                                    return response;
+                                })
+                                .catch((err) => {
+                                    console.log('[SW] API fetch failed, trying cache:', err);
+                                    // Return cached menu if available
+                                    if (pathname === '/api/menu') {
+                                        return apiCache.match('/api/menu')
+                                            .then(cached => {
+                                                if (cached) return cached;
+                                                // Return embedded fallback data
+                                                return new Response(JSON.stringify(getFallbackMenu()), {
+                                                    status: 200,
+                                                    headers: { 'Content-Type': 'application/json' }
+                                                });
+                                            });
+                                    }
+                                    return new Response(JSON.stringify({ error: 'Serverga ulanish mumkin emas', offline: true }), {
+                                        status: 503,
+                                        headers: { 'Content-Type': 'application/json' }
+                                    });
+                                });
+                        });
                 })
         );
         return;
@@ -174,3 +201,27 @@ self.addEventListener('message', (event) => {
         self.skipWaiting();
     }
 });
+
+// Fallback menu data for offline mode
+function getFallbackMenu() {
+    return {
+        salads: [
+            { title: "Chiroqchi Salati", description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.", price: "20,000 so'm" },
+            { title: "Sezer Salati", description: "Romsalat, parmesan, croutons va caesar sousi bilan.", price: "30,000 so'm" },
+            { title: "Svejiy Salat", description: "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.", price: "15,000 so'm" },
+            { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "15,000 so'm" }
+        ],
+        mains: [
+            { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom.", price: "250,000 so'm" },
+            { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali taom.", price: "60,000 so'm" },
+            { title: "Lag'mon", description: "Qo'lda cho'zilgan lag'mon go'sht va sabzavotlar bilan.", price: "45,000 so'm" },
+            { title: "Shashlik", description: "Mol go'shtidan tayyorlangan shashlik.", price: "50,000 so'm" }
+        ],
+        drinks: [
+            { title: "Coca Cola", description: "Gazli ichimlik 0.5L", price: "15,000 so'm" },
+            { title: "Choy", description: "Ko'k va qora choy", price: "10,000 so'm" },
+            { title: "Suv", description: "Ichimlik suvi 1L", price: "8,000 so'm" },
+            { title: "Kompot", description: "Mevalar komboki", price: "20,000 so'm" }
+        ]
+    };
+}

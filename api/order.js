@@ -25,8 +25,14 @@ module.exports = async function handler(req, res) {
     const axios = require('axios');
 
     // Foydalanuvchi muhiti o'zgaruvchilari
-    const BOT_TOKEN = process.env.BOT_TOKEN || '8658618667:AAHiS_SKKpj6z6Y78nGf0zd456PBfa79Mbo';
-    const CHAT_ID = process.env.CHAT_ID || '5968349865';
+    const BOT_TOKEN = process.env.BOT_TOKEN;
+    const CHAT_ID = process.env.CHAT_ID;
+
+    // Validate credentials
+    if (!BOT_TOKEN || !CHAT_ID) {
+        console.log('Xato: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan');
+        return res.status(500).json({ error: 'Bot konfiguratsiyasi topilmadi', success: false });
+    }
 
     const { product, quantity, price, tableNumber, kabinaNumber } = req.body;
 

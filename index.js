@@ -399,24 +399,7 @@ function saveOrderToQueue(orderData) {
         queue.push(orderData);
         localStorage.setItem(ORDER_QUEUE_KEY, JSON.stringify(queue));
         console.log('Buyurtma queue ga saqlandi:', orderData);
-        
-        // Telegram botga offline buyurtma xabar yuborish
-        if (!navigator.onLine) {
-            fetch('/api/notify-offline', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('📱 Offline buyurtma xabari telegram botga yuborildi');
-                }
-            })
-            .catch(error => {
-                console.log('Telegram botga xabar yuborish mumkin emas:', error);
-            });
-        }
+        // NOTE: Buyurtmalar onlayn bo'lganda processOrderQueue() tomonidan yuboriladi
     } catch (error) {
         console.error('Queue ga saqlash xatosi:', error);
     }

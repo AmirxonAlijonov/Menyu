@@ -32,6 +32,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// Security headers
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+});
+
 // Statik fayllarni serv qilish (barcha fayllar uchun)
 // 1. Root papka (index.html, index.js, CSS)
 app.use(express.static(__dirname));
@@ -101,7 +110,8 @@ const foodData = {
         { title: "Coca Cola", description: "Gazli ichimlik 0.5L", price: "15,000 so'm" },
         { title: "Choy", description: "Ko'k va qora choy", price: "10,000 so'm" },
         { title: "Suv", description: "Ichimlik suvi 1L", price: "8,000 so'm" },
-        { title: "Kompot", description: "Mevalar komboki", price: "20,000 so'm" }
+        { title: "Kompot", description: "Mevalar komboki", price: "20,000 so'm" },
+        { title: "Sok", description: "Tabiiy meva sharbati - aralash mevalar.", price: "20,000 so'm" }
     ],
     deserts: [
         { title: "Medovik", description: "Asal tort", price: "35,000 so'm" },
