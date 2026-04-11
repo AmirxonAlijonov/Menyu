@@ -6,6 +6,16 @@ let autoSlide;
 // Modal elementlari
 const modal = document.getElementById('fullscreenModal');
 
+// ==================== LOKATSIYA VA SAVAT FUNKSIYALARI ====================
+let userLocation = {
+    address: '',
+    latitude: null,
+    longitude: null,
+    deliveryAvailable: false
+};
+
+let cart = [];
+
 // Ovqatlar ma'lumotlari - Bo'limlar bo'yicha
 const foodData = {
     salads: [
@@ -282,18 +292,25 @@ function closeFullscreen() {
     document.body.style.overflow = '';
 }
 
-// Stol/Kabina tanlash funksiyasi
+// Stol/Kabina/Tabcha tanlash funksiyasi
 function toggleTableInput() {
     const tableType = document.getElementById('tableType').value;
     const stolContainer = document.getElementById('stolInputContainer');
     const kabinaContainer = document.getElementById('kabinaInputContainer');
+    const tabchaContainer = document.getElementById('tabchaInputContainer');
     
     if (tableType === 'stol') {
         stolContainer.style.display = 'flex';
         kabinaContainer.style.display = 'none';
-    } else {
+        tabchaContainer.style.display = 'none';
+    } else if (tableType === 'kabina') {
         stolContainer.style.display = 'none';
         kabinaContainer.style.display = 'flex';
+        tabchaContainer.style.display = 'none';
+    } else if (tableType === 'tabcha') {
+        stolContainer.style.display = 'none';
+        kabinaContainer.style.display = 'none';
+        tabchaContainer.style.display = 'flex';
     }
 }
 
@@ -308,12 +325,16 @@ function submitOrder() {
         return;
     }
     
-    // Stol raqamini tekshirish
+    // Stol/Kabina/Tabcha/Karavot raqamini tekshirish
     const tableType = document.getElementById('tableType').value;
     const tableNumberInput = document.getElementById('tableNumber');
     const kabinaInput = document.getElementById('kabinaNumber');
+    const tabchaInput = document.getElementById('tabchaNumber');
+    const karavotInput = document.getElementById('karavotNumber');
     const tableNumber = parseInt(tableNumberInput.value);
     let kabinaNumber = kabinaInput.value ? parseInt(kabinaInput.value) : null;
+    let tabchaNumber = tabchaInput.value ? parseInt(tabchaInput.value) : null;
+    let karavotNumber = karavotInput.value ? parseInt(karavotInput.value) : null;
     
     // Stol raqami tekshirish (faqat Stol tanlanganida)
     if (tableType === 'stol' && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
@@ -324,6 +345,12 @@ function submitOrder() {
     // Kabina raqamini tekshirish (faqat Kabina tanlanganida)
     if (tableType === 'kabina' && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
         showToast('❌ Xato!', 'Kabina raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
+        return;
+    }
+    
+    // Tabcha raqamini tekshirish (faqat Tabcha tanlanganida) - maximum 3 ta tabcha
+    if (tableType === 'tabcha' && (isNaN(tabchaNumber) || tabchaNumber < 1 || tabchaNumber > 3)) {
+        showToast('❌ Xato!', 'Tabcha raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
         return;
     }
     
@@ -347,6 +374,7 @@ function submitOrder() {
         price: totalPriceText,
         tableNumber: tableType === 'stol' ? tableNumber : null,
         kabinaNumber: tableType === 'kabina' ? kabinaNumber : null,
+        tabchaNumber: tableType === 'tabcha' ? tabchaNumber : null,
         timestamp: new Date().toISOString()
     };
     
@@ -365,7 +393,16 @@ function submitOrder() {
         if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
         
         if (data.success) {
-            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nJami narx: ${totalPriceText}\n${kabinaNumber ? 'Kabina: ' + kabinaNumber : 'Stol: ' + tableNumber}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
+            // Joylashuv matnini tayyorlash
+            let locationMsg = '';
+            if (tableType === 'tabcha') {
+                locationMsg = 'Tabcha: ' + tabchaNumber;
+            } else if (tableType === 'kabina') {
+                locationMsg = 'Kabina: ' + kabinaNumber;
+            } else {
+                locationMsg = 'Stol: ' + tableNumber;
+            }
+            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nJami narx: ${totalPriceText}\n${locationMsg}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
         } else {
             showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
         }
@@ -527,14 +564,283 @@ modal.addEventListener('click', (e) => {
     }
 });
 
+// ==================== LOKATSIYA FUNKSIYALARI ====================
+// Sayt ochilganda lokatsiyani tekshirish
+function checkLocationOnLoad() {
+    const savedLocation = localStorage.getItem('userLocation');
+    if (savedLocation) {
+        userLocation = JSON.parse(savedLocation);
+    } else {
+        setTimeout(() => {
+            document.getElementById('locationModal').style.display = 'flex';
+        }, 2500);
+    }
+}
+
+// Geolocation orqali lokatsiyani so'rash
+function requestLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                userLocation.latitude = position.coords.latitude;
+                userLocation.longitude = position.coords.longitude;
+                userLocation.address = `Koordinatalar: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+                userLocation.deliveryAvailable = true;
+                saveLocation();
+                closeLocationModal();
+                showNotification('Lokatsiya muvaffaqiyatli saqlandi!');
+            },
+            (error) => {
+                showManualLocation();
+            }
+        );
+    } else {
+        showManualLocation();
+    }
+}
+
+// Qo'lda manzil kiritish
+function showManualLocation() {
+    document.querySelector('.location-options').style.display = 'none';
+    document.getElementById('manualLocation').style.display = 'block';
+}
+
+// Manual manzilni saqlash
+function saveManualLocation() {
+    const address = document.getElementById('userAddress').value;
+    if (address.trim()) {
+        userLocation.address = address;
+        userLocation.deliveryAvailable = true;
+        saveLocation();
+        closeLocationModal();
+        showNotification('Manzilingiz saqlandi!');
+    } else {
+        alert('Iltimos, manzilingizni kiriting');
+    }
+}
+
+// Lokatsiyani saqlash
+function saveLocation() {
+    localStorage.setItem('userLocation', JSON.stringify(userLocation));
+}
+
+// Location modalni yopish
+function closeLocationModal() {
+    document.getElementById('locationModal').style.display = 'none';
+}
+
+// ==================== SAVAT FUNKSIYALARI ====================
+function addToCartFromModal() {
+    var title = document.getElementById('modalTitle').innerHTML;
+    var price = document.getElementById('modalPrice').innerHTML;
+    var img = document.getElementById('modalImage').src;
+    var qty = document.getElementById('modalQuantity').value;
+    
+    var item = {id: 1, title: title, price: price, priceNum: 10000, quantity: qty, image: img};
+    window.myCart = [];
+    window.myCart.push(item);
+    
+    document.getElementById('cartBadge').innerHTML = window.myCart.length;
+    document.getElementById('fullscreenModal').style.display = 'none';
+    alert('Qoshildi!');
+}
+
+// Mahsulotni savatga qo'shish
+function addToCart(item, quantity = 1) {
+    const existingItem = cart.find(c => c.title === item.title);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        const cartItem = {
+            id: Date.now(),
+            title: item.title,
+            price: item.price,
+            priceNum: parsePrice(item.price),
+            quantity: quantity,
+            image: item.image
+        };
+        cart.push(cartItem);
+    }
+    saveCart();
+    updateCartBadge();
+    showNotification(`${item.title} savatga qo'shildi!`);
+}
+
+// Savatni ko'rsatish
+function showCart() {
+    renderCartItems();
+    document.getElementById('cartModal').style.display = 'flex';
+}
+
+// Savatni yopish
+function closeCart() {
+    document.getElementById('cartModal').style.display = 'none';
+}
+
+// Savatdagi mahsulotlarni chiqarish
+function renderCartItems() {
+    const container = document.getElementById('cartItems');
+    const totalContainer = document.getElementById('cartTotal');
+    if (cart.length === 0) {
+        container.innerHTML = '<p class="empty-cart">Savat bo\'sh</p>';
+        totalContainer.style.display = 'none';
+        return;
+    }
+    let total = 0;
+    container.innerHTML = cart.map(item => {
+        const itemTotal = item.priceNum * item.quantity;
+        total += itemTotal;
+        return `<div class="cart-item"><img src="${item.image}" alt="${item.title}"><div class="cart-item-info"><h3>${item.title}</h3><p>${item.price} x ${item.quantity}</p><p class="item-total">Jami: ${formatPrice(itemTotal)}</p></div><button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button></div>`;
+    }).join('');
+    totalContainer.style.display = 'block';
+    document.getElementById('totalPrice').textContent = formatPrice(total);
+}
+
+// Mahsulotni savatdan o'chirish
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    saveCart();
+    updateCartBadge();
+    renderCartItems();
+}
+
+// Savatni tozalash
+function clearCart() {
+    if (confirm('Savatni tozalashni xohlaysizmi?')) {
+        cart = [];
+        saveCart();
+        updateCartBadge();
+        renderCartItems();
+    }
+}
+
+// Savatni localStorage ga saqlash
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Savatni localStorage dan olish
+function loadCart() {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartBadge();
+    }
+}
+
+// Kategoriya mosligini tekshirish function
+function getCategoryItems(category) {
+    // Kategoriya nomini to'g'rilash
+    if (category === 'salats') category = 'salads';
+    return foodData[category] || foodData.salads || foodData.mains || foodData.drinks || [];
+}
+
+// Cart badge yangilash
+function updateCartBadge() {
+    const badge = document.getElementById('cartBadge');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    badge.textContent = totalItems;
+    badge.style.display = totalItems > 0 ? 'flex' : 'none';
+}
+
+// Checkout - buyurtma qilish
+function checkout() {
+    if (cart.length === 0) {
+        alert('Savat bo\'sh!');
+        return;
+    }
+    
+    // Stol/Kabina/Tabcha tanlashni so'rash
+    const choice = prompt('Qayerda o\'tirasiz?\n1 - Stol\n2 - Kabina\n3 - Tabcha\n4 - Yetkazish (manzilga)\n\nRaqamni kiriting:');
+    
+    if (!choice) return;
+    
+    let locationInfo = '';
+    let deliveryType = 'come';
+    
+    if (choice === '1') {
+        const tableNum = prompt('Stol raqamini kiriting (1-16):', '1');
+        if (tableNum) {
+            locationInfo = 'Stol raqami: ' + tableNum;
+            deliveryType = 'table';
+        }
+    } else if (choice === '2') {
+        const kabinaNum = prompt('Kabina raqamini kiriting (1-3):', '1');
+        if (kabinaNum) {
+            locationInfo = 'Kabina raqami: ' + kabinaNum;
+            deliveryType = 'kabina';
+        }
+    } else if (choice === '3') {
+        const tabchaNum = prompt('Tabcha raqamini kiriting (1-3):', '1');
+        if (tabchaNum) {
+            locationInfo = 'Tabcha raqami: ' + tabchaNum;
+            deliveryType = 'tabcha';
+        }
+    } else if (choice === '4') {
+        if (!userLocation.address) {
+            alert('Iltimos, avval manzilingizni kiriting!');
+            document.getElementById('locationModal').style.display = 'flex';
+            closeCart();
+            return;
+        }
+        locationInfo = 'Manzil: ' + userLocation.address;
+        deliveryType = 'address';
+    } else {
+        alert('Noto\'g\'ri tanlov!');
+        return;
+    }
+    
+    if (!locationInfo) return;
+    
+    const firstItem = cart[0];
+    let found = false;
+    for (const cat in foodData) {
+        const item = foodData[cat].find(function(i) { return i.title === firstItem.title; });
+        if (item) {
+            currentCategory = cat;
+            currentIndexCategory = foodData[cat].indexOf(item);
+            found = true;
+            break;
+        }
+    }
+    
+    closeCart();
+    
+    if (found) {
+        openMobileCard(currentCategory, currentIndexCategory);
+        document.getElementById('modalQuantity').value = firstItem.quantity;
+        updateQuantity(0);
+        
+        const deliverySelect = document.getElementById('deliveryType');
+        if (deliverySelect) {
+            deliverySelect.value = deliveryType;
+            updateDeliveryOptions();
+        }
+    }
+    
+    showNotification(locationInfo + ' tanlandi!');
+}
+
+// Xabar ko'rsatish
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 100);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 2000);
+}
+
 // Sahifa yuklanganda
 document.addEventListener('DOMContentLoaded', () => {
-    // Loading screenni yashirish
     const loader = document.getElementById('loader');
     setTimeout(() => {
         loader.classList.add('hide');
     }, 2000);
-    
-    // Bosh sahifani ko'rsatish
     showMainPage();
+    checkLocationOnLoad();
+    loadCart();
 });

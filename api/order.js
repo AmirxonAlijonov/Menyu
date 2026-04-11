@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ error: 'Bot konfiguratsiyasi topilmadi', success: false });
     }
 
-    const { product, quantity, price, tableNumber, kabinaNumber } = req.body;
+    const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;
 
     if (!product || !quantity) {
         console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
@@ -50,6 +50,12 @@ module.exports = async function handler(req, res) {
     if (kabinaNumber && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
         console.log('Xato: Kabina raqami noto\'g\'ri');
         return res.status(400).json({ error: 'Kabina raqami 1 dan 3 gacha bo\'lishi kerak', success: false });
+    }
+
+    // Tabcha raqamini tekshirish - maximum 3 ta tabcha
+    if (tabchaNumber && (isNaN(tabchaNumber) || tabchaNumber < 1 || tabchaNumber > 3)) {
+        console.log('Xato: Tabcha raqami noto\'g\'ri');
+        return res.status(400).json({ error: 'Tabcha raqami 1 dan 3 gacha bo\'lishi kerak', success: false });
     }
 
     // Escape Markdown special characters to prevent XSS
@@ -68,7 +74,9 @@ module.exports = async function handler(req, res) {
 
     // Joylashuv matnini tayyorlash
     let locationText = '';
-    if (kabinaNumber) {
+    if (tabchaNumber) {
+        locationText = `🛏️ Tabcha raqami: ${escapeMarkdown(tabchaNumber)}`;
+    } else if (kabinaNumber) {
         locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
     } else if (tableNumber) {
         locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;

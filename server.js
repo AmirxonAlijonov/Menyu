@@ -297,12 +297,14 @@ app.post('/api/notify-offline', async (req, res) => {
         return res.json({ success: false, error: 'Bot konfiguratsiyasi topilmadi' });
     }
 
-    const { product, quantity, price, tableNumber, kabinaNumber } = req.body;
+    const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;
     const timestamp = new Date().toLocaleString('uz-UZ');
 
     // Joylashuv matnini tayyorlash
     let locationText = '';
-    if (kabinaNumber) {
+    if (tabchaNumber) {
+        locationText = `🛏️ Tabcha: ${tabchaNumber}`;
+    } else if (kabinaNumber) {
         locationText = `🚪 Kabina: ${kabinaNumber}`;
     } else if (tableNumber) {
         locationText = `🪑 Stol: ${tableNumber}`;
