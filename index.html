@@ -31,11 +31,11 @@
     </div>
 
     <!-- Asosiy sahifa - Bo'limlar -->
-    <div class="slider-wrapper" id="mainPage">
+    <div class="slider-wrapper active" id="mainPage">
         <div class="menu-container">
             <div class="logo">
-        <h1 class="menu-title">🍽️ Restoran Menyu</h1>
-    </div>
+                <h1 class="menu-title">🍽️ Restoran Menyu</h1>
+            </div>
             
             <div class="category-grid">
                 <!-- Salatlar -->
@@ -66,7 +66,7 @@
                 </div>
             </div>
             
-            <button class="back-btn" onclick="showMainPage()">Bosh Sahifa</button>
+            <button class="back-btn" onclick="showMainPage()">Orqaga</button>
         </div>
     </div>
 
@@ -131,6 +131,13 @@
                     <div class="info">
                         <h2>Tabaka</h2>
                         <span class="price">60,000 so'm</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains', 2)">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" alt="Vag'ori">
+                    <div class="info">
+                        <h2>Vag'ori</h2>
+                        <span class="price">250,000 so'm</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('mains', 2)">
@@ -298,126 +305,55 @@
                 <h2 id="modalTitle"></h2>
                 <p id="modalDesc"></p>
                 <div class="modal-price">
-                    <span class="price-label">Narxi:</span>
                     <span id="modalPrice"></span>
                 </div>
-                <div class="modal-quantity">
-                    <label for="quantity">Miqdor:</label>
-                    <input type="number" id="modalQuantity" value="1" min="1">
-                </div>
-                <div class="modal-table-info">
-                    <h3>📍 Joylashuv</h3>
-                    <div class="table-kabina-type">
-                        <label for="tableType">Qayerda o'tiribsiz?</label>
-                        <select id="tableType" onchange="toggleTableInput()">
-                            <option value="stol">🪑 Stol</option>
-                            <option value="kabina">🚪 Kabina</option>
-                            <option value="tabcha">🛏️ Tabchan (karavot)</option>
-                        </select>
-                    </div>
-                    <div class="table-kabina-row">
-                        <div class="table-input" id="stolInputContainer">
-                            <label for="tableNumber">Stol raqami:</label>
-                            <input type="number" id="tableNumber" value="1" min="1" max="16">
-                        </div>
-                        <div class="kabina-input" id="kabinaInputContainer" style="display: none;">
-                            <label for="kabinaNumber">Kabina raqami:</label>
-                            <input type="number" id="kabinaNumber" value="1" min="1" max="3">
-                        </div>
-                        <div class="tabcha-input" id="tabchaInputContainer" style="display: none;">
-                            <label for="tabchaNumber">Tabcha raqami:</label>
-                            <input type="number" id="tabchaNumber" value="1" min="1" max="3">
-                        </div>
+                
+                <!-- Quantity -->
+                <div class="quantity-container">
+                    <label>Miqdor:</label>
+                    <div class="quantity-controls">
+                        <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
+                        <input type="number" id="modalQuantity" value="1" min="1" readonly>
+                        <button class="qty-btn" onclick="changeQuantity(1)">+</button>
                     </div>
                 </div>
-                <button class="order-btn add-cart-btn" id="modalAddCartBtn" onclick="var t=document.getElementById('modalTitle').innerHTML; var p=document.getElementById('modalPrice').innerHTML; var i=document.getElementById('modalImage').src; var q=document.getElementById('modalQuantity').value; window.myCart=window.myCart||[]; window.myCart.push({id:Date.now(),title:t,price:p,quantity:q,image:i}); document.getElementById('cartBadge').innerHTML=window.myCart.length; alert(t+' qoshildi!'); document.getElementById('fullscreenModal').style.display='none';">🛒 Savatga Qo'shish</button>
-                <button class="order-btn" id="modalOrderBtn" onclick="submitOrder()">📨 Buyurtma Yuborish</button>
+                
+                <!-- Table Type -->
+                <div class="table-select">
+                    <label>Joyni tanlang:</label>
+                    <select id="tableType" onchange="toggleTableInput()">
+                        <option value="stol">Stol</option>
+                        <option value="kabina">Kabina</option>
+                        <option value="tabcha">Tabcha</option>
+                    </select>
+                </div>
+                
+                <!-- Table Number -->
+                <div id="stolInputContainer">
+                    <input type="number" id="tableNumber" placeholder="Stol raqami (1-16)" min="1" max="16">
+                </div>
+                
+                <div id="kabinaInputContainer" style="display: none;">
+                    <input type="number" id="kabinaNumber" placeholder="Kabina raqami (1-3)" min="1" max="3">
+                </div>
+                
+                <div id="tabchaInputContainer" style="display: none;">
+                    <input type="number" id="tabchaNumber" placeholder="Tabcha raqami (1-3)" min="1" max="3">
+                </div>
+                
+                <button class="order-btn" onclick="submitOrder()">📦 Buyurtma berish</button>
             </div>
         </div>
     </div>
 
-    <!-- Location Modal -->
-    <div class="modal-container" id="locationModal" style="display: none;">
-        <div class="modal-content">
-            <h2>📍 Lokatsiya</h2>
-            <p>Sizning joylashuvingizni aniqlash uchun ruxsat bering:</p>
-            <div class="location-options">
-                <button class="location-btn" onclick="requestLocation()">📍 Joylashuvni aniqlash</button>
-                <button class="location-btn manual" onclick="showManualLocation()">✍️ Qo'lda kiritish</button>
-            </div>
-            <div class="manual-location" id="manualLocation" style="display: none;">
-                <label for="userAddress">Manzilingizni kiriting:</label>
-                <input type="text" id="userAddress" placeholder="Ko'cha, uy raqami...">
-                <button class="location-btn" onclick="saveManualLocation()">Saqlash</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Button -->
-    <div class="cart-btn" onclick="showCart()">
-        <span class="cart-icon">🛒</span>
-        <span class="cart-badge" id="cartBadge">0</span>
-    </div>
-
-    <!-- Cart Modal -->
-    <div class="modal-container fullscreen-modal" id="cartModal" style="display: none;">
-        <div class="modal-content cart-content">
-            <div class="cart-header">
-                <h2>🛒 Savat</h2>
-                <button class="close-btn" onclick="closeCart()">✕</button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <p class="empty-cart">Savat bo'sh</p>
-            </div>
-            <div class="cart-total" id="cartTotal" style="display: none;">
-                <p>Jami: <span id="totalPrice">0 so'm</span></p>
-            </div>
-            <div class="cart-actions">
-                <button class="order-btn" onclick="checkout()">📨 Buyurtma Qilish</button>
-                <button class="clear-btn" onclick="clearCart()">🗑️ Savatni tozalash</button>
-            </div>
+    <!-- Toast xabar -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <h3 id="toastTitle"></h3>
+            <p id="toastMessage"></p>
         </div>
     </div>
 
     <script src="index.js?v=2"></script>
-    <!-- PWA Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then((registration) => {
-                        console.log('SW registered:', registration.scope);
-                        
-                        // Update notification - yangi versiya mavjud bo'lsa
-                        registration.addEventListener('updatefound', () => {
-                            const newSW = registration.installing;
-                            newSW.addEventListener('statechange', () => {
-                                if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-                                    console.log('New SW installed, refresh needed');
-                                    // Foydalanuvchiga xabar berish
-                                    if (confirm('Yangi menyu versiyasi mavjud! Yangilash uchun "OK" bosing.')) {
-                                        newSW.postMessage({ type: 'SKIP_WAITING' });
-                                        location.reload();
-                                    }
-                                }
-                            });
-                        });
-                    })
-                    .catch((error) => {
-                        console.log('SW registration failed:', error);
-                    });
-            });
-            
-            // Online/offline holatini kuzatish
-            window.addEventListener('online', () => {
-                console.log('Internetga ulanish tiklandi!');
-                location.reload();
-            });
-            
-            window.addEventListener('offline', () => {
-                console.log('Offline rejimi - cached versiya ishlamoqda');
-            });
-        }
-    </script>
 </body>
 </html>

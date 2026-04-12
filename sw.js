@@ -152,44 +152,39 @@ self.addEventListener('fetch', (event) => {
         return;
     }
     
-    // Static assets - cache first, then network
-    console.log('[SW] Static request - cache first:', pathname);
+// Static assets - stale-while-revalidate strategy
+    // First serve from cache, then update cache in background
+    console.log('[SW] Static request - stale-while-revalidate:', pathname);
     event.respondWith(
-        caches.match(event.request)
-            .then((cachedResponse) => {
-                if (cachedResponse) {
-                    console.log('[SW] Serving from cache:', pathname);
-                    return cachedResponse;
-                }
-                
-                console.log('[SW] Fetching from network:', pathname);
-                return fetch(event.request)
-                    .then((response) => {
-                        // Don't cache non-successful responses
-                        if (!response || response.status !== 200) {
-                            return response;
-                        }
-                        
-                        // Clone the response
-                        const responseToCache = response.clone();
-                        
-                        // Cache the new response
-                        caches.open(STATIC_CACHE)
-                            .then((cache) => {
+        caches.open(STATIC_CACHE)
+            .then((cache) => {
+                return cache.match(event.request)
+                    .then((cachedResponse) => {
+                        // Fetch from network in background
+                        const fetchPromise = fetch(event.request)
+                            .then((response) => {
+                                // Don't cache non-successful responses
+                                if (!response || response.status !== 200) {
+                                    return response;
+                                }
+                                
+                                // Clone and cache the new response
+                                const responseToCache = response.clone();
                                 cache.put(event.request, responseToCache);
+                                
+                                return response;
+                            })
+                            .catch((err) => {
+                                console.log('[SW] Network fetch failed:', err);
+                                // Return offline page for navigation requests
+                                if (event.request.mode === 'navigate') {
+                                    return caches.match('/index.html');
+                                }
                             });
                         
-                        return response;
-                    })
-                    .catch((err) => {
-                        console.log('[SW] Fetch failed:', err);
-                        
-                        // Return offline page for navigation requests
-                        if (event.request.mode === 'navigate') {
-                            return caches.match('/index.html');
-                        }
-                        
-                        return new Response('Offline', { status: 503 });
+                        // Return cached response immediately if available
+                        // Otherwise wait for network response
+                        return cachedResponse || fetchPromise;
                     });
             })
     );

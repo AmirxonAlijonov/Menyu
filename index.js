@@ -58,6 +58,12 @@ const foodData = {
             image: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=800"
         },
         {
+            title: "Vag'ori",
+            description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
+            price: "250,000 so'm",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
+        },
+        {
             title: "KFS",
             description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.",
             price: "80,000 so'm",
@@ -122,6 +128,12 @@ const foodData = {
             description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.",
             price: "35,000 so'm",
             image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg"
+        },
+        {
+            title: "Vag'ori",
+            description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
+            price: "250,000 so'm",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
         }
     ],
     drinks: [
