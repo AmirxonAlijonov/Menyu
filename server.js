@@ -199,7 +199,7 @@ app.post('/api/order', async (req, res) => {
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
-        locationText = `🛏️ Tabcha raqami: ${escapeMarkdown(tabchaNumber)}`;
+        locationText = `🛏️ Tabchan raqami: ${escapeMarkdown(tabchaNumber)}`;
     } else if (kabinaNumber) {
         locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
     } else if (tableNumber) {
@@ -319,7 +319,7 @@ app.post('/api/notify-offline', async (req, res) => {
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
-        locationText = `🛏️ Tabcha: ${tabchaNumber}`;
+        locationText = `🛏️ Tabchan: ${tabchaNumber}`;
     } else if (kabinaNumber) {
         locationText = `🚪 Kabina: ${kabinaNumber}`;
     } else if (tableNumber) {

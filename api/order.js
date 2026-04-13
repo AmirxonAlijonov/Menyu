@@ -40,6 +40,11 @@ module.exports = async function handler(req, res) {
         console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
         return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
     }
+    
+    if (!customerName || !customerPhone) {
+        console.log('Xato: Mijoz ma\'lumotlari kiritilmagan');
+        return res.status(400).json({ error: 'Ism va telefon raqami kiritilishi shart', success: false });
+    }
 
     // Server-side validation for tableNumber and kabinaNumber
     if (tableNumber && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
@@ -76,7 +81,7 @@ module.exports = async function handler(req, res) {
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
-        locationText = `🛏️ Tabcha raqami: ${escapeMarkdown(String(tabchaNumber))}`;
+        locationText = `🛏️ Tabchan raqami: ${escapeMarkdown(String(tabchaNumber))}`;
     } else if (kabinaNumber) {
         locationText = `🚪 Kabina raqami: ${escapeMarkdown(String(kabinaNumber))}`;
     } else if (tableNumber) {

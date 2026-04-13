@@ -4,6 +4,14 @@
     { "source": "/webhook", "destination": "/server.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
+  "functions": {
+    "api/order.js": {
+      "runtime": "nodejs18.x"
+    },
+    "server.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "headers": [
     {
       "source": "/sw.js",

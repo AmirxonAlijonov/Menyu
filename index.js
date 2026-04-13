@@ -400,7 +400,13 @@ function toggleTableInput() {
 
 // Buyurtma yuborish funksiyasi
 function submitOrder() {
+    console.log('submitOrder ishga tushdi');
+    
     const quantityInput = document.getElementById('modalQuantity');
+    if (!quantityInput) {
+        showToast('❌ Xato!', 'Miqdor input topilmadi', '#e74c3c');
+        return;
+    }
     let quantity = parseInt(quantityInput.value);
     
     // Miqdor tekshirish
@@ -414,44 +420,49 @@ function submitOrder() {
     const tableNumberInput = document.getElementById('tableNumber');
     const kabinaInput = document.getElementById('kabinaNumber');
     const tabchaInput = document.getElementById('tabchaNumber');
-    const karavotInput = document.getElementById('karavotNumber');
-    const tableNumber = parseInt(tableNumberInput.value);
-    let kabinaNumber = kabinaInput.value ? parseInt(kabinaInput.value) : null;
-    let tabchaNumber = tabchaInput.value ? parseInt(tabchaInput.value) : null;
-    let karavotNumber = karavotInput.value ? parseInt(karavotInput.value) : null;
+    
+    const tableNumber = tableNumberInput?.value ? parseInt(tableNumberInput.value) : null;
+    const kabinaNumber = kabinaInput?.value ? parseInt(kabinaInput.value) : null;
+    const tabchaNumber = tabchaInput?.value ? parseInt(tabchaInput.value) : null;
     
     // Stol raqami tekshirish (faqat Stol tanlanganida)
-    if (tableType === 'stol' && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
+    if (tableType === 'stol' && tableNumber && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
         showToast('❌ Xato!', 'Stol raqamini 1 dan 16 gacha kiriting.', '#e74c3c');
         return;
     }
     
     // Kabina raqamini tekshirish (faqat Kabina tanlanganida)
-    if (tableType === 'kabina' && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
+    if (tableType === 'kabina' && kabinaNumber && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
         showToast('❌ Xato!', 'Kabina raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
         return;
     }
     
-    // Tabcha raqamini tekshirish (faqat Tabcha tanlanganida) - maximum 3 ta tabcha
-    if (tableType === 'tabcha' && (isNaN(tabchaNumber) || tabchaNumber < 1 || tabchaNumber > 3)) {
-        showToast('❌ Xato!', 'Tabcha raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
+    // Tabcha raqamini tekshirish (faqat Tabcha tanlanganida)
+    if (tableType === 'tabcha' && tabchaNumber && (isNaN(tabchaNumber) || tabchaNumber < 1 || tabchaNumber > 3)) {
+        showToast('❌ Xato!', 'Tabchan raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
         return;
     }
     
     const title = document.getElementById('modalTitle').textContent;
     const priceText = document.getElementById('modalPrice').textContent;
     
-    // Narxni hisoblash (miqdor * bitta narx)
-    // Narxdan "so'm" va vergullarni olib tashlash
-    const basePrice = parseInt(priceText.replace(/[^0-9]/g, ''));
-    const totalPrice = basePrice * quantity;
-    const totalPriceText = totalPrice.toLocaleString() + " so'm";
+    // Narxni to'g'ri hisoblash
+    let totalPriceText;
+    if (baseProductPrice > 0) {
+        const totalPrice = baseProductPrice * quantity;
+        totalPriceText = totalPrice.toLocaleString() + " so'm";
+    } else {
+        const basePrice = parseInt(priceText.replace(/[^0-9]/g, ''));
+        totalPriceText = basePrice.toLocaleString() + " so'm";
+    }
     
     // Loading ko'rsatish
-    const orderBtn = document.querySelector('.order-btn');
+    const orderBtn = document.getElementById('orderBtn');
     if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
     
     // Buyurtma ma'lumotlarini tayyorlash
+    console.log('Buyurtma tayyorlanmoqda:', { tableType, tableNumber, kabinaNumber, tabchaNumber, title, quantity });
+    
     const orderData = {
         product: title,
         quantity: quantity,
@@ -461,6 +472,8 @@ function submitOrder() {
         tabchaNumber: tableType === 'tabcha' ? tabchaNumber : null,
         timestamp: new Date().toISOString()
     };
+    
+    console.log('Yuboriladigan data:', JSON.stringify(orderData));
     
     // Serverga buyurtma yuborish
     console.log('Buyurtma yuborilmoqda...');
@@ -480,13 +493,13 @@ function submitOrder() {
             // Joylashuv matnini tayyorlash
             let locationMsg = '';
             if (tableType === 'tabcha') {
-                locationMsg = 'Tabcha: ' + tabchaNumber;
+                locationMsg = 'Tabchan: ' + tabchaNumber;
             } else if (tableType === 'kabina') {
                 locationMsg = 'Kabina: ' + kabinaNumber;
             } else {
                 locationMsg = 'Stol: ' + tableNumber;
             }
-            showToast('✅ Buyurtmangiz qabul qilindi!', `Mahsulot: ${title}\nMiqdor: ${quantity}\nJami narx: ${totalPriceText}\n${locationMsg}\n\nRahmat! Tez orada operator siz bilan bog'lanadi.`, '#27ae60');
+            showToast('✅ Buyurtmangiz qabul qilindi!', `🎉 Buyurtmangiz muvaffaqiyatli yuborildi!\n\n📦 Mahsulot: ${title}\n📊 Miqdor: ${quantity}\n💰 Jami narx: ${totalPriceText}\n📍 ${locationMsg}\n\n✨ Rahmat! Tez orada operator siz bilan bog'lanadi!`, '#27ae60', '🎉');
         } else {
             showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
         }
@@ -600,11 +613,14 @@ window.addEventListener('load', () => {
 // BILDIRISHNOMA FUNKTSIYASI
 // ============================================
 
-function showToast(title, message, color) {
+function showToast(title, message, color, icon = null) {
     const notification = document.createElement('div');
+    notification.className = 'toast';
     notification.style.borderLeft = `5px solid ${color}`;
+    const displayIcon = icon || title.split(' ')[0];
     notification.innerHTML = `
-        <div class="toast-icon">${title.split(' ')[0]}</div>
+        <span class="toast-close" onclick="this.parentElement.remove()">&times;</span>
+        <div class="toast-icon">${displayIcon}</div>
         <div class="toast-content">
             <h3>${title.split(' ').slice(1).join(' ')}</h3>
             <p style="white-space: pre-line;">${message}</p>
@@ -612,6 +628,11 @@ function showToast(title, message, color) {
     `;
     
     document.body.appendChild(notification);
+    
+    // Show the notification with animation
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
     
     // 5 soniyadan so'ng bildirishnomani olib tashlash
     setTimeout(() => {
@@ -835,7 +856,7 @@ function checkout() {
     }
     
     // Stol/Kabina/Tabcha tanlashni so'rash
-    const choice = prompt('Qayerda o\'tirasiz?\n1 - Stol\n2 - Kabina\n3 - Tabcha\n4 - Yetkazish (manzilga)\n\nRaqamni kiriting:');
+    const choice = prompt('Qayerda o\'tirasiz?\n1 - Stol\n2 - Kabina\n3 - Tabchan\n4 - Yetkazish (manzilga)\n\nRaqamni kiriting:');
     
     if (!choice) return;
     
@@ -855,9 +876,9 @@ function checkout() {
             deliveryType = 'kabina';
         }
     } else if (choice === '3') {
-        const tabchaNum = prompt('Tabcha raqamini kiriting (1-3):', '1');
+        const tabchaNum = prompt('Tabchan raqamini kiriting (1-3):', '1');
         if (tabchaNum) {
-            locationInfo = 'Tabcha raqami: ' + tabchaNum;
+            locationInfo = 'Tabchan raqami: ' + tabchaNum;
             deliveryType = 'tabcha';
         }
     } else if (choice === '4') {
@@ -916,6 +937,12 @@ function showNotification(message) {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
     }, 2000);
+}
+
+// Telegram ga ulanish funksiyasi
+function openTelegram() {
+    // Telegram botga havola - o'zgartiring
+    window.open('https://t.me/YourBotUsername', '_blank');
 }
 
 // Sahifa yuklanganda
