@@ -472,8 +472,14 @@ function submitOrder() {
     // Serverga buyurtma yuborish
     console.log('Buyurtma yuborilmoqda...');
     
-    // Vercel/Production uchun to'liq URL ishlatish
-    const apiUrl = window.location.origin + '/api/order';
+    // Vercel/Production yoki local server uchun URL
+    let apiUrl;
+    if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
+        apiUrl = window.location.origin + '/api/order';
+    } else {
+        // Local server yoki file holatida default URL
+        apiUrl = 'http://localhost:3000/api/order';
+    }
     console.log('API URL:', apiUrl);
     
     fetch(apiUrl, {
@@ -516,7 +522,7 @@ function submitOrder() {
             saveOrderToQueue(orderData);
             showToast('📱 Offline holatda!', 'Internetga ulanish yo\'q. Buyurtmangiz saqlandi va internet tiklanganda avtomatik yuboriladi.', '#e67e22');
         } else {
-            showToast('⚠️ Serverga ulanish mumkin emas!', 'Server ishlamayotgan bo\'lishi mumkin. Internetga ulanishni tekshiring yoki qayta urinib ko\'ring.', '#e74c3c');
+            showToast('⚠️ Serverga ulanish mumkin emas!', 'Server ishlamayotgan bo\'lishi mumkin. Internetga ulanishni tekshiring yoki qayta urinib ko\'ring. URL: ' + apiUrl, '#e74c3c');
         }
     });
     
@@ -569,8 +575,13 @@ async function processOrderQueue() {
     }
     console.log(`Queue da ${queue.length} ta buyurtma yuborilmoqda...`);
     
-    // Vercel/Production uchun to'liq URL
-    const apiUrl = window.location.origin + '/api/order';
+    // Vercel/Production yoki local server uchun URL
+    let apiUrl;
+    if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
+        apiUrl = window.location.origin + '/api/order';
+    } else {
+        apiUrl = 'http://localhost:3000/api/order';
+    }
     const failedOrders = [];
     for (let i = 0; i < queue.length; i++) {
         const order = queue[i];
