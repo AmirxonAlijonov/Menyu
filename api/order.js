@@ -59,9 +59,10 @@ module.exports = async function handler(req, res) {
     }
 
     // Escape Markdown special characters to prevent XSS
+    // FIXED: To'g'ri capture group ishlatiladi
     function escapeMarkdown(str) {
         if (!str) return '';
-        return String(str).replace(/[-_*`\[\]()~`>#+\|={}.!]/g, '\\$1');
+        return String(str).replace(/([-_*`\[\]()~`>#+\|={}.!])/g, '\\$1');
     }
 
     // Bildirishnoma ovozini sozlash uchun qo'llanma:
@@ -75,14 +76,14 @@ module.exports = async function handler(req, res) {
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
-        locationText = `🛏️ Tabcha raqami: ${escapeMarkdown(tabchaNumber)}`;
+        locationText = `🛏️ Tabcha raqami: ${escapeMarkdown(String(tabchaNumber))}`;
     } else if (kabinaNumber) {
-        locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
+        locationText = `🚪 Kabina raqami: ${escapeMarkdown(String(kabinaNumber))}`;
     } else if (tableNumber) {
-        locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;
+        locationText = `🪑 Stol raqami: ${escapeMarkdown(String(tableNumber))}`;
     }
 
-    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${escapeMarkdown(product)}\n📊 Miqdor: ${escapeMarkdown(quantity)}\n💰 Narx: ${escapeMarkdown(price)}\n${locationText ? locationText + '\n' : ''}\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${escapeMarkdown(product)}\n📊 Miqdor: ${escapeMarkdown(String(quantity))}\n💰 Narx: ${escapeMarkdown(price)}\n${locationText ? locationText + '\n' : ''}\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
 
     console.log('Telegram ga yuborilmoqda...');
 

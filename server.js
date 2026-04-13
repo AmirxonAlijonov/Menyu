@@ -149,6 +149,12 @@ function getCategoryName(category) {
     return names[category] || category;
 }
 
+// Escape Markdown special characters to prevent XSS
+function escapeMarkdown(str) {
+    if (!str) return '';
+    return String(str).replace(/([-_*`\[\]()~`>#+\|={}.!])/g, '\\$1');
+}
+
 // Telegram ga xabar yuborish
 async function sendToTelegram(message, chatId = CHAT_ID) {
     try {
@@ -183,14 +189,24 @@ app.post('/api/order', async (req, res) => {
     console.log('=== Buyurtma keldi ===');
     console.log('Body:', req.body);
     
-    const { product, quantity, price } = req.body;
+    const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;
     
     if (!product || !quantity) {
         console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
         return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
     }
     
-    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${product}\n📊 Miqdor: ${quantity}\n💰 Narx: ${price}\n\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+    // Joylashuv matnini tayyorlash
+    let locationText = '';
+    if (tabchaNumber) {
+        locationText = `🛏️ Tabcha raqami: ${escapeMarkdown(tabchaNumber)}`;
+    } else if (kabinaNumber) {
+        locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
+    } else if (tableNumber) {
+        locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;
+    }
+    
+    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${escapeMarkdown(product)}\n📊 Miqdor: ${escapeMarkdown(quantity)}\n💰 Narx: ${escapeMarkdown(price)}\n${locationText ? locationText + '\n' : ''}\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
     
     console.log('Telegram ga yuborilmoqda...');
     

@@ -2,6 +2,7 @@
 let currentCategory = 'salads';
 let currentIndexCategory = 0;
 let autoSlide;
+let baseProductPrice = 0; // Asosiy mahsulot narxi saqlash uchun
 
 // Modal elementlari
 const modal = document.getElementById('fullscreenModal');
@@ -268,6 +269,16 @@ function openFullscreen(category) {
     document.getElementById('modalTitle').textContent = foodInfo.title;
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
+    document.getElementById('modalPrice').dataset.basePrice = foodInfo.price;
+    
+    // Asosiy narxni global o'zgaruvchida saqlash
+    baseProductPrice = parseInt(foodInfo.price.replace(/[^0-9]/g, ''));
+    
+    // Miqdorni 1 ga qaytarish
+    const quantityInput = document.getElementById('modalQuantity');
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
 
     // Modalni ko'rsatish
     modal.classList.add('active');
@@ -288,6 +299,16 @@ function openMobileCard(category, index) {
     document.getElementById('modalTitle').textContent = foodInfo.title;
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
+    document.getElementById('modalPrice').dataset.basePrice = foodInfo.price;
+    
+    // Asosiy narxni global o'zgaruvchida saqlash
+    baseProductPrice = parseInt(foodInfo.price.replace(/[^0-9]/g, ''));
+    
+    // Miqdorni 1 ga qaytarish
+    const quantityInput = document.getElementById('modalQuantity');
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
 
     // Modalni ko'rsatish
     modal.classList.add('active');
@@ -302,6 +323,57 @@ function openMobileCard(category, index) {
 function closeFullscreen() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
+    
+    // Miqdorni 1 ga qaytarish
+    const quantityInput = document.getElementById('modalQuantity');
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
+    
+    // Asosiy narxni tiklash (keyinchalik ishlatish uchun)
+    baseProductPrice = 0;
+}
+
+// Miqdor o'zgartirish funksiyasi
+function changeQuantity(delta) {
+    const quantityInput = document.getElementById('modalQuantity');
+    let currentValue = parseInt(quantityInput.value) || 1;
+    let newValue = currentValue + delta;
+    
+    // Minimal qiymat 1
+    if (newValue < 1) newValue = 1;
+    // Maksimal qiymat 99
+    if (newValue > 99) newValue = 99;
+    
+    quantityInput.value = newValue;
+    
+    // Narxni yangilash
+    updateModalPrice();
+}
+
+// Modal narxini yangilash
+function updateModalPrice() {
+    const quantityInput = document.getElementById('modalQuantity');
+    const quantity = parseInt(quantityInput.value) || 1;
+    
+    // Asosiy narxni olish: avval global, keyin dataset, oxirgi fallback foodData
+    let basePrice = 0;
+    
+    if (baseProductPrice > 0) {
+        basePrice = baseProductPrice;
+    } else {
+        // dataset dan olish
+        const priceEl = document.getElementById('modalPrice');
+        if (priceEl && priceEl.dataset.basePrice) {
+            basePrice = parseInt(priceEl.dataset.basePrice.replace(/[^0-9]/g, ''));
+        }
+    }
+    
+    // Jami narx: asosiy narx * miqdor
+    const totalPrice = basePrice * quantity;
+    
+    // Natijani ko'rsatish
+    document.getElementById('modalPrice').textContent = totalPrice.toLocaleString() + " so'm";
 }
 
 // Stol/Kabina/Tabcha tanlash funksiyasi
