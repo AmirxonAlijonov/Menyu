@@ -471,7 +471,12 @@ function submitOrder() {
     
     // Serverga buyurtma yuborish
     console.log('Buyurtma yuborilmoqda...');
-    fetch('/api/order', {
+    
+    // Vercel/Production uchun to'liq URL ishlatish
+    const apiUrl = window.location.origin + '/api/order';
+    console.log('API URL:', apiUrl);
+    
+    fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -560,11 +565,14 @@ async function processOrderQueue() {
         return;
     }
     console.log(`Queue da ${queue.length} ta buyurtma yuborilmoqda...`);
+    
+    // Vercel/Production uchun to'liq URL
+    const apiUrl = window.location.origin + '/api/order';
     const failedOrders = [];
     for (let i = 0; i < queue.length; i++) {
         const order = queue[i];
         try {
-            const response = await fetch('/api/order', {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(order)
