@@ -129,12 +129,6 @@ const foodData = {
             description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.",
             price: "35,000 so'm",
             image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg"
-        },
-        {
-            title: "Vag'ori",
-            description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
-            price: "250,000 so'm",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
         }
     ],
     drinks: [
@@ -954,4 +948,15 @@ document.addEventListener('DOMContentLoaded', () => {
     showMainPage();
     checkLocationOnLoad();
     loadCart();
+    
+    // Service Worker ro'yhatga olish (PWA uchun)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker ro\'yxatga olindi:', registration.scope);
+            })
+            .catch(error => {
+                console.error('Service Worker ro\'yxatga olishda xato:', error);
+            });
+    }
 });
