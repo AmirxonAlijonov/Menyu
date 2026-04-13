@@ -483,7 +483,10 @@ function submitOrder() {
         },
         body: JSON.stringify(orderData)
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
     .then(data => {
         // Buyurtma tugagandan so'ng tugma matnini qayta tiklaymiz
         if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
