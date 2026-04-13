@@ -197,7 +197,7 @@ self.addEventListener('message', (event) => {
     }
 });
 
-// Fallback menu data for offline mode
+// Fallback menu data for offline mode - index.js bilan mos
 function getFallbackMenu() {
     return {
         salads: [
@@ -207,16 +207,30 @@ function getFallbackMenu() {
             { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "15,000 so'm" }
         ],
         mains: [
-            { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom.", price: "250,000 so'm" },
-            { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali taom.", price: "60,000 so'm" },
-            { title: "Lag'mon", description: "Qo'lda cho'zilgan lag'mon go'sht va sabzavotlar bilan.", price: "45,000 so'm" },
-            { title: "Shashlik", description: "Mol go'shtidan tayyorlangan shashlik.", price: "50,000 so'm" }
+            { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "250,000 so'm" },
+            { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm" },
+            { title: "Vag'ori", description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.", price: "250,000 so'm" },
+            { title: "KFS", description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.", price: "80,000 so'm" },
+            { title: "Barbekyu", description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.", price: "250,000 so'm" },
+            { title: "Baliq", description: "Yangi baliqni yog'da qovurilgan holda tayyorlangan mazali taom. KFS uslubida yog'da qovurilgan.", price: "180,000 so'm" },
+            { title: "Mol Go'shti Shashlik", description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "110,000 so'm" },
+            { title: "Manti", description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.", price: "7,000 so'm" },
+            { title: "Tandir Somsa", description: "Tandirda pishirilgan go'shtli an'anaviy somsa.", price: "15,000 so'm" },
+            { title: "Mastava", description: "Guruch, go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek sho'rvasi.", price: "35,000 so'm" },
+            { title: "Qaynatma Sho'rva", description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.", price: "35,000 so'm" },
+            { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "35,000 so'm" },
+            { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm" },
+            { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm" }
         ],
         drinks: [
-            { title: "Coca Cola", description: "Gazli ichimlik 0.5L", price: "15,000 so'm" },
-            { title: "Choy", description: "Ko'k va qora choy", price: "10,000 so'm" },
-            { title: "Suv", description: "Ichimlik suvi 1L", price: "8,000 so'm" },
-            { title: "Kompot", description: "Mevalar komboki", price: "20,000 so'm" }
+            { title: "Coca Cola", description: "Gazli ichimlik 1.5l hajmda. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm" },
+            { title: "Yashil Choy", description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.", price: "2,000 so'm" },
+            { title: "Fanta", description: "Gazli apelsinli ichimlik 1.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.", price: "17,000 so'm" },
+            { title: "Pepsi", description: "Gazli ichimlik 1.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.", price: "17,000 so'm" },
+            { title: "Qora Choy", description: "Issiq qora choy suty bilan. An'anaviy ichimlik.", price: "5,000 so'm" },
+            { title: "Limon Choy", description: "Maxsus tayyorlangan limonli choy - yangi limon va choy bilan tayyorlangan.", price: "20,000 so'm" },
+            { title: "Sok", description: "Tabiiy meva sharbati - aralash mevalar.", price: "20,000 so'm" },
+            { title: "Sprite", description: "Gazli limonato ichimlik 1.5l hajmda. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm" }
         ]
     };
 }
