@@ -4,43 +4,18 @@
     {
       "src": "api/order.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "handle": "filesystem"
+    },
     {
       "src": "/api/order",
       "dest": "/api/order.js"
     },
     {
-      "src": "/sw.js",
-      "dest": "/sw.js"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/manifest.json"
-    },
-    {
-      "src": "/index.js",
-      "dest": "/index.js"
-    },
-    {
-      "src": "/CSS/style.css",
-      "dest": "/CSS/style.css"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*).html",
-      "dest": "/$1.html"
-    },
-    {
-      "src": "/(.*)",
+      "src": "/.*",
       "dest": "/index.html"
     }
   ],
