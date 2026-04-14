@@ -192,9 +192,14 @@ self.addEventListener('fetch', (event) => {
 
 // Handle messages from the main app
 self.addEventListener('message', (event) => {
+    console.log('[SW] Xabar keldi:', event.data);
+    
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
+    
+    // Javob yuborish (kanalni yopmaslik uchun)
+    event.ports[0]?.postMessage({ status: 'ok' });
 });
 
 // Fallback menu data for offline mode - index.js bilan mos
