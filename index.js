@@ -491,6 +491,23 @@ function submitOrder() {
     })
     .then(response => {
         console.log('Response status:', response.status);
+        console.log('Response type:', response.headers.get('content-type'));
+        
+        // Check if response is OK
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
+            });
+        }
+        
+        // Check content type
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                throw new Error('Server JSON emas, HTML qaytaryapti. Server ishlamayotgan bolishi mumkin. Response: ' + text.substring(0, 200));
+            });
+        }
+        
         return response.json();
     })
     .then(data => {
