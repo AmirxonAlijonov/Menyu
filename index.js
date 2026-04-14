@@ -477,8 +477,8 @@ function submitOrder() {
     if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
         apiUrl = window.location.origin + '/api/order';
     } else {
-        // Local server yoki file holatida default URL
-        apiUrl = 'http://localhost:3000/api/order';
+        // Local server uchun default port 3001
+        apiUrl = 'http://localhost:3001/api/order';
     }
     console.log('API URL:', apiUrl);
     
@@ -597,7 +597,7 @@ async function processOrderQueue() {
     if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
         apiUrl = window.location.origin + '/api/order';
     } else {
-        apiUrl = 'http://localhost:3000/api/order';
+        apiUrl = 'http://localhost:3001/api/order';
     }
     const failedOrders = [];
     for (let i = 0; i < queue.length; i++) {

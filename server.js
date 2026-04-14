@@ -357,10 +357,27 @@ app.post('/api/notify-offline', async (req, res) => {
 });
 
 // Server ishga tushirish
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3001; // Default port 3001 to avoid conflict
+const HOSTNAME = process.env.HOSTNAME || '0.0.0.0'; // Barcha tarmoqlar uchun
+
+// Local IP ni olish funksiyasi
+function getLocalIP() {
+    const os = require('os');
+    const interfaces = os.networkInterfaces();
+    for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return 'localhost';
+}
+
+app.listen(PORT, HOSTNAME, () => {
     console.log('==========================================');
     console.log('🚀 Server ishga tushdi: http://localhost:' + PORT);
+    console.log('🌐 Tarmoq uchun: http://' + getLocalIP() + ':' + PORT);
     console.log('📱 Telegram bot ishga tushirilmoqda...');
     console.log('==========================================');
     
