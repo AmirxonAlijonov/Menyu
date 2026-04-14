@@ -165,16 +165,33 @@ function escapeMarkdown(str) {
 
 // Telegram ga xabar yuborish
 async function sendToTelegram(message, chatId = CHAT_ID) {
+    console.log('=== Telegram ga yuborish boshlandi ===');
+    console.log('BOT_TOKEN mavjud:', BOT_TOKEN ? 'Ha' : 'Yo\'q');
+    console.log('CHAT_ID:', CHAT_ID);
+    console.log('Xabar:', message.substring(0, 100));
+    
+    if (!BOT_TOKEN || !CHAT_ID) {
+        console.error('❌ BOT_TOKEN yoki CHAT_ID yo\'q!');
+        return false;
+    }
+    
     try {
-        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        console.log('URL:', url.replace(BOT_TOKEN, '***HIDDEN***'));
+        
+        const response = await axios.post(url, {
             chat_id: chatId,
             text: message,
             parse_mode: 'Markdown'
         });
-        console.log('✅ Telegram ga xabar yuborildi');
+        
+        console.log('✅ Telegram ga xabar yuborildi:', response.data);
         return true;
     } catch (error) {
-        console.error('❌ Telegram xato:', error.response?.data || error.message);
+        console.error('❌ Telegram xato:');
+        console.error('Status:', error.response?.status);
+        console.error('Data:', error.response?.data);
+        console.error('Message:', error.message);
         return false;
     }
 }
