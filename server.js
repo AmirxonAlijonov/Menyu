@@ -77,6 +77,19 @@ app.get('/', (req, res) => {
     });
 });
 
+// Barcha boshqa fayllar uchun (index.js, CSS, sw.js, manifest.json)
+app.get('*', (req, res) => {
+    const filePath = path.join(__dirname, req.path);
+    
+    // Fayl mavjudligini tekshirish
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        // Agar fayl topilmasa, index.html qaytarish
+        res.sendFile(path.join(__dirname, 'index.html'));
+    }
+});
+
 // ============================================
 // KONFIGURATSIYA - BU YERDA O'ZGARTIRING!
 // ============================================
