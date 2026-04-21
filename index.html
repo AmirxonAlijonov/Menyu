@@ -309,6 +309,32 @@
                     <span id="modalPrice"></span>
                 </div>
                 
+                <!-- Size Selection (for drinks) -->
+                <div class="size-select" id="sizeSelectContainer">
+                    <label>Hajmni tanlang:</label>
+                    <div class="size-options">
+                        <button class="size-btn" data-size="1.5l" onclick="selectSize('1.5l')">
+                            1.5L - 17,000
+                        </button>
+                        <button class="size-btn" data-size="1l" onclick="selectSize('1l')">
+                            1L - 12,000
+                        </button>
+                        <button class="size-btn" data-size="0.5l" onclick="selectSize('0.5l')">
+                            0.5L - 8,000
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Weight Selection (for mains) -->
+                <div class="weight-select" id="weightSelectContainer">
+                    <label>Narxini hisoblash uchun og'irlikni kiriting (gramm):</label>
+                    <div class="weight-input-wrapper">
+                        <input type="number" id="modalWeight" value="1000" min="300" step="100" onchange="updateWeightPrice()" oninput="updateWeightPrice()">
+                        <span>gramm</span>
+                    </div>
+                    <p class="weight-hint">Minimal og'irlik: 300g</p>
+                </div>
+                
                 <!-- Quantity -->
                 <div class="quantity-container">
                     <label>Miqdor:</label>
@@ -331,7 +357,7 @@
                 
                 <!-- Table Number -->
                 <div id="stolInputContainer">
-                    <input type="number" id="tableNumber" placeholder="Stol raqami (1-16)" min="1" max="16" required>
+                    <input type="number" id="tableNumber" placeholder="Stol raqami (1-18)" min="1" max="18" required>
                 </div>
                 
                 <div id="kabinaInputContainer" style="display: none;">

@@ -50,6 +50,10 @@ const foodData = {
             title: "Jiz",
             description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.",
             price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
             image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800"
         },
         {
@@ -62,18 +66,30 @@ const foodData = {
             title: "Vag'ori",
             description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
             price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
         },
         {
             title: "KFS",
             description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.",
             price: "80,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 80,
+            minWeight: 300,
             image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800"
         },
         {
             title: "Barbekyu",
             description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
             price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
             image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800"
         },
         {
@@ -134,8 +150,14 @@ const foodData = {
     drinks: [
         {
             title: "Coca Cola",
-            description: "Gazli ichimlik 1.5l hajmda. Sovuq va tetiklashtiruvchi ichimlik.",
+            description: "Gazli ichimlik. Sovuq va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "1.5l": { price: 17000, desc: "1.5 litr" },
+                "1l": { price: 12000, desc: "1 litr" },
+                "0.5l": { price: 8000, desc: "0.5 litr" }
+            },
             image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
         },
         {
@@ -146,14 +168,26 @@ const foodData = {
         },
         {
             title: "Fanta",
-            description: "Gazli apelsinli ichimlik 1.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.",
+            description: "Gazli apelsinli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "1.5l": { price: 17000, desc: "1.5 litr" },
+                "1l": { price: 12000, desc: "1 litr" },
+                "0.5l": { price: 8000, desc: "0.5 litr" }
+            },
             image: "https://thumbs.dreamstime.com/b/can-fanta-orange-moscow-russia-april-coca-cola-company-soft-drink-ice-global-brand-fruit-flavored-carbonated-63824545.jpg"
         },
         {
             title: "Pepsi",
-            description: "Gazli ichimlik 1.5l hajmda. Mashhur va tetiklashtiruvchi ichimlik.",
+            description: "Gazli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "1.5l": { price: 17000, desc: "1.5 litr" },
+                "1l": { price: 12000, desc: "1 litr" },
+                "0.5l": { price: 8000, desc: "0.5 litr" }
+            },
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5xpJ6WWLQZvHlDhrZrL5JtPZlf2Ul8CgbQ&s"
         },
         {
@@ -176,8 +210,14 @@ const foodData = {
         },
         {
             title: "Sprite",
-            description: "Gazli limonato ichimlik 1.5l hajmda. Sovuq va tetiklashtiruvchi ichimlik.",
+            description: "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.",
             price: "17,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "1.5l": { price: 17000, desc: "1.5 litr" },
+                "1l": { price: 12000, desc: "1 litr" },
+                "0.5l": { price: 8000, desc: "0.5 litr" }
+            },
             image: "https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2609175503.jpg"
         }
     ]
@@ -268,6 +308,25 @@ function openFullscreen(category) {
     // Asosiy narxni global o'zgaruvchida saqlash
     baseProductPrice = parseInt(foodInfo.price.replace(/[^0-9]/g, ''));
     
+    // Size selectionni ko'rsatish yoki yashirish
+    const sizeContainer = document.getElementById('sizeSelectContainer');
+    const weightContainer = document.getElementById('weightSelectContainer');
+    
+    if (foodInfo.hasSizes && sizeContainer) {
+        sizeContainer.style.display = 'flex';
+        if (weightContainer) weightContainer.style.display = 'none';
+        // Default tanlov: 1.5l
+        selectSize('1.5l', foodInfo);
+    } else if (foodInfo.hasWeight && weightContainer) {
+        if (sizeContainer) sizeContainer.style.display = 'none';
+        weightContainer.style.display = 'flex';
+        // Default og'irlik
+        setDefaultWeight(foodInfo);
+    } else {
+        if (sizeContainer) sizeContainer.style.display = 'none';
+        if (weightContainer) weightContainer.style.display = 'none';
+    }
+    
     // Miqdorni 1 ga qaytarish
     const quantityInput = document.getElementById('modalQuantity');
     if (quantityInput) {
@@ -297,6 +356,25 @@ function openMobileCard(category, index) {
     
     // Asosiy narxni global o'zgaruvchida saqlash
     baseProductPrice = parseInt(foodInfo.price.replace(/[^0-9]/g, ''));
+    
+    // Size selectionni ko'rsatish yoki yashirish
+    const sizeContainer = document.getElementById('sizeSelectContainer');
+    const weightContainer = document.getElementById('weightSelectContainer');
+    
+    if (foodInfo.hasSizes && sizeContainer) {
+        sizeContainer.style.display = 'flex';
+        if (weightContainer) weightContainer.style.display = 'none';
+        // Default tanlov: 1.5l
+        selectSize('1.5l', foodInfo);
+    } else if (foodInfo.hasWeight && weightContainer) {
+        if (sizeContainer) sizeContainer.style.display = 'none';
+        weightContainer.style.display = 'flex';
+        // Default og'irlik
+        setDefaultWeight(foodInfo);
+    } else {
+        if (sizeContainer) sizeContainer.style.display = 'none';
+        if (weightContainer) weightContainer.style.display = 'none';
+    }
     
     // Miqdorni 1 ga qaytarish
     const quantityInput = document.getElementById('modalQuantity');
@@ -345,6 +423,64 @@ function changeQuantity(delta) {
     updateModalPrice();
 }
 
+// Hajm (size) tanlash funksiyasi
+function selectSize(size, foodInfo) {
+    // Avval joriy itemni topish (agar foodInfo berilmagan bo'lsa)
+    if (!foodInfo) {
+        // currentCategory va currentIndexCategory dan olishga harakat qilamiz
+        if (currentCategory && foodData[currentCategory] && foodData[currentCategory][currentIndexCategory]) {
+            foodInfo = foodData[currentCategory][currentIndexCategory];
+        }
+        // Agar topilmasa, title bo'yicha izlaymiz
+        if (!foodInfo) {
+            const title = document.getElementById('modalTitle').textContent;
+            for (const cat in foodData) {
+                const found = foodData[cat].find(item => item.title === title);
+                if (found) {
+                    foodInfo = found;
+                    break;
+                }
+            }
+        }
+    }
+    
+    // Size container ni ko'rsatish
+    const sizeContainer = document.getElementById('sizeSelectContainer');
+    if (sizeContainer) {
+        if (foodInfo && foodInfo.hasSizes) {
+            sizeContainer.style.display = 'flex';
+        } else {
+            sizeContainer.style.display = 'none';
+            return;
+        }
+    }
+    
+    if (!foodInfo || !foodInfo.hasSizes || !foodInfo.sizes) {
+        return;
+    }
+    
+    const sizeData = foodInfo.sizes[size];
+    if (!sizeData) {
+        return;
+    }
+    
+    // Base pricer yangilash
+    baseProductPrice = sizeData.price;
+    
+    // Tugmalarni yangilash
+    const buttons = document.querySelectorAll('.size-btn');
+    buttons.forEach(btn => {
+        if (btn.dataset.size === size) {
+            btn.classList.add('selected');
+        } else {
+            btn.classList.remove('selected');
+        }
+    });
+    
+    // Narxni yangilash
+    updateModalPrice();
+}
+
 // Modal narxini yangilash
 function updateModalPrice() {
     const quantityInput = document.getElementById('modalQuantity');
@@ -363,6 +499,30 @@ function updateModalPrice() {
         }
     }
     
+    // Og'irlik bo'lsa, narxni yangilash
+    const weightInput = document.getElementById('modalWeight');
+    if (weightInput) {
+        let weight = parseInt(weightInput.value) || 0;
+        const title = document.getElementById('modalTitle').textContent;
+        // Taomni topish
+        let foodInfo = null;
+        for (const cat in foodData) {
+            const found = foodData[cat].find(item => item.title === title);
+            if (found && found.hasWeight) {
+                foodInfo = found;
+                break;
+            }
+        }
+        if (foodInfo && foodInfo.pricePerGram) {
+            // Minimal og'irlik tekshiruv
+            if (weight < foodInfo.minWeight) {
+                weight = foodInfo.minWeight;
+                weightInput.value = weight;
+            }
+            basePrice = weight * foodInfo.pricePerGram;
+        }
+    }
+    
     // Jami narx: asosiy narx * miqdor
     const totalPrice = basePrice * quantity;
     
@@ -370,7 +530,27 @@ function updateModalPrice() {
     document.getElementById('modalPrice').textContent = totalPrice.toLocaleString() + " so'm";
 }
 
-// Stol/Kabina/Tabcha tanlash funksiyasi
+// Default og'irlikni o'rnatish
+function setDefaultWeight(foodInfo) {
+    const weightInput = document.getElementById('modalWeight');
+    if (weightInput && foodInfo && foodInfo.baseWeight) {
+        weightInput.value = foodInfo.baseWeight;
+        weightInput.min = foodInfo.minWeight || 300;
+        // Hint yangilash
+        const hint = document.querySelector('.weight-hint');
+        if (hint) {
+            hint.textContent = 'Minimal og\'irlik: ' + (foodInfo.minWeight || 300) + 'g';
+        }
+    }
+    updateModalPrice();
+}
+
+// Og'irlik o'zgartirganda narxni yangilash
+function updateWeightPrice() {
+    updateModalPrice();
+}
+
+// Stol/Kabina/Tabchan tanlash funksiyasi
 function toggleTableInput() {
     const tableType = document.getElementById('tableType').value;
     const stolContainer = document.getElementById('stolInputContainer');
@@ -420,8 +600,8 @@ function submitOrder() {
     const tabchaNumber = tabchaInput?.value ? parseInt(tabchaInput.value) : null;
     
     // Stol raqami tekshirish (faqat Stol tanlanganida)
-    if (tableType === 'stol' && tableNumber && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 16)) {
-        showToast('❌ Xato!', 'Stol raqamini 1 dan 16 gacha kiriting.', '#e74c3c');
+    if (tableType === 'stol' && tableNumber && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 18)) {
+        showToast('❌ Xato!', 'Stol raqamini 1 dan 18 gacha kiriting.', '#e74c3c');
         return;
     }
     
@@ -897,7 +1077,7 @@ function checkout() {
     let deliveryType = 'come';
     
     if (choice === '1') {
-        const tableNum = prompt('Stol raqamini kiriting (1-16):', '1');
+        const tableNum = prompt('Stol raqamini kiriting (1-18):', '1');
         if (tableNum) {
             locationInfo = 'Stol raqami: ' + tableNum;
             deliveryType = 'table';
