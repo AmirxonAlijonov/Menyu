@@ -1853,6 +1853,7 @@ body::before {
     
     .slider-wrapper {
         align-items: center;
+        justify-content: center;
         padding: 20px;
     }
 
@@ -1878,10 +1879,12 @@ body::before {
     .menu-title {
         font-size: 18px;
         margin-bottom: 10px;
+        text-align: center;
     }
     
     .category-grid {
-        gap: 10px;
+        gap: 30px;
+        text-align: center;
     }
     
     .category-card {
@@ -1909,7 +1912,7 @@ body::before {
     .mobile-cards-container {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 35px;
         max-height: calc(100vh - 180px);
         overflow-y: auto;
         padding-bottom: 20px;
@@ -2034,6 +2037,19 @@ body::before {
         height: 35px;
         font-size: 25px;
     }
+
+    .slide {
+        overflow: visible;
+    }
+
+    .info {
+        padding: 12px;
+        min-height: auto;
+    }
+
+    .info p {
+        display: none;
+    }
 }
 
 /* juda kichik qurilmalar uchun (max-width: 320px) */
@@ -2049,18 +2065,32 @@ body::before {
     .menu-container {
         padding: 15px 10px;
         border-radius: 20px 20px 0 0;
+        max-width: 320px;
+        margin: 0 auto;
+        left: 50%;
+        transform: translateX(-50%);
     }
     
     .menu-title {
         font-size: 18px;
+        padding-top: 20px;
     }
     
     .category-grid {
         gap: 10px;
+        margin: 0 auto;
+        max-width: 300px;
+        justify-content: center;
+        padding-top: 20px;
+    }
+    
+    .category-card {
+        width: 100%;
     }
     
     .category-card {
         height: 130px;
+        margin-top: 30px;
     }
     
     .category-overlay h2 {
@@ -2381,6 +2411,7 @@ body::before {
 @media (max-width: 480px) and (orientation: landscape) {
     .slider-wrapper {
         align-items: center;
+        justify-content: center;
         padding: 10px;
     }
     
@@ -2404,7 +2435,8 @@ body::before {
     
     .category-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
+        gap: 25px;
+        text-align: center;
     }
     
     .category-card {
@@ -2419,7 +2451,7 @@ body::before {
     .mobile-cards-container {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 30px;
         width: 100%;
         clear: both;
     }
