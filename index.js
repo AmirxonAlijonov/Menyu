@@ -369,7 +369,7 @@ function openMobileCard(category, index) {
     } else if (foodInfo.hasWeight && weightContainer) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         weightContainer.style.display = 'flex';
-        // Default og'irlik
+        // Default hajm
         setDefaultWeight(foodInfo);
     } else {
         if (sizeContainer) sizeContainer.style.display = 'none';
@@ -514,7 +514,7 @@ function updateModalPrice() {
             }
         }
         if (foodInfo && foodInfo.pricePerGram) {
-            // Minimal og'irlik tekshiruv
+            // Minimal hajm tekshiruv
             if (weight < foodInfo.minWeight) {
                 weight = foodInfo.minWeight;
                 weightInput.value = weight;
@@ -530,7 +530,7 @@ function updateModalPrice() {
     document.getElementById('modalPrice').textContent = totalPrice.toLocaleString() + " so'm";
 }
 
-// Default og'irlikni o'rnatish
+// Default hajmni o'rnatish
 function setDefaultWeight(foodInfo) {
     const weightInput = document.getElementById('modalWeight');
     if (weightInput && foodInfo && foodInfo.baseWeight) {
@@ -889,9 +889,7 @@ function checkLocationOnLoad() {
     if (savedLocation) {
         userLocation = JSON.parse(savedLocation);
     } else {
-        setTimeout(() => {
-            document.getElementById('locationModal').style.display = 'flex';
-        }, 2500);
+        document.getElementById('locationModal').style.display = 'flex';
     }
 }
 
@@ -945,6 +943,60 @@ function saveLocation() {
 // Location modalni yopish
 function closeLocationModal() {
     document.getElementById('locationModal').style.display = 'none';
+}
+
+// ==================== BOSHLANG'ICH JOYLASHUV ====================
+// Joylashuv turini almashtirish (boshlang'ich)
+function toggleTableInputInitial() {
+    const tableType = document.getElementById('tableTypeInitial').value;
+    document.getElementById('stolInputContainerInitial').style.display = tableType === 'stol' ? 'block' : 'none';
+    document.getElementById('kabinaInputContainerInitial').style.display = tableType === 'kabina' ? 'block' : 'none';
+    document.getElementById('tabchaInputContainerInitial').style.display = tableType === 'tabcha' ? 'block' : 'none';
+}
+
+// Boshlang'ich joylashuvni saqlash
+function saveInitialLocation() {
+    const tableType = document.getElementById('tableTypeInitial').value;
+    let tableNumber = '';
+    
+    if (tableType === 'stol') {
+        tableNumber = document.getElementById('tableNumberInitial').value;
+        if (!tableNumber || tableNumber < 1 || tableNumber > 18) {
+            alert('Iltimos, to\'g\'ri stol raqamini kiriting (1-18)!');
+            return;
+        }
+    } else if (tableType === 'kabina') {
+        tableNumber = document.getElementById('kabinaNumberInitial').value;
+        if (!tableNumber || tableNumber < 1 || tableNumber > 3) {
+            alert('Iltimos, to\'g\'ri kabina raqamini kiriting (1-3)!');
+            return;
+        }
+    } else if (tableType === 'tabcha') {
+        tableNumber = document.getElementById('tabchaNumberInitial').value;
+        if (!tableNumber || tableNumber < 1 || tableNumber > 3) {
+            alert('Iltimos, to\'g\'ri tabchan raqamini kiriting (1-3)!');
+            return;
+        }
+    }
+    
+    userLocation = {
+        type: tableType,
+        tableNumber: tableNumber,
+        address: tableType + ' ' + tableNumber
+    };
+    localStorage.setItem('userLocation', JSON.stringify(userLocation));
+    document.getElementById('tableSelectModal').style.display = 'none';
+    showToast('✅ Joylashuv saqlandi!', 'Sizning joylashuvingiz: ' + userLocation.address, '#27ae60');
+}
+
+// Boshlang'ich joylashuvni tekshirish va modalni ochish
+function checkInitialLocation() {
+    const savedLocation = localStorage.getItem('userLocation');
+    if (!savedLocation) {
+        document.getElementById('tableSelectModal').style.display = 'flex';
+    } else {
+        userLocation = JSON.parse(savedLocation);
+    }
 }
 
 // ==================== SAVAT FUNKSIYALARI ====================
@@ -1165,8 +1217,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loader.classList.add('hide');
     }, 2000);
     showMainPage();
-    checkLocationOnLoad();
     loadCart();
+    
+    // Boshlang'ich joylashuvni tekshirish (loader yashirilgandan so'ng)
+    setTimeout(() => {
+        checkInitialLocation();
+    }, 2000);
     
     // Service Worker ro'yhatga olish (PWA uchun)
     if ('serviceWorker' in navigator) {

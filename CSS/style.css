@@ -2563,3 +2563,58 @@ body::before {
         image-rendering: -webkit-optimize-contrast;
     }
 }
+
+/* ========== BOSHLANG'ICH JOYLASHUV MODALI ========== */
+#tableSelectModal .modal-content {
+    max-width: 400px;
+    padding: 30px;
+}
+
+#tableSelectModal .table-select {
+    margin: 20px 0;
+}
+
+#tableSelectModal .table-select label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+#tableSelectModal .table-select select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+#tableSelectModal input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#tableSelectModal .location-btn {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(39, 174, 96, 0.4);
+    width: 100%;
+    margin-top: 20px;
+}
+
+#tableSelectModal .location-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(39, 174, 96, 0.6);
+}
