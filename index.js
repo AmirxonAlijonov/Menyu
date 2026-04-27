@@ -45,77 +45,7 @@ const foodData = {
             image: "https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600"
         }
     ],
-    mains: [
-        {
-            title: "Jiz",
-            description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.",
-            price: "250,000 so'm",
-            hasWeight: true,
-            baseWeight: 1000,
-            pricePerGram: 250,
-            minWeight: 300,
-            image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800"
-        },
-        {
-            title: "Tabaka",
-            description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.",
-            price: "60,000 so'm",
-            image: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=800"
-        },
-        {
-            title: "Vag'ori",
-            description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
-            price: "250,000 so'm",
-            hasWeight: true,
-            baseWeight: 1000,
-            pricePerGram: 250,
-            minWeight: 300,
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
-        },
-        {
-            title: "KFS",
-            description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.",
-            price: "80,000 so'm",
-            hasWeight: true,
-            baseWeight: 1000,
-            pricePerGram: 80,
-            minWeight: 300,
-            image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800"
-        },
-        {
-            title: "Barbekyu",
-            description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
-            price: "250,000 so'm",
-            hasWeight: true,
-            baseWeight: 1000,
-            pricePerGram: 250,
-            minWeight: 300,
-            image: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=800"
-        },
-        {
-            title: "Baliq",
-            description: "Yangi baliqni yog'da qovurilgan holda tayyorlangan mazali taom. KFS uslubida yog'da qovurilgan.",
-            price: "180,000 so'm",
-            image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800"
-        },
-        {
-            title: "Mol Go'shti Shashlik",
-            description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
-            price: "110,000 so'm",
-            image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800"
-        },
-        {
-            title: "Manti",
-            description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.",
-            price: "7,000 so'm",
-            image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=800"
-        },
-        {
-            title: "Tandir Somsa",
-            description: "Tandirda pishirilgan go'shtli an'anaviy somsa.",
-            price: "15,000 so'm",
-            image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800"
-        },
+    mains1: [
         {
             title: "Mastava",
             description: "Guruch, go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek sho'rvasi.",
@@ -147,6 +77,83 @@ const foodData = {
             image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg"
         }
     ],
+    mains2: [
+        {
+            title: "Jiz",
+            description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.",
+            price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
+            image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg"
+        },
+        {
+            title: "Tabaka",
+            description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.",
+            price: "60,000 so'm",
+            image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&"
+        },
+        {
+            title: "Vag'ori",
+            description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
+            price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
+        },
+        {
+            title: "KFS",
+            description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.",
+            price: "80,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 80,
+            minWeight: 300,
+            image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800"
+        },
+        {
+            title: "Barbekyu",
+            description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
+            price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
+            image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg"
+        },
+        {
+            title: "Mol Go'shti Shashlik",
+            description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
+            price: "110,000 so'm",
+            image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800"
+        },
+        {
+            title: "Qozon Kabob",
+            description: "Qozonda pishirilgan mazali kabob. Go'sht, sabzavotlar va maxsus ziravorlar bilan.",
+            price: "250,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 250,
+            minWeight: 300,
+            image: "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg"
+        },
+        {
+            title: "Manti",
+            description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.",
+            price: "7,000 so'm",
+            image: "https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png"
+        },
+        {
+            title: "Tandir Somsa",
+            description: "Tandirda pishirilgan go'shtli an'anaviy somsa.",
+            price: "15,000 so'm",
+            image: "https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg"
+        }
+    ],
+    mains: [],
     drinks: [
         {
             title: "Coca Cola",
@@ -228,7 +235,8 @@ function openCategory(category) {
     // Hamma sahifalarni yashirish
     document.getElementById('mainPage').classList.remove('active');
     document.getElementById('saladsPage').classList.remove('active');
-    document.getElementById('mainsPage').classList.remove('active');
+    document.getElementById('mains1Page').classList.remove('active');
+    document.getElementById('mains2Page').classList.remove('active');
     document.getElementById('drinksPage').classList.remove('active');
     
     // Tanlangan sahifani ko'rsatish
@@ -243,7 +251,8 @@ function openCategory(category) {
 function showMainPage() {
     // Hamma category sahifalarini yashirish
     document.getElementById('saladsPage').classList.remove('active');
-    document.getElementById('mainsPage').classList.remove('active');
+    document.getElementById('mains1Page').classList.remove('active');
+    document.getElementById('mains2Page').classList.remove('active');
     document.getElementById('drinksPage').classList.remove('active');
     
     // Bosh sahifani ko'rsatish

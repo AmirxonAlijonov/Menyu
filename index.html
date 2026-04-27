@@ -41,23 +41,31 @@
             <div class="category-grid">
                 <!-- Salatlar -->
                 <div class="category-card" onclick="openCategory('salads')">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" alt="Salatlar">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" alt="Salatlar" width="500" height="350" loading="eager" fetchpriority="high">
                     <div class="category-overlay">
                         <h2>🥗 Salatlar</h2>
                     </div>
                 </div>
                 
-                <!-- Asosiy Taomlar -->
-                <div class="category-card" onclick="openCategory('mains')">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Taomlar">
+                <!-- Suyuq ovqatlar (birinchisi) -->
+                <div class="category-card" onclick="openCategory('mains1')">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Suyuq ovqatlar" width="500" height="350" loading="eager" fetchpriority="high">
                     <div class="category-overlay">
-                        <h2>🍖 Asosiy Taomlar</h2>
+                        <h2>🍲 Suyuq ovqatlar (birinchisi)</h2>
+                    </div>
+                </div>
+                
+                <!-- Asosiy taomlar (ikkichisi) -->
+                <div class="category-card" onclick="openCategory('mains2')">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Asosiy taomlar" width="500" height="350" loading="eager" fetchpriority="high">
+                    <div class="category-overlay">
+                        <h2>🍖 Asosiy taomlar (ikkichisi)</h2>
                     </div>
                 </div>
                 
                 <!-- Ichimliklar -->
                 <div class="category-card" onclick="openCategory('drinks')">
-                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Ichimliklar">
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Ichimliklar" width="500" height="350" loading="eager" fetchpriority="high">
                     <div class="category-overlay">
                         <h2>🥤 Ichimliklar</h2>
                     </div>
@@ -74,28 +82,28 @@
             <!-- Mobile cards container -->
             <div class="mobile-cards-container">
                 <div class="mobile-card" onclick="openMobileCard('salads', 0)">
-                    <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500" alt="Salat">
+                    <img src="https://api.silkphoto.uz/storage/ResourceThumbnail/c47ad3b4-fc99-4df6-a580-0b623ee89b41/YzQ3YWQzYjQtZmM5OS00ZGY2LWE1ODAtMGI2MjNlZTg5YjQxLTE3MzY5NTEyNTc=.webp" alt="Chiroqchi Salati" width="500" height="350" loading="lazy" fetchpriority="high">
                     <div class="info">
                         <h2>Chiroqchi Salati</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('salads', 1)">
-                    <img src="https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=500" alt="Salat">
+                    <img src="https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=500" alt="Sezer Salati" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Sezer Salati</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('salads', 2)">
-                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500" alt="Salat">
+                    <img src="https://shar-shara.ru/wp-content/uploads/2024/10/IMG_0254.jpg" alt="Svejiy Salat" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Svejiy Salat</h2>
                         <span class="price">15,000 so'm</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('salads', 3)">
-                    <img src="https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600" alt="Salat">
+                    <img src="https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600" alt="Achchiq Chuchuk Salat" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Achchiq Chuchuk Salat</h2>
                         <span class="price">15,000 so'm</span>
@@ -107,109 +115,118 @@
         </div>
     </div>
 
-    <!-- Asosiy Taomlar Sahifasi -->
-    <div class="slider-wrapper category-page" id="mainsPage">
+    <!-- 1-ovqatlar (birinchisi) Sahifasi -->
+    <div class="slider-wrapper category-page" id="mains1Page">
         <div class="menu-container">
-            <h1 class="menu-title">🍖 Asosiy Taomlar</h1>
-            
-            <!-- Mobile cards container -->
+            <h1 class="menu-title">🍲 1-ovqatlar (birinchisi)</h1>
+
             <div class="mobile-cards-container">
-                <div class="mobile-card" onclick="openMobileCard('mains', 0)">
-                    <img src="https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=500" alt="Jiz">
-                    <div class="info">
-                        <h2>Jiz</h2>
-                        <span class="price">250,000 so'm</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 1)">
-                    <img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=500" alt="Tabaka">
-                    <div class="info">
-                        <h2>Tabaka</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 2)">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" alt="Vag'ori">
-                    <div class="info">
-                        <h2>Vag'ori</h2>
-                        <span class="price">250,000 so'm</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 3)">
-                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500" alt="KFS">
-                    <div class="info">
-                        <h2>KFS</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 4)">
-                    <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500" alt="Barbekyu">
-                    <div class="info">
-                        <h2>Barbekyu</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 5)">
-                    <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500" alt="Baliq">
-                    <div class="info">
-                        <h2>Baliq</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 6)">
-                    <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500" alt="Shashlik">
-                    <div class="info">
-                        <h2>Mol Go'shti Shashlik</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 7)">
-                    <img src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=500" alt="Manti">
-                    <div class="info">
-                        <h2>Manti</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 8)">
-                    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500" alt="Tandir Somsa">
-                    <div class="info">
-                        <h2>Tandir Somsa</h2>
-                        <span class="price">Buyurtma Berish</span>
-                    </div>
-                </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 9)">
-                    <img src="https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg" alt="Mastava">
+                <div class="mobile-card" onclick="openMobileCard('mains1', 0)">
+                    <img src="https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg" alt="Mastava" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Mastava</h2>
                         <span class="price">35,000 so'm</span>
                     </div>
                 </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 10)">
-                    <img src="https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" alt="Qaynatma Sho'rva">
+                <div class="mobile-card" onclick="openMobileCard('mains1', 1)">
+                    <img src="https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" alt="Qaynatma Sho'rva" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Qaynatma Sho'rva</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 11)">
-                    <img src="https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" alt="Grechka">
+                <div class="mobile-card" onclick="openMobileCard('mains1', 2)">
+                    <img src="https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" alt="Grechka" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Grechka</h2>
                         <span class="price">35,000 so'm</span>
                     </div>
                 </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 12)">
-                    <img src="https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" alt="Ko'za Sho'rva">
+                <div class="mobile-card" onclick="openMobileCard('mains1', 3)">
+                    <img src="https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" alt="Ko'za Sho'rva" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Ko'za Sho'rva</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" onclick="openMobileCard('mains', 13)">
-                    <img src="https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" alt="Tushonka Sho'rva">
+                <div class="mobile-card" onclick="openMobileCard('mains1', 4)">
+                    <img src="https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" alt="Tushonka Sho'rva" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Tushonka Sho'rva</h2>
                         <span class="price">35,000 so'm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Asosiy taomlar (ikkichisi) Sahifasi -->
+    <div class="slider-wrapper category-page" id="mains2Page">
+        <div class="menu-container">
+            <h1 class="menu-title">🍖 Asosiy taomlar (ikkichisi)</h1>
+
+            <div class="mobile-cards-container">
+                <div class="mobile-card" onclick="openMobileCard('mains2', 0)">
+                    <img src="https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" alt="Jiz" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Jiz</h2>
+                        <span class="price">250,000 so'm</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 1)">
+                    <img src="https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" alt="Tabaka" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Tabaka</h2>
+                        <span class="price">Buyurtma Berish</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 2)">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" alt="Vag'ori" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Vag'ori</h2>
+                        <span class="price">250,000 so'm</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 3)">
+                    <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500" alt="KFS" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>KFS</h2>
+                        <span class="price">Buyurtma Berish</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 4)">
+                    <img src="https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg" alt="Barbekyu" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Barbekyu</h2>
+                        <span class="price">Buyurtma Berish</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 5)">
+                    <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500" alt="Shashlik" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Mol Go'shti Shashlik</h2>
+                        <span class="price">Buyurtma Berish</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 6)">
+                    <img src="https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg" alt="Qozon Kabob" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Qozon Kabob</h2>
+                        <span class="price">250,000 so'm</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 7)">
+                    <img src="https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png" alt="Manti" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Manti</h2>
+                        <span class="price">Buyurtma Berish</span>
+                    </div>
+                </div>
+                <div class="mobile-card" onclick="openMobileCard('mains2', 8)">
+                    <img src="https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg" alt="Tandir Somsa" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Tandir Somsa</h2>
+                        <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
             </div>
@@ -226,56 +243,56 @@
             <!-- Mobile cards container -->
             <div class="mobile-cards-container">
                 <div class="mobile-card" onclick="openMobileCard('drinks', 0)">
-                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Cola">
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Cola" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Coca Cola</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 1)">
-                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500" alt="Choy">
+                    <img src="https://homiladorlik.uz/wp-content/uploads/2022/05/kok-choy.webp" alt="Ko'k Choy" width="500" height="350" loading="lazy">
                     <div class="info">
-                        <h2>Yashil Choy</h2>
-                        <span class="price">Buyurtma Berish</span>
+                    <h2>Ko'k Choy</h2>
+                    <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 2)">
-                    <img src="https://thumbs.dreamstime.com/b/can-fanta-orange-moscow-russia-april-coca-cola-company-soft-drink-ice-global-brand-fruit-flavored-carbonated-63824545.jpg" alt="Fanta">
+                    <img src="https://thumbs.dreamstime.com/b/can-fanta-orange-moscow-russia-april-coca-cola-company-soft-drink-ice-global-brand-fruit-flavored-carbonated-63824545.jpg" alt="Fanta" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Fanta</h2>
                         <span class="price">17,000 so'm</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 3)">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5xpJ6WWLQZvHlDhrZrL5JtPZlf2Ul8CgbQ&s" alt="Pepsi">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5xpJ6WWLQZvHlDhrZrL5JtPZlf2Ul8CgbQ&s" alt="Pepsi" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Pepsi</h2>
                         <span class="price">17,000 so'm</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 4)">
-                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500" alt="Qora Choy">
+                    <img src="https://xabar.uz/static/crop/1/2/736_736_95_1223447726.jpg" alt="Qora Choy" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Qora Choy</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 5)">
-                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500" alt="Limon Choy">
+                    <img src="https://data.daryo.uz/media/2023/10/651f186ece54c.jpg" alt="Limon Choy" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Limon Choy</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 6)">
-                    <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500" alt="Sok">
+                    <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500" alt="Sok" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Sok</h2>
                         <span class="price">Buyurtma Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" onclick="openMobileCard('drinks', 7)">
-                    <img src="https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2609175503.jpg" alt="Sprite">
+                    <img src="https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2609175503.jpg" alt="Sprite" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Sprite</h2>
                         <span class="price">17,000 so'm</span>

@@ -115,20 +115,20 @@ const foodData = {
         { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "15,000 so'm" }
     ],
     mains: [
-        { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300 },
-        { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm" },
-        { title: "Vag'ori", description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300 },
-        { title: "KFS", description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.", price: "80,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 80, minWeight: 300 },
-        { title: "Barbekyu", description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300 },
-        { title: "Baliq", description: "Yangi baliqni yog'da qovurilgan holda tayyorlangan mazali taom. KFS uslubida yog'da qovurilgan.", price: "180,000 so'm" },
-        { title: "Mol Go'shti Shashlik", description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "110,000 so'm" },
-        { title: "Manti", description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.", price: "7,000 so'm" },
-        { title: "Tandir Somsa", description: "Tandirda pishirilgan go'shtli an'anaviy somsa.", price: "15,000 so'm" },
         { title: "Mastava", description: "Guruch, go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek sho'rvasi.", price: "35,000 so'm", image: "https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg" },
         { title: "Qaynatma Sho'rva", description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.", price: "35,000 so'm", image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" },
-        { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "35,000 so'm" },
-        { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm" },
-        { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm" }
+        { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "35,000 so'm", image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" },
+        { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm", image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
+        { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm", image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" },
+        { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300, image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" },
+        { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm", image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" },
+        { title: "Vag'ori", description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" },
+        { title: "KFS", description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.", price: "80,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 80, minWeight: 300, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800" },
+        { title: "Barbekyu", description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300, image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg" },
+        { title: "Mol Go'shti Shashlik", description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "110,000 so'm", image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800" },
+        { title: "Qozon Kabob", description: "Qozonda pishirilgan mazali kabob. Go'sht, sabzavotlar va maxsus ziravorlar bilan.", price: "250,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 250, minWeight: 300, image: "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg" },
+        { title: "Manti", description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.", price: "7,000 so'm", image: "https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png" },
+        { title: "Tandir Somsa", description: "Tandirda pishirilgan go'shtli an'anaviy somsa.", price: "15,000 so'm", image: "https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg" }
     ],
     drinks: [
         { title: "Coca Cola", description: "Gazli ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
