@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍴</text></svg>">
     <title> Al-safar Restoran Menyusi</title>
-    <link rel="stylesheet" href="CSS/style.css?v=13">
+    <link rel="stylesheet" href="CSS/style.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Preload critical above-the-fold images -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" imagesrcset="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500 500w, https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800 800w" imagesizes="(max-width: 500px) 500px, 800px">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" imagesrcset="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500 500w, https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800 800w" imagesizes="(max-width: 500px) 500px, 800px">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" imagesrcset="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500 500w, https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800 800w" imagesizes="(max-width: 500px) 500px, 800px">
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#e94560">
@@ -41,7 +45,7 @@
             <div class="category-grid">
                 <!-- Salatlar -->
                 <div class="category-card" onclick="openCategory('salads')">
-                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" alt="Salatlar" width="500" height="350" loading="eager" fetchpriority="high">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500" alt="Salatlar" width="500" height="350" loading="eager" fetchpriority="high" decoding="async" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E'; this.style.background='linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)'">
                     <div class="category-overlay">
                         <h2>🥗 Salatlar</h2>
                     </div>
@@ -49,7 +53,7 @@
                 
                 <!-- Suyuq ovqatlar (birinchisi) -->
                 <div class="category-card" onclick="openCategory('mains1')">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Suyuq ovqatlar" width="500" height="350" loading="eager" fetchpriority="high">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Suyuq ovqatlar" width="500" height="350" loading="eager" fetchpriority="high" decoding="async" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E'; this.style.background='linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)'">
                     <div class="category-overlay">
                         <h2>🍲 Suyuq ovqatlar (birinchisi)</h2>
                     </div>
@@ -57,7 +61,7 @@
                 
                 <!-- Asosiy taomlar (ikkichisi) -->
                 <div class="category-card" onclick="openCategory('mains2')">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Asosiy taomlar" width="500" height="350" loading="eager" fetchpriority="high">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="Asosiy taomlar" width="500" height="350" loading="eager" fetchpriority="high" decoding="async" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E'; this.style.background='linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)'">
                     <div class="category-overlay">
                         <h2>🍖 Asosiy taomlar (ikkichisi)</h2>
                     </div>
@@ -65,7 +69,7 @@
                 
                 <!-- Ichimliklar -->
                 <div class="category-card" onclick="openCategory('drinks')">
-                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Ichimliklar" width="500" height="350" loading="eager" fetchpriority="high">
+                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Ichimliklar" width="500" height="350" loading="eager" fetchpriority="high" decoding="async" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E'; this.style.background='linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)'">
                     <div class="category-overlay">
                         <h2>🥤 Ichimliklar</h2>
                     </div>
@@ -309,7 +313,7 @@
         <div class="modal-content">
             <button class="close-btn" onclick="closeFullscreen()">&times;</button>
             <div class="modal-image">
-                <img id="modalImg" src="" alt="">
+                <img id="modalImg" src="" alt="" decoding="async">
             </div>
             <div class="modal-info">
                 <h2 id="modalTitle"></h2>
@@ -361,16 +365,91 @@
         </div>
     </div>
 
-    <!-- Toast xabar -->
-    <div class="toast" id="toast">
-        <div class="toast-content">
-            <h3 id="toastTitle"></h3>
-            <p id="toastMessage"></p>
-        </div>
-    </div>
+     <!-- Toast xabar -->
+     <div class="toast" id="toast">
+         <div class="toast-content">
+             <h3 id="toastTitle"></h3>
+             <p id="toastMessage"></p>
+         </div>
+     </div>
 
+     <!-- Joylashuvni tanlash modali (sayt ochilishi bilan) -->
+     <div class="fullscreen-modal" id="tableSelectModal" style="display: none;">
+         <div class="modal-content">
+             <h2 style="text-align: center; margin-bottom: 20px;">📍 Joylashuvni tanlang</h2>
+              <div class="table-select">
+                  <label>Joyni tanlang:</label>
+                  <select id="tableTypeInitial" onchange="toggleTableInputInitial()">
+                      <option value="stol">Stol (1-18)</option>
+                      <option value="kabina">Kabina (1-3)</option>
+                      <option value="tabcha">Tabchan (karavot) (1-3)</option>
+                      <option value="delivery">Yetkazish (manzilga)</option>
+                  </select>
+              </div>
+             <div id="stolInputContainerInitial">
+                 <input type="number" id="tableNumberInitial" placeholder="Stol raqami (1-18)" min="1" max="18">
+             </div>
+             <div id="kabineInputContainerInitial" style="display: none;">
+                 <input type="number" id="kabineNumberInitial" placeholder="Kabina raqami (1-3)" min="1" max="3">
+             </div>
+             <div id="tabchaInputContainerInitial" style="display: none;">
+                 <input type="number" id="tabchaNumberInitial" placeholder="Tabchan raqami (1-3)" min="1" max="3">
+             </div>
+             <button class="location-btn" onclick="saveInitialLocation()" style="margin-top: 20px; width: 100%;">Saqlash</button>
+         </div>
+      </div>
 
+      <!-- Delivery Address Modal -->
+      <div class="fullscreen-modal" id="locationModal" style="display: none;">
+          <div class="modal-content">
+              <button class="close-btn" onclick="closeLocationModal()">&times;</button>
+              <div class="modal-info">
+                  <h2>📍 Manzilni kiriting</h2>
+                  <p>Yetkazish manzilingizni to'liq kiriting</p>
+                  <div class="input-group">
+                      <label>Manzil</label>
+                      <textarea id="deliveryAddress" placeholder="Ko'cha, uy, kvartira, qo'shimcha ma'lumotlar..." rows="3"></textarea>
+                  </div>
+                  <button class="order-btn" onclick="saveDeliveryLocation()">Manzilni saqlash</button>
+              </div>
+          </div>
+      </div>
 
-    <script src="index.js?v=16"></script>
+      <script src="index.min.js"></script>
+      <!-- Image loading optimizations -->
+      <script>
+        // Set decoding="async" on all images for better performance
+        document.addEventListener('DOMContentLoaded', function() {
+            // Optimize all images
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                // Set async decoding if not already set
+                if (!img.hasAttribute('decoding')) {
+                    img.decoding = 'async';
+                }
+                
+                // Add error handling for mobile card images (if not already has onerror)
+                if (!img.onerror && img.loading === 'lazy') {
+                    img.onerror = function() {
+                        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="16"%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E';
+                        this.style.background = 'linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%)';
+                    };
+                }
+            });
+
+            // Preload first few mobile card images for faster perceived loading
+            const mobileCardImages = document.querySelectorAll('.mobile-card img');
+            const imagesToPreload = Array.from(mobileCardImages).slice(0, 3);
+            imagesToPreload.forEach(img => {
+                if (img.src) {
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = 'image';
+                    link.href = img.src;
+                    document.head.appendChild(link);
+                }
+            });
+        });
+      </script>
 </body>
 </html>

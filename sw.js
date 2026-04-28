@@ -121,31 +121,28 @@ self.addEventListener('fetch', (event) => {
         return;
     }
     
-    // Images - cache first with separate image cache
+    // Images - stale-while-revalidate (fast + fresh)
     if (isImage) {
-        console.log('[SW] Image request - cache first:', pathname);
+        console.log('[SW] Image request - stale-while-revalidate:', pathname);
         event.respondWith(
             caches.open(IMAGE_CACHE)
                 .then((imageCache) => {
                     return imageCache.match(event.request)
                         .then((cachedResponse) => {
-                            if (cachedResponse) {
-                                console.log('[SW] Serving image from cache:', pathname);
-                                return cachedResponse;
-                            }
-                            
-                            console.log('[SW] Fetching image from network:', pathname);
-                            return fetch(event.request)
-                                .then((response) => {
-                                    if (response && response.status === 200) {
-                                        imageCache.put(event.request, response.clone());
+                            // Fetch from network in background
+                            const fetchPromise = fetch(event.request)
+                                .then((networkResponse) => {
+                                    if (networkResponse && networkResponse.status === 200) {
+                                        imageCache.put(event.request, networkResponse.clone());
                                     }
-                                    return response;
+                                    return networkResponse;
                                 })
-                                .catch(() => {
-                                    // Return placeholder image if offline
-                                    return new Response('', { status: 503 });
+                                .catch((err) => {
+                                    console.log('[SW] Image network fetch failed:', err);
                                 });
+                            
+                            // Return cached response immediately if available, otherwise wait for network
+                            return cachedResponse || fetchPromise;
                         });
                 })
         );

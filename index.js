@@ -307,8 +307,14 @@ function openFullscreen(category) {
     const foodInfo = items[currentIndexCategory];
 
     // Modal ma'lumotlarini to'ldirish
-    document.getElementById('modalImg').src = foodInfo.image;
-    document.getElementById('modalImg').alt = foodInfo.title;
+    const modalImg = document.getElementById('modalImg');
+    modalImg.src = foodInfo.image;
+    modalImg.alt = foodInfo.title;
+    // Image error handling - show fallback
+    modalImg.onerror = function() {
+        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="16"%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E';
+        this.style.background = 'linear-gradient(135deg, #f0f0f0 0%25, #e0e0e0 100%25)';
+    };
     document.getElementById('modalTitle').textContent = foodInfo.title;
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
@@ -356,8 +362,14 @@ function openMobileCard(category, index) {
     const foodInfo = items[index];
 
     // Modal ma'lumotlarini to'ldirish
-    document.getElementById('modalImg').src = foodInfo.image;
-    document.getElementById('modalImg').alt = foodInfo.title;
+    const modalImg = document.getElementById('modalImg');
+    modalImg.src = foodInfo.image;
+    modalImg.alt = foodInfo.title;
+    // Image error handling - show fallback
+    modalImg.onerror = function() {
+        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="16"%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E';
+        this.style.background = 'linear-gradient(135deg, #f0f0f0 0%25, #e0e0e0 100%25)';
+    };
     document.getElementById('modalTitle').textContent = foodInfo.title;
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
@@ -999,48 +1011,37 @@ function checkout() {
         return;
     }
     
-    // Stol/Kabina/Tabcha tanlashni so'rash
-    const choice = prompt('Qayerda o\'tirasiz?\n1 - Stol\n2 - Kabina\n3 - Tabchan\n4 - Yetkazish (manzilga)\n\nRaqamni kiriting:');
-    
-    if (!choice) return;
-    
-    let locationInfo = '';
-    let deliveryType = 'come';
-    
-    if (choice === '1') {
-        const tableNum = prompt('Stol raqamini kiriting (1-18):', '1');
-        if (tableNum) {
-            locationInfo = 'Stol raqami: ' + tableNum;
+    // Agar oldin tanlangan location bo'lsa, shuni ishlat
+    if (userLocation.address) {
+        // Determine delivery type based on location format
+        let deliveryType = 'come';
+        let locationInfo = userLocation.address;
+        
+        if (userLocation.address.includes('Stol raqami:')) {
             deliveryType = 'table';
-        }
-    } else if (choice === '2') {
-        const kabinaNum = prompt('Kabina raqamini kiriting (1-3):', '1');
-        if (kabinaNum) {
-            locationInfo = 'Kabina raqami: ' + kabinaNum;
+        } else if (userLocation.address.includes('Kabina raqami:')) {
             deliveryType = 'kabina';
-        }
-    } else if (choice === '3') {
-        const tabchaNum = prompt('Tabchan raqamini kiriting (1-3):', '1');
-        if (tabchaNum) {
-            locationInfo = 'Tabchan raqami: ' + tabchaNum;
+        } else if (userLocation.address.includes('Tabchan raqami:')) {
             deliveryType = 'tabcha';
+        } else {
+            deliveryType = 'address';
         }
-    } else if (choice === '4') {
-        if (!userLocation.address) {
-            alert('Iltimos, avval manzilingizni kiriting!');
-            document.getElementById('locationModal').style.display = 'flex';
-            closeCart();
-            return;
-        }
-        locationInfo = 'Manzil: ' + userLocation.address;
-        deliveryType = 'address';
-    } else {
-        alert('Noto\'g\'ri tanlov!');
+        
+        processOrder(locationInfo, deliveryType);
         return;
     }
     
-    if (!locationInfo) return;
-    
+    // Agar location tanlanmagan bo'lsa, initial modalni ko'rsatish
+    const tableSelectModal = document.getElementById('tableSelectModal');
+    if (tableSelectModal) {
+        tableSelectModal.style.display = 'flex';
+        toggleTableInputInitial();
+        closeCart();
+    }
+}
+
+// Order processing after location is selected
+function processOrder(locationInfo, deliveryType) {
     const firstItem = cart[0];
     let found = false;
     for (const cat in foodData) {
@@ -1068,6 +1069,110 @@ function checkout() {
     }
     
     showNotification(locationInfo + ' tanlandi!');
+}
+
+// ==================== INITIAL LOCATION SELECTION ====================
+// Initial location modal - toggle input fields based on table type
+function toggleTableInputInitial() {
+    const tableType = document.getElementById('tableTypeInitial').value;
+    const stolContainer = document.getElementById('stolInputContainerInitial');
+    const kabinaContainer = document.getElementById('kabineInputContainerInitial');
+    const tabchaContainer = document.getElementById('tabchaInputContainerInitial');
+    
+    // Hide all first
+    if (stolContainer) stolContainer.style.display = 'none';
+    if (kabinaContainer) kabinaContainer.style.display = 'none';
+    if (tabchaContainer) tabchaContainer.style.display = 'none';
+    
+    // Show selected
+    if (tableType === 'stol' && stolContainer) {
+        stolContainer.style.display = 'flex';
+    } else if (tableType === 'kabina' && kabinaContainer) {
+        kabinaContainer.style.display = 'flex';
+    } else if (tableType === 'tabcha' && tabchaContainer) {
+        tabchaContainer.style.display = 'flex';
+    } else if (tableType === 'delivery') {
+        // For delivery, we'll open the address modal directly
+        document.getElementById('tableSelectModal').style.display = 'none';
+        document.getElementById('locationModal').style.display = 'flex';
+    }
+}
+
+// Save initial location selection
+function saveInitialLocation() {
+    const tableType = document.getElementById('tableTypeInitial').value;
+    let locationNumber = null;
+    
+    if (tableType === 'stol') {
+        locationNumber = document.getElementById('tableNumberInitial').value;
+        if (!locationNumber || locationNumber < 1 || locationNumber > 18) {
+            alert('Iltimos, stol raqamini 1 dan 18 gacha bo\'lgan son kiriting!');
+            return;
+        }
+        userLocation.address = 'Stol raqami: ' + locationNumber;
+        userLocation.deliveryAvailable = false;
+        
+        // Hide modal and show notification
+        document.getElementById('tableSelectModal').style.display = 'none';
+        showNotification('📍 ' + userLocation.address + ' tanlandi!');
+        console.log('Location saved:', userLocation);
+    } else if (tableType === 'kabina') {
+        locationNumber = document.getElementById('kabineNumberInitial').value;
+        if (!locationNumber || locationNumber < 1 || locationNumber > 3) {
+            alert('Iltimos, kabina raqamini 1 dan 3 gacha bo\'lgan son kiriting!');
+            return;
+        }
+        userLocation.address = 'Kabina raqami: ' + locationNumber;
+        userLocation.deliveryAvailable = false;
+        
+        // Hide modal and show notification
+        document.getElementById('tableSelectModal').style.display = 'none';
+        showNotification('📍 ' + userLocation.address + ' tanlandi!');
+        console.log('Location saved:', userLocation);
+    } else if (tableType === 'tabcha') {
+        locationNumber = document.getElementById('tabchaNumberInitial').value;
+        if (!locationNumber || locationNumber < 1 || locationNumber > 3) {
+            alert('Iltimos, tabchan raqamini 1 dan 3 gacha bo\'lgan son kiriting!');
+            return;
+        }
+        userLocation.address = 'Tabchan raqami: ' + locationNumber;
+        userLocation.deliveryAvailable = false;
+        
+        // Hide modal and show notification
+        document.getElementById('tableSelectModal').style.display = 'none';
+        showNotification('📍 ' + userLocation.address + ' tanlandi!');
+        console.log('Location saved:', userLocation);
+    } else if (tableType === 'delivery') {
+        // Switch to address input modal
+        document.getElementById('tableSelectModal').style.display = 'none';
+        document.getElementById('locationModal').style.display = 'flex';
+    }
+}
+
+// Close delivery location modal
+function closeLocationModal() {
+    document.getElementById('locationModal').style.display = 'none';
+}
+
+// Save delivery location
+function saveDeliveryLocation() {
+    const address = document.getElementById('deliveryAddress').value.trim();
+    
+    if (!address) {
+        alert('Iltimos, manzilingizni kiriting!');
+        return;
+    }
+    
+    userLocation.address = address;
+    userLocation.deliveryAvailable = true;
+    
+    // Hide modal
+    document.getElementById('locationModal').style.display = 'none';
+    
+    // Show notification
+    showNotification('📍 Manzil saqlandi!');
+    
+    console.log('Delivery location saved:', userLocation);
 }
 
 // Xabar ko'rsatish
@@ -1098,7 +1203,15 @@ document.addEventListener('DOMContentLoaded', () => {
     showMainPage();
     loadCart();
     
-
+    // Show initial location selection modal if location not set
+    if (!userLocation.address) {
+        const locationModal = document.getElementById('tableSelectModal');
+        if (locationModal) {
+            locationModal.style.display = 'flex';
+            // Initialize toggle
+            toggleTableInputInitial();
+        }
+    }
     
     // Service Worker ro'yhatga olish (PWA uchun)
     if ('serviceWorker' in navigator) {
