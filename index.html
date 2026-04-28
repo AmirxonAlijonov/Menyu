@@ -360,6 +360,7 @@
                 
 
                 
+                <button class="add-cart-btn" onclick="addToCartFromModal()">🛒 Savatga qo'shish</button>
                 <button class="order-btn" id="orderBtn" onclick="submitOrder(); return false;">📦 Buyurtma berish</button>
             </div>
         </div>
@@ -411,6 +412,32 @@
                       <textarea id="deliveryAddress" placeholder="Ko'cha, uy, kvartira, qo'shimcha ma'lumotlar..." rows="3"></textarea>
                   </div>
                   <button class="order-btn" onclick="saveDeliveryLocation()">Manzilni saqlash</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- Cart Button (Fixed) -->
+      <div class="cart-btn" id="cartBtn" onclick="toggleCart()">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-badge" id="cartBadge">0</span>
+      </div>
+
+      <!-- Cart Modal -->
+      <div class="fullscreen-modal" id="cartModal" style="display: none;">
+          <div class="modal-content" style="max-width: 500px;">
+              <button class="close-btn" onclick="closeCart()">&times;</button>
+              <div class="cart-header">
+                  <h2>🛒 Savatingiz</h2>
+                  <button class="clear-btn" onclick="clearCart()">Tozalash</button>
+              </div>
+              <div class="cart-items" id="cartItems">
+                  <!-- Cart items will be rendered here -->
+              </div>
+              <div class="cart-total" id="cartTotalContainer" style="display: none;">
+                  <p>Jami: <span id="cartTotal">0 so'm</span></p>
+              </div>
+              <div class="cart-actions">
+                  <button class="order-btn" id="checkoutBtn" onclick="checkout()">📦 Buyurtma berish</button>
               </div>
           </div>
       </div>

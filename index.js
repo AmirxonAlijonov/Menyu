@@ -590,7 +590,27 @@ function submitOrder() {
         return;
     }
     
-
+    // Joylashuv ma'lumotlarini olish
+    let tableType = null, tableNumber = null, kabinaNumber = null, tabchaNumber = null;
+    const locationAddress = userLocation.address;
+    
+    if (locationAddress) {
+        if (locationAddress.includes('Stol raqami:')) {
+            tableType = 'stol';
+            tableNumber = locationAddress.replace('Stol raqami:', '').trim();
+        } else if (locationAddress.includes('Kabina raqami:')) {
+            tableType = 'kabina';
+            kabinaNumber = locationAddress.replace('Kabina raqami:', '').trim();
+        } else if (locationAddress.includes('Tabchan raqami:')) {
+            tableType = 'tabcha';
+            tabchaNumber = locationAddress.replace('Tabchan raqami:', '').trim();
+        } else {
+            tableType = 'address';
+        }
+    } else {
+        showToast('❌ Xato!', 'Iltimos, avval joylashuvni tanlang!', '#e74c3c');
+        return;
+    }
     
     const title = document.getElementById('modalTitle').textContent;
     const priceText = document.getElementById('modalPrice').textContent;
@@ -619,6 +639,7 @@ function submitOrder() {
         tableNumber: tableType === 'stol' ? tableNumber : null,
         kabinaNumber: tableType === 'kabina' ? kabinaNumber : null,
         tabchaNumber: tableType === 'tabcha' ? tabchaNumber : null,
+        address: tableType === 'address' ? locationAddress : null,
         timestamp: new Date().toISOString()
     };
     
@@ -676,8 +697,10 @@ function submitOrder() {
                 locationMsg = 'Tabchan: ' + tabchaNumber;
             } else if (tableType === 'kabina') {
                 locationMsg = 'Kabina: ' + kabinaNumber;
-            } else {
+            } else if (tableType === 'stol') {
                 locationMsg = 'Stol: ' + tableNumber;
+            } else {
+                locationMsg = 'Manzil: ' + locationAddress;
             }
             showToast('✅ Buyurtmangiz qabul qilindi!', `🎉 Buyurtmangiz muvaffaqiyatli yuborildi!\n\n📦 Mahsulot: ${title}\n📊 Miqdor: ${quantity}\n💰 Jami narx: ${totalPriceText}\n📍 ${locationMsg}\n\n✨ Rahmat! Tez orada operator siz bilan bog'lanadi!`, '#27ae60', '🎉');
         } else {
@@ -891,19 +914,41 @@ function closeLocationModal() {
 
 
 // ==================== SAVAT FUNKSIYALARI ====================
+// Modaldan savatga qo'shish
 function addToCartFromModal() {
-    var title = document.getElementById('modalTitle').innerHTML;
-    var price = document.getElementById('modalPrice').innerHTML;
-    var img = document.getElementById('modalImage').src;
-    var qty = document.getElementById('modalQuantity').value;
+    var title = document.getElementById('modalTitle').textContent;
+    var price = document.getElementById('modalPrice').textContent;
+    var img = document.getElementById('modalImg').src;
+    var qty = parseInt(document.getElementById('modalQuantity').value);
     
-    var item = {id: 1, title: title, price: price, priceNum: 10000, quantity: qty, image: img};
-    window.myCart = [];
-    window.myCart.push(item);
+    if (isNaN(qty) || qty <= 0) {
+        showToast('❌ Xato!', 'Miqdorni to\'g\'ri kiriting', '#e74c3c');
+        return;
+    }
     
-    document.getElementById('cartBadge').innerHTML = window.myCart.length;
-    document.getElementById('fullscreenModal').style.display = 'none';
-    alert('Qoshildi!');
+    // Narxni son sifatida olish
+    var priceNum = parseInt(price.replace(/[^0-9]/g, ''));
+    
+    var item = {
+        id: Date.now(),
+        title: title,
+        price: price,
+        priceNum: priceNum,
+        quantity: qty,
+        image: img
+    };
+    
+    // Mavjud itemni tekshirish
+    const existingItem = cart.find(c => c.title === item.title);
+    if (existingItem) {
+        existingItem.quantity += qty;
+    } else {
+        cart.push(item);
+    }
+    
+    saveCart();
+    updateCartBadge();
+    showNotification(`${item.title} savatga qo'shildi!`);
 }
 
 // Mahsulotni savatga qo'shish
@@ -927,6 +972,16 @@ function addToCart(item, quantity = 1) {
     showNotification(`${item.title} savatga qo'shildi!`);
 }
 
+// Savatni ochish/yopish
+function toggleCart() {
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal.style.display === 'flex') {
+        closeCart();
+    } else {
+        showCart();
+    }
+}
+
 // Savatni ko'rsatish
 function showCart() {
     renderCartItems();
@@ -938,10 +993,21 @@ function closeCart() {
     document.getElementById('cartModal').style.display = 'none';
 }
 
+// Narxni parse qilish (son ga aylantirish)
+function parsePrice(priceStr) {
+    return parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+}
+
+// Narxni formatlash (so'm uchun)
+function formatPrice(price) {
+    return price.toLocaleString() + " so'm";
+}
+
 // Savatdagi mahsulotlarni chiqarish
 function renderCartItems() {
     const container = document.getElementById('cartItems');
-    const totalContainer = document.getElementById('cartTotal');
+    const totalContainer = document.getElementById('cartTotalContainer');
+    const totalElement = document.getElementById('cartTotal');
     if (cart.length === 0) {
         container.innerHTML = '<p class="empty-cart">Savat bo\'sh</p>';
         totalContainer.style.display = 'none';
@@ -954,7 +1020,7 @@ function renderCartItems() {
         return `<div class="cart-item"><img src="${item.image}" alt="${item.title}"><div class="cart-item-info"><h3>${item.title}</h3><p>${item.price} x ${item.quantity}</p><p class="item-total">Jami: ${formatPrice(itemTotal)}</p></div><button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button></div>`;
     }).join('');
     totalContainer.style.display = 'block';
-    document.getElementById('totalPrice').textContent = formatPrice(total);
+    totalElement.textContent = formatPrice(total);
 }
 
 // Mahsulotni savatdan o'chirish
