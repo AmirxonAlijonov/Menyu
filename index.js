@@ -24,7 +24,7 @@ const foodData = {
             title: "Chiroqchi Salati",
             description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.",
             price: "20,000 so'm",
-            image: "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=800"
+            image: "https://api.silkphoto.uz/storage/ResourceThumbnail/c47ad3b4-fc99-4df6-a580-0b623ee89b41/YzQ3YWQzYjQtZmM5OS00ZGY2LWE1ODAtMGI2MjNlZTg5YjQxLTE3MzY5NTEyNTc=.webp"
         },
         {
             title: "Sezer Salati",
@@ -36,7 +36,7 @@ const foodData = {
             title: "Svejiy Salat",
             description: "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.",
             price: "15,000 so'm",
-            image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800"
+            image: "https://shar-shara.ru/wp-content/uploads/2024/10/IMG_0254.jpg"
         },
         {
             title: "Achchiq Chuchuk Salat",
@@ -168,10 +168,10 @@ const foodData = {
             image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
         },
         {
-            title: "Yashil Choy",
+            title: "Ko'k Choy",
             description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.",
             price: "2,000 so'm",
-            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800"
+            image: "https://homiladorlik.uz/wp-content/uploads/2022/05/kok-choy.webp"
         },
         {
             title: "Fanta",
@@ -201,13 +201,13 @@ const foodData = {
             title: "Qora Choy",
             description: "Issiq qora choy suty bilan. An'anaviy ichimlik.",
             price: "5,000 so'm",
-            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800"
+            image: "https://xabar.uz/static/crop/1/2/736_736_95_1223447726.jpg"
         },
         {
             title: "Limon Choy",
             description: "Maxsus tayyorlangan limonli choy - yangi limon va choy bilan tayyorlangan.",
             price: "20,000 so'm",
-            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800"
+            image: "https://data.daryo.uz/media/2023/10/651f186ece54c.jpg"
         },
         {
             title: "Sok",
@@ -559,27 +559,7 @@ function updateWeightPrice() {
     updateModalPrice();
 }
 
-// Stol/Kabina/Tabchan tanlash funksiyasi
-function toggleTableInput() {
-    const tableType = document.getElementById('tableType').value;
-    const stolContainer = document.getElementById('stolInputContainer');
-    const kabinaContainer = document.getElementById('kabinaInputContainer');
-    const tabchaContainer = document.getElementById('tabchaInputContainer');
-    
-    if (tableType === 'stol') {
-        stolContainer.style.display = 'flex';
-        kabinaContainer.style.display = 'none';
-        tabchaContainer.style.display = 'none';
-    } else if (tableType === 'kabina') {
-        stolContainer.style.display = 'none';
-        kabinaContainer.style.display = 'flex';
-        tabchaContainer.style.display = 'none';
-    } else if (tableType === 'tabcha') {
-        stolContainer.style.display = 'none';
-        kabinaContainer.style.display = 'none';
-        tabchaContainer.style.display = 'flex';
-    }
-}
+
 
 // Buyurtma yuborish funksiyasi
 function submitOrder() {
@@ -598,33 +578,7 @@ function submitOrder() {
         return;
     }
     
-    // Stol/Kabina/Tabcha/Karavot raqamini tekshirish
-    const tableType = document.getElementById('tableType').value;
-    const tableNumberInput = document.getElementById('tableNumber');
-    const kabinaInput = document.getElementById('kabinaNumber');
-    const tabchaInput = document.getElementById('tabchaNumber');
-    
-    const tableNumber = tableNumberInput?.value ? parseInt(tableNumberInput.value) : null;
-    const kabinaNumber = kabinaInput?.value ? parseInt(kabinaInput.value) : null;
-    const tabchaNumber = tabchaInput?.value ? parseInt(tabchaInput.value) : null;
-    
-    // Stol raqami tekshirish (faqat Stol tanlanganida)
-    if (tableType === 'stol' && tableNumber && (isNaN(tableNumber) || tableNumber < 1 || tableNumber > 18)) {
-        showToast('❌ Xato!', 'Stol raqamini 1 dan 18 gacha kiriting.', '#e74c3c');
-        return;
-    }
-    
-    // Kabina raqamini tekshirish (faqat Kabina tanlanganida)
-    if (tableType === 'kabina' && kabinaNumber && (isNaN(kabinaNumber) || kabinaNumber < 1 || kabinaNumber > 3)) {
-        showToast('❌ Xato!', 'Kabina raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
-        return;
-    }
-    
-    // Tabcha raqamini tekshirish (faqat Tabcha tanlanganida)
-    if (tableType === 'tabcha' && tabchaNumber && (isNaN(tabchaNumber) || tabchaNumber < 1 || tabchaNumber > 3)) {
-        showToast('❌ Xato!', 'Tabchan raqamini 1 dan 3 gacha kiriting.', '#e74c3c');
-        return;
-    }
+
     
     const title = document.getElementById('modalTitle').textContent;
     const priceText = document.getElementById('modalPrice').textContent;
@@ -892,43 +846,11 @@ modal.addEventListener('click', (e) => {
 });
 
 // ==================== LOKATSIYA FUNKSIYALARI ====================
-// Sayt ochilganda lokatsiyani tekshirish
-function checkLocationOnLoad() {
-    const savedLocation = localStorage.getItem('userLocation');
-    if (savedLocation) {
-        userLocation = JSON.parse(savedLocation);
-    } else {
-        document.getElementById('locationModal').style.display = 'flex';
-    }
-}
 
-// Geolocation orqali lokatsiyani so'rash
-function requestLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                userLocation.latitude = position.coords.latitude;
-                userLocation.longitude = position.coords.longitude;
-                userLocation.address = `Koordinatalar: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
-                userLocation.deliveryAvailable = true;
-                saveLocation();
-                closeLocationModal();
-                showNotification('Lokatsiya muvaffaqiyatli saqlandi!');
-            },
-            (error) => {
-                showManualLocation();
-            }
-        );
-    } else {
-        showManualLocation();
-    }
-}
 
-// Qo'lda manzil kiritish
-function showManualLocation() {
-    document.querySelector('.location-options').style.display = 'none';
-    document.getElementById('manualLocation').style.display = 'block';
-}
+
+
+
 
 // Manual manzilni saqlash
 function saveManualLocation() {
@@ -954,59 +876,7 @@ function closeLocationModal() {
     document.getElementById('locationModal').style.display = 'none';
 }
 
-// ==================== BOSHLANG'ICH JOYLASHUV ====================
-// Joylashuv turini almashtirish (boshlang'ich)
-function toggleTableInputInitial() {
-    const tableType = document.getElementById('tableTypeInitial').value;
-    document.getElementById('stolInputContainerInitial').style.display = tableType === 'stol' ? 'block' : 'none';
-    document.getElementById('kabinaInputContainerInitial').style.display = tableType === 'kabina' ? 'block' : 'none';
-    document.getElementById('tabchaInputContainerInitial').style.display = tableType === 'tabcha' ? 'block' : 'none';
-}
 
-// Boshlang'ich joylashuvni saqlash
-function saveInitialLocation() {
-    const tableType = document.getElementById('tableTypeInitial').value;
-    let tableNumber = '';
-    
-    if (tableType === 'stol') {
-        tableNumber = document.getElementById('tableNumberInitial').value;
-        if (!tableNumber || tableNumber < 1 || tableNumber > 18) {
-            alert('Iltimos, to\'g\'ri stol raqamini kiriting (1-18)!');
-            return;
-        }
-    } else if (tableType === 'kabina') {
-        tableNumber = document.getElementById('kabinaNumberInitial').value;
-        if (!tableNumber || tableNumber < 1 || tableNumber > 3) {
-            alert('Iltimos, to\'g\'ri kabina raqamini kiriting (1-3)!');
-            return;
-        }
-    } else if (tableType === 'tabcha') {
-        tableNumber = document.getElementById('tabchaNumberInitial').value;
-        if (!tableNumber || tableNumber < 1 || tableNumber > 3) {
-            alert('Iltimos, to\'g\'ri tabchan raqamini kiriting (1-3)!');
-            return;
-        }
-    }
-    
-    userLocation = {
-        type: tableType,
-        tableNumber: tableNumber,
-        address: tableType + ' ' + tableNumber
-    };
-    localStorage.setItem('userLocation', JSON.stringify(userLocation));
-    document.getElementById('tableSelectModal').style.display = 'none';
-    showToast('✅ Joylashuv saqlandi!', 'Sizning joylashuvingiz: ' + userLocation.address, '#27ae60');
-}
-
-// Boshlang'ich joylashuvni tekshirish va modalni ochish
-function checkInitialLocation() {
-    const savedLocation = localStorage.getItem('userLocation');
-    if (!savedLocation) {
-        document.getElementById('tableSelectModal').style.display = 'flex';
-    } else {
-        userLocation = JSON.parse(savedLocation);
-    }
-}
 
 // ==================== SAVAT FUNKSIYALARI ====================
 function addToCartFromModal() {
@@ -1228,10 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showMainPage();
     loadCart();
     
-    // Boshlang'ich joylashuvni tekshirish (loader yashirilgandan so'ng)
-    setTimeout(() => {
-        checkInitialLocation();
-    }, 2000);
+
     
     // Service Worker ro'yhatga olish (PWA uchun)
     if ('serviceWorker' in navigator) {
