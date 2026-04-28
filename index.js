@@ -948,6 +948,12 @@ function addToCartFromModal() {
     
     saveCart();
     updateCartBadge();
+    // Badge bounce animation
+    const badge = document.getElementById('cartBadge');
+    if (badge) {
+        badge.classList.add('bounce');
+        setTimeout(() => badge.classList.remove('bounce'), 400);
+    }
     showNotification(`${item.title} savatga qo'shildi!`);
 }
 
@@ -969,6 +975,12 @@ function addToCart(item, quantity = 1) {
     }
     saveCart();
     updateCartBadge();
+    // Badge bounce animation
+    const badge = document.getElementById('cartBadge');
+    if (badge) {
+        badge.classList.add('bounce');
+        setTimeout(() => badge.classList.remove('bounce'), 400);
+    }
     showNotification(`${item.title} savatga qo'shildi!`);
 }
 
@@ -1017,7 +1029,20 @@ function renderCartItems() {
     container.innerHTML = cart.map(item => {
         const itemTotal = item.priceNum * item.quantity;
         total += itemTotal;
-        return `<div class="cart-item"><img src="${item.image}" alt="${item.title}"><div class="cart-item-info"><h3>${item.title}</h3><p>${item.price} x ${item.quantity}</p><p class="item-total">Jami: ${formatPrice(itemTotal)}</p></div><button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button></div>`;
+        return `<div class="cart-item">
+            <img src="${item.image}" alt="${item.title}">
+            <div class="cart-item-info">
+                <h3>${item.title}</h3>
+                <p>${item.price} x ${item.quantity}</p>
+                <p class="item-total">Jami: ${formatPrice(itemTotal)}</p>
+            </div>
+            <div class="cart-quantity-controls">
+                <button class="qty-btn-small" onclick="decreaseQuantity(${item.id})">-</button>
+                <span class="qty-display">${item.quantity}</span>
+                <button class="qty-btn-small" onclick="increaseQuantity(${item.id})">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button>
+        </div>`;
     }).join('');
     totalContainer.style.display = 'block';
     totalElement.textContent = formatPrice(total);
@@ -1029,6 +1054,33 @@ function removeFromCart(id) {
     saveCart();
     updateCartBadge();
     renderCartItems();
+}
+
+// Savatdagi miqdorni oshirish
+function increaseQuantity(id) {
+    const item = cart.find(i => i.id === id);
+    if (item) {
+        item.quantity++;
+        saveCart();
+        updateCartBadge();
+        renderCartItems();
+    }
+}
+
+// Savatdagi miqdorni kamayirish
+function decreaseQuantity(id) {
+    const item = cart.find(i => i.id === id);
+    if (item && item.quantity > 1) {
+        item.quantity--;
+        saveCart();
+        updateCartBadge();
+        renderCartItems();
+    } else if (item && item.quantity === 1) {
+        // Agar 1 bo'lsa, o'chirishni so'rash
+        if (confirm("Mahsulotni savatdan o'chirmoqchimisiz?")) {
+            removeFromCart(id);
+        }
+    }
 }
 
 // Savatni tozalash
@@ -1106,35 +1158,112 @@ function checkout() {
     }
 }
 
-// Order processing after location is selected
+// Order processing after location is selected - send ALL cart items
 function processOrder(locationInfo, deliveryType) {
-    const firstItem = cart[0];
-    let found = false;
-    for (const cat in foodData) {
-        const item = foodData[cat].find(function(i) { return i.title === firstItem.title; });
-        if (item) {
-            currentCategory = cat;
-            currentIndexCategory = foodData[cat].indexOf(item);
-            found = true;
-            break;
-        }
+    if (cart.length === 0) {
+        showToast('❌ Xato!', 'Savat bo\'sh!', '#e74c3c');
+        return;
     }
     
-    closeCart();
+    // Determine table/kabina/tabcha numbers from location
+    let tableNumber = null, kabinaNumber = null, tabchaNumber = null, address = null;
     
-    if (found) {
-        openMobileCard(currentCategory, currentIndexCategory);
-        document.getElementById('modalQuantity').value = firstItem.quantity;
-        updateQuantity(0);
+    if (locationInfo.includes('Stol raqami:')) {
+        tableNumber = locationInfo.replace('Stol raqami:', '').trim();
+    } else if (locationInfo.includes('Kabina raqami:')) {
+        kabinaNumber = locationInfo.replace('Kabina raqami:', '').trim();
+    } else if (locationInfo.includes('Tabchan raqami:')) {
+        tabchaNumber = locationInfo.replace('Tabchan raqami:', '').trim();
+    } else {
+        address = locationInfo;
+    }
+    
+    // Send all cart items as separate orders
+    const orderPromises = cart.map(item => {
+        const orderData = {
+            product: item.title,
+            quantity: item.quantity,
+            price: item.price,
+            tableNumber: tableNumber,
+            kabinaNumber: kabinaNumber,
+            tabchaNumber: tabchaNumber,
+            address: address,
+            timestamp: new Date().toISOString()
+        };
         
-        const deliverySelect = document.getElementById('deliveryType');
-        if (deliverySelect) {
-            deliverySelect.value = deliveryType;
-            updateDeliveryOptions();
+        // Vercel/Production yoki local server uchun URL
+        let apiUrl;
+        if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
+            apiUrl = window.location.origin + '/api/order';
+        } else {
+            apiUrl = 'http://localhost:3001/api/order';
         }
-    }
+        
+        return fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        }).then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error('Server xatosi: ' + response.status);
+                });
+            }
+            return response.json();
+        });
+    });
     
-    showNotification(locationInfo + ' tanlandi!');
+    // Show loading state
+    const orderBtn = document.getElementById('orderBtn');
+    if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
+    
+    // Wait for all orders to complete
+    Promise.all(orderPromises)
+        .then(results => {
+            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+            
+            const successCount = results.filter(r => r.success).length;
+            if (successCount === cart.length) {
+                // All orders successful
+                closeCart();
+                showToast('✅ Muvaffaqiyat!', `Barcha ${successCount} ta buyurtma muvaffaqiyatli yuborildi!`, '#27ae60', '🎉');
+                // Clear cart after successful order
+                cart = [];
+                saveCart();
+                updateCartBadge();
+            } else {
+                showToast('⚠️ Qisman xato!', `${successCount}/${cart.length} ta buyurtma yuborildi.`, '#e67e22');
+            }
+        })
+        .catch(error => {
+            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+            console.error('Buyurtma yuborish xatosi:', error);
+            
+            // Offline holatda - saqlash
+            if (!navigator.onLine) {
+                cart.forEach(item => {
+                    const orderData = {
+                        product: item.title,
+                        quantity: item.quantity,
+                        price: item.price,
+                        tableNumber: tableNumber,
+                        kabinaNumber: kabinaNumber,
+                        tabchaNumber: tabchaNumber,
+                        address: address,
+                        timestamp: new Date().toISOString(),
+                        offline: true
+                    };
+                    saveOrderToQueue(orderData);
+                });
+                showToast('📱 Offline!', 'Buyurtmalar saqlandi. Internet tiklanganda yuboriladi.', '#e67e22');
+                cart = [];
+                saveCart();
+                updateCartBadge();
+                closeCart();
+            } else {
+                showToast('❌ Xato!', 'Buyurtma yuborishda xatolik: ' + error.message, '#e74c3c');
+            }
+        });
 }
 
 // ==================== INITIAL LOCATION SELECTION ====================
