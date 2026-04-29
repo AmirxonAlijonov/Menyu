@@ -633,9 +633,11 @@ function submitOrder() {
     console.log('Buyurtma tayyorlanmoqda:', { tableType, tableNumber, kabinaNumber, tabchaNumber, title, quantity });
     
     const orderData = {
-        product: title,
-        quantity: quantity,
-        price: totalPriceText,
+        items: [{
+            product: title,
+            quantity: quantity,
+            price: totalPriceText
+        }],
         tableNumber: tableType === 'stol' ? tableNumber : null,
         kabinaNumber: tableType === 'kabina' ? kabinaNumber : null,
         tabchaNumber: tableType === 'tabcha' ? tabchaNumber : null,
@@ -1158,7 +1160,7 @@ function checkout() {
     }
 }
 
-// Order processing after location is selected - send ALL cart items
+// Order processing after location is selected - send ALL cart items in a single order
 function processOrder(locationInfo, deliveryType) {
     if (cart.length === 0) {
         showToast('❌ Xato!', 'Savat bo\'sh!', '#e74c3c');
@@ -1178,92 +1180,99 @@ function processOrder(locationInfo, deliveryType) {
         address = locationInfo;
     }
     
-    // Send all cart items as separate orders
-    const orderPromises = cart.map(item => {
-        const orderData = {
+    // Create a single order with all cart items
+    const orderData = {
+        items: cart.map(item => ({
             product: item.title,
             quantity: item.quantity,
-            price: item.price,
-            tableNumber: tableNumber,
-            kabinaNumber: kabinaNumber,
-            tabchaNumber: tabchaNumber,
-            address: address,
-            timestamp: new Date().toISOString()
-        };
-        
-        // Vercel/Production yoki local server uchun URL
-        let apiUrl;
-        if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
-            apiUrl = window.location.origin + '/api/order';
-        } else {
-            apiUrl = 'http://localhost:3001/api/order';
-        }
-        
-        return fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        }).then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error('Server xatosi: ' + response.status);
-                });
-            }
-            return response.json();
-        });
-    });
+            price: item.price
+        })),
+        tableNumber: tableNumber,
+        kabinaNumber: kabinaNumber,
+        tabchaNumber: tabchaNumber,
+        address: address,
+        timestamp: new Date().toISOString()
+    };
+    
+    // Vercel/Production yoki local server uchun URL
+    let apiUrl;
+    if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
+        apiUrl = window.location.origin + '/api/order';
+    } else {
+        apiUrl = 'http://localhost:3001/api/order';
+    }
     
     // Show loading state
     const orderBtn = document.getElementById('orderBtn');
     if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
     
-    // Wait for all orders to complete
-    Promise.all(orderPromises)
-        .then(results => {
-            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
-            
-            const successCount = results.filter(r => r.success).length;
-            if (successCount === cart.length) {
-                // All orders successful
-                closeCart();
-                showToast('✅ Muvaffaqiyat!', `Barcha ${successCount} ta buyurtma muvaffaqiyatli yuborildi!`, '#27ae60', '🎉');
-                // Clear cart after successful order
-                cart = [];
-                saveCart();
-                updateCartBadge();
-            } else {
-                showToast('⚠️ Qisman xato!', `${successCount}/${cart.length} ta buyurtma yuborildi.`, '#e67e22');
-            }
-        })
-        .catch(error => {
-            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
-            console.error('Buyurtma yuborish xatosi:', error);
-            
-            // Offline holatda - saqlash
-            if (!navigator.onLine) {
-                cart.forEach(item => {
-                    const orderData = {
-                        product: item.title,
-                        quantity: item.quantity,
-                        price: item.price,
-                        tableNumber: tableNumber,
-                        kabinaNumber: kabinaNumber,
-                        tabchaNumber: tabchaNumber,
-                        address: address,
-                        timestamp: new Date().toISOString(),
-                        offline: true
-                    };
-                    saveOrderToQueue(orderData);
-                });
-                showToast('📱 Offline!', 'Buyurtmalar saqlandi. Internet tiklanganda yuboriladi.', '#e67e22');
-                cart = [];
-                saveCart();
-                updateCartBadge();
-                closeCart();
-            } else {
-                showToast('❌ Xato!', 'Buyurtma yuborishda xatolik: ' + error.message, '#e74c3c');
-            }
-        });
+    // Send single order
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
+            });
+        }
+        
+        // Check content type
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return response.text().then(text => {
+                throw new Error('Server JSON emas, HTML qaytaryapti. Server ishlamayotgan bolishi mumkin. Response: ' + text.substring(0, 200));
+            });
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+        
+        if (data.success) {
+            closeCart();
+            showToast('✅ Muvaffaqiyat!', `Barcha ${cart.length} ta mahsulot bitta buyurtmada yuborildi!`, '#27ae60', '🎉');
+            // Clear cart after successful order
+            cart = [];
+            saveCart();
+            updateCartBadge();
+        } else {
+            showToast('⚠️ Xato!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
+        }
+    })
+    .catch(error => {
+        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+        console.error('Buyurtma yuborish xatosi:', error);
+        
+        // Offline holatda - saqlash
+        if (!navigator.onLine) {
+            // Save each item separately to queue for later processing
+            cart.forEach(item => {
+                const orderData = {
+                    product: item.title,
+                    quantity: item.quantity,
+                    price: item.price,
+                    tableNumber: tableNumber,
+                    kabinaNumber: kabinaNumber,
+                    tabchaNumber: tabchaNumber,
+                    address: address,
+                    timestamp: new Date().toISOString(),
+                    offline: true
+                };
+                saveOrderToQueue(orderData);
+            });
+            showToast('📱 Offline!', 'Buyurtmalar saqlandi. Internet tiklanganda yuboriladi.', '#e67e22');
+            cart = [];
+            saveCart();
+            updateCartBadge();
+            closeCart();
+        } else {
+            showToast('❌ Xato!', 'Buyurtma yuborishda xatolik: ' + error.message, '#e74c3c');
+        }
+    });
 }
 
 // ==================== INITIAL LOCATION SELECTION ====================

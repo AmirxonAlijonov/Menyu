@@ -35,10 +35,11 @@ module.exports = async (req, res) => {
     }
     
     try {
-        const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;
+        const { items, tableNumber, kabinaNumber, tabchaNumber, address } = req.body;
         
-        if (!product || !quantity) {
-            return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
+        // Validate items array
+        if (!items || !Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
         }
         
         // Prepare location text
@@ -49,15 +50,24 @@ module.exports = async (req, res) => {
             locationText = `Kabina raqami: ${kabinaNumber}`;
         } else if (tableNumber) {
             locationText = `Stol raqami: ${tableNumber}`;
+        } else if (address) {
+            locationText = `Manzil: ${address}`;
         }
         
-        const orderText = `📦 *YANGI BUYURTMA*
-
-📦 Mahsulot: ${product}
-📊 Miqdor: ${quantity}
-💰 Narx: ${price}
-${locationText ? locationText + '\n' : ''}
-⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+        // Build order text with all items
+        let orderText = `📦 *YANGI BUYURTMA*\n\n`;
+        
+        items.forEach((item, index) => {
+            orderText += `${index + 1}. 📦 ${item.product}\n`;
+            orderText += `   📊 Miqdor: ${item.quantity}\n`;
+            orderText += `   💰 Narx: ${item.price}\n\n`;
+        });
+        
+        if (locationText) {
+            orderText += `${locationText}\n`;
+        }
+        
+        orderText += `⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
         
         console.log('Buyurtma tayyor:', orderText);
         
