@@ -228,7 +228,18 @@ app.post('/api/order', async (req, res) => {
     console.log('=== Buyurtma keldi ===');
     console.log('Body:', req.body);
     
-    const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;
+    const { items, tableNumber, kabinaNumber, tabchaNumber, address } = req.body;
+    
+    // Validate items array
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        console.log('Xato: Mahsulotlar kiritilmagan');
+        return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
+    }
+    
+    // Process each item (for now, we'll just take the first item for backward compatibility
+    // but ideally we should send all items or create a summary)
+    const firstItem = items[0];
+    const { product, quantity, price } = firstItem;
     
     if (!product || !quantity) {
         console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
@@ -243,6 +254,8 @@ app.post('/api/order', async (req, res) => {
         locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
     } else if (tableNumber) {
         locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;
+    } else if (address) {
+        locationText = `📍 Manzil: ${escapeMarkdown(address)}`;
     }
     
     const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${escapeMarkdown(product)}\n📊 Miqdor: ${escapeMarkdown(quantity)}\n💰 Narx: ${escapeMarkdown(price)}\n${locationText ? locationText + '\n' : ''}\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;

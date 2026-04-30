@@ -1247,14 +1247,15 @@ function processOrder(locationInfo, deliveryType) {
         if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
         console.error('Buyurtma yuborish xatosi:', error);
         
-        // Offline holatda - saqlash
-        if (!navigator.onLine) {
-            // Save each item separately to queue for later processing
-            cart.forEach(item => {
+            // Offline holatda - saqlash
+            if (!navigator.onLine) {
+                // Save all cart items as a single order in queue for consistency
                 const orderData = {
-                    product: item.title,
-                    quantity: item.quantity,
-                    price: item.price,
+                    items: cart.map(item => ({
+                        product: item.title,
+                        quantity: item.quantity,
+                        price: item.price
+                    })),
                     tableNumber: tableNumber,
                     kabinaNumber: kabinaNumber,
                     tabchaNumber: tabchaNumber,
@@ -1263,7 +1264,6 @@ function processOrder(locationInfo, deliveryType) {
                     offline: true
                 };
                 saveOrderToQueue(orderData);
-            });
             showToast('📱 Offline!', 'Buyurtmalar saqlandi. Internet tiklanganda yuboriladi.', '#e67e22');
             cart = [];
             saveCart();
