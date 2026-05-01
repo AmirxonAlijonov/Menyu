@@ -236,14 +236,17 @@ app.post('/api/order', async (req, res) => {
         return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
     }
     
-    // Process each item (for now, we'll just take the first item for backward compatibility
-    // but ideally we should send all items or create a summary)
-    const firstItem = items[0];
-    const { product, quantity, price } = firstItem;
+    // Validate all items
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        console.log('Xato: Mahsulotlar kiritilmagan');
+        return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
+    }
     
-    if (!product || !quantity) {
-        console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
-        return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
+    for (const item of items) {
+        if (!item.product || !item.quantity) {
+            console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
+            return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
+        }
     }
     
     // Joylashuv matnini tayyorlash
@@ -258,7 +261,20 @@ app.post('/api/order', async (req, res) => {
         locationText = `📍 Manzil: ${escapeMarkdown(address)}`;
     }
     
-    const orderText = `📦 *YANGI BUYURTMA*\n\n📦 Mahsulot: ${escapeMarkdown(product)}\n📊 Miqdor: ${escapeMarkdown(quantity)}\n💰 Narx: ${escapeMarkdown(price)}\n${locationText ? locationText + '\n' : ''}\n⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+    // Build order text with all items
+    let orderText = `📦 *YANGI BUYURTMA*\n\n`;
+    
+    items.forEach((item, index) => {
+        orderText += `${index + 1}. 📦 ${escapeMarkdown(item.product)}\n`;
+        orderText += `   📊 Miqdor: ${escapeMarkdown(item.quantity)}\n`;
+        orderText += `   💰 Narx: ${escapeMarkdown(item.price)}\n\n`;
+    });
+    
+    if (locationText) {
+        orderText += `${locationText}\n`;
+    }
+    
+    orderText += `⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
     
     console.log('Telegram ga yuborilmoqda...');
     

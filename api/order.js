@@ -17,6 +17,15 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method not allowed', success: false });
     }
     
+    // Parse JSON body
+    let body;
+    try {
+        body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        return res.status(400).json({ error: 'Invalid JSON in request body', success: false });
+    }
+    
     // Get Telegram credentials from environment variables
     const BOT_TOKEN = process.env.BOT_TOKEN;
     const CHAT_ID = process.env.CHAT_ID;
@@ -35,7 +44,7 @@ module.exports = async (req, res) => {
     }
     
     try {
-        const { items, tableNumber, kabinaNumber, tabchaNumber, address } = req.body;
+        const { items, tableNumber, kabinaNumber, tabchaNumber, address } = body;
         
         // Validate items array
         if (!items || !Array.isArray(items) || items.length === 0) {
