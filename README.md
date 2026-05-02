@@ -57,8 +57,11 @@ Server `http://localhost:3000` da ishga tushadi.
 ## 🔧 API Endpoints
 
 - `GET /` - Bosh sahifa
+- `GET /api/health` - Server holatini tekshirish (debug uchun)
 - `GET /api/menu` - Menyu ma'lumotlari JSON formatida
 - `POST /api/order` - Buyurtma yuborish
+- `POST /api/notify-offline` - Offline buyurtma xabari
+- `POST /webhook` - Telegram webhook
 
 ## 📦 Loyiha fayllari
 
@@ -118,6 +121,32 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
 - ❌ CHAT_ID noto'g'ri yoki o'rnatilmagan
 
 **Javob:** Vercel environment variable'larini tekshirib ko'ring.
+
+### Debug qilish
+
+1. **Health endpoint'ni tekshirish:**
+   ```
+   https://menyu-wheat.vercel.app/api/health
+   ```
+   Bu endpoint server ishlayotganini tekshirish uchun. Agar bu endpoint ishlasa, server sozlangan.
+
+2. **Environment variable'larni tekshirish:**
+   - Vercel dashboard'da: Project -> Settings -> Environment Variables
+   - Quyidagilar qo'shilganligini tekshiring:
+     - `BOT_TOKEN` (yashirin bo'lishi kerak)
+     - `CHAT_ID`
+     - `ALLOWED_USERS` (optional)
+
+3. **Vercel logs'ni ko'rish:**
+   ```bash
+   vercel logs menyu-wheat.vercel.app
+   ```
+
+4. **Qayta deploy qilish:**
+   Environment variable'lar o'zgartirilgandan so'ng, qayta deploy qilish shart:
+   ```bash
+   vercel --prod --force
+   ```
 
 ---
 

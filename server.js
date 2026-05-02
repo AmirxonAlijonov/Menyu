@@ -18,10 +18,22 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
+
+// Security headers (must be first)
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; img-src 'self' https: data:; connect-src 'self' https:;");
+    next();
+});
+
+// CORS
 app.use(cors());
 app.use(express.json());
 
-// CORS headers for all responses
+// CORS headers middleware
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -32,21 +44,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Security headers
-app.use((req, res, next) => {
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; img-src 'self' https: data:; connect-src 'self' https:;");
-    next();
-});
-
-// Statik fayllarni serv qilish (barcha fayllar uchun)
-// 1. Root papka (index.html, index.js, CSS)
-app.use(express.static(__dirname));
-
-// 2. PWA fayllar uchun MIME type
+// MIME type middleware for PWA files
 app.use((req, res, next) => {
     if (req.url.endsWith('.webmanifest')) {
         res.setHeader('Content-Type', 'application/manifest+json');
@@ -58,15 +56,221 @@ app.use((req, res, next) => {
     next();
 });
 
-// 2. Agar public papkasi bo'lsa, u ham qo'shimcha
+// API routes (must be before static file serving)
+app.get('/api/menu', (req, res) => {
+    res.json(foodData);
+});
+
+// ============================================
+// API ENDPOINTS
+// ============================================
+
+// Buyurtma yuborish API
+app.post('/api/order', async (req, res) => {
+    console.log('=== Buyurtma keldi ===');
+    console.log('Body:', req.body);
+
+    // Check bot configuration first
+    if (!BOT_TOKEN || !CHAT_ID) {
+        console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Buyurtma qabul qilinmadi.');
+        return res.status(503).json({
+            success: false,
+            error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
+            code: 'BOT_NOT_CONFIGURED'
+        });
+    }
+
+    const { items, tableNumber, kabinaNumber, tabchaNumber, address } = req.body;
+
+    // Validate items array
+    if (!items || !Array.isArray(items) || items.length === 0) {
+        console.log('Xato: Mahsulotlar kiritilmagan');
+        return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
+    }
+
+    // Validate each item
+    for (const item of items) {
+        if (!item.product || !item.quantity) {
+            console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
+            return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
+        }
+    }
+
+    // Joylashuv matnini tayyorlash
+    let locationText = '';
+    if (tabchaNumber) {
+        locationText = `🛏️ Tabchan raqami: ${escapeMarkdown(tabchaNumber)}`;
+    } else if (kabinaNumber) {
+        locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
+    } else if (tableNumber) {
+        locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;
+    } else if (address) {
+        locationText = `📍 Manzil: ${escapeMarkdown(address)}`;
+    }
+
+    // Build order text with all items
+    let orderText = `📦 *YANGI BUYURTMA*\n\n`;
+
+    items.forEach((item, index) => {
+        orderText += `${index + 1}. 📦 ${escapeMarkdown(item.product)}\n`;
+        orderText += `   📊 Miqdor: ${escapeMarkdown(item.quantity)}\n`;
+        orderText += `   💰 Narx: ${escapeMarkdown(item.price)}\n\n`;
+    });
+
+    if (locationText) {
+        orderText += `${locationText}\n`;
+    }
+
+    orderText += `⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+
+    console.log('Telegram ga yuborilmoqda...');
+
+    try {
+        const success = await sendToTelegram(orderText);
+
+        if (success) {
+            console.log('Buyurtma muvaffaqiyatli yuborildi');
+            res.json({ success: true, message: 'Buyurtma yuborildi!' });
+        } else {
+            console.log('Telegram ga yuborish muvaffaqiyatsiz');
+            res.status(500).json({ success: false, error: 'Telegram ga yuborishda xatolik' });
+        }
+    } catch (error) {
+        console.error('Xato:', error);
+        res.status(500).json({ success: false, error: 'Server xatosi' });
+    }
+});
+
+// Telegram webhook (ixtiyoriy)
+app.post('/webhook', async (req, res) => {
+    const message = req.body.message;
+
+    if (!message || !message.text) {
+        return res.send('OK');
+    }
+
+    const text = message.text;
+    const chatId = message.chat.id;
+    const userId = message.from.id;
+
+    // Foydalanuvchi ruxsatini tekshirish
+    if (!isUserAllowed(userId)) {
+        console.log(`❌ Ruxsatsiz foydalanuvchi kirishga urindi: ${userId}`);
+        return res.send('OK');
+    }
+
+    let response = '';
+
+    switch (text) {
+        case '/menu':
+        case '/start':
+            response = `🍽️ *Restoran Menyu*\n\nQuyidagilardan birini tanlang:\n\n` +
+                `🥗 /salads - Salatlar\n` +
+                `🍖 /mains - Asosiy Taomlar\n` +
+                `🥤 /drinks - Ichimliklar\n` +
+                `🍰 /deserts - Desertlar\n\n` +
+                `🛒 /order - Buyurtma berish`;
+            break;
+
+        case '/salads':
+            response = createMenuMessage('salads');
+            break;
+
+        case '/mains':
+            response = createMenuMessage('mains');
+            break;
+
+        case '/drinks':
+            response = createMenuMessage('drinks');
+            break;
+
+        case '/deserts':
+            response = createMenuMessage('deserts');
+            break;
+
+        case '/order':
+            response = `🛒 *Buyurtma berish*\n\nBuyurtmangizni yozing va yuboring!\n\n` +
+                `Misol: \n"2 ta jiz, 1 ta cola"`;
+            break;
+
+        default:
+            if (text.length > 5) {
+                await sendToTelegram(`📝 Xabar: ${text}`);
+                response = `✅ Xabaringiz qabul qilindi!\n\nRahmat! 🍴`;
+            } else {
+                response = `❌ Noma'lum buyruq.\n\n` +
+                    `/menu - Menyuni ko'rish\n` +
+                    `/order - Buyurtma berish`;
+            }
+    }
+
+    try {
+        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            chat_id: chatId,
+            text: response,
+            parse_mode: 'Markdown'
+        });
+    } catch (error) {
+        console.error('Xato:', error.message);
+    }
+
+    res.send('OK');
+});
+
+// Offline buyurtma xabar endpointi
+app.post('/api/notify-offline', async (req, res) => {
+    if (!BOT_TOKEN || !CHAT_ID) {
+        console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Offline buyurtma yuborilmadi.');
+        return res.status(503).json({
+            success: false,
+            error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
+            code: 'BOT_NOT_CONFIGURED'
+        });
+    }
+
+    const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;
+    const timestamp = new Date().toLocaleString('uz-UZ');
+
+    let locationText = '';
+    if (tabchaNumber) {
+        locationText = `🛏️ Tabchan: ${tabchaNumber}`;
+    } else if (kabinaNumber) {
+        locationText = `🚪 Kabina: ${kabinaNumber}`;
+    } else if (tableNumber) {
+        locationText = `🪑 Stol: ${tableNumber}`;
+    }
+
+    const message = `📦 *YANGI BUYURTMA (OFFLINE)*\n\n` +
+        `📦 Mahsulot: ${product}\n` +
+        `📊 Miqdor: ${quantity}\n` +
+        `💰 Narx: ${price}\n` +
+        `${locationText ? locationText + '\n' : ''}` +
+        `⏰ Vaqt: ${timestamp}\n\n` +
+        `_Al-safar Restoran Menyusi_`;
+
+    try {
+        await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+        });
+        console.log('📱 Offline buyurtma xabari yuborildi:', product);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Offline buyurtma xabar xatosi:', error.message);
+        res.json({ success: false, error: error.message });
+    }
+});
+
+// Statik fayllarni serv qilish (API dan KEYIN)
 const publicPath = path.join(__dirname, 'public');
 if (fs.existsSync(publicPath)) {
     app.use(express.static(publicPath));
 }
+app.use(express.static(__dirname));
 
 // index.html uchun alohida yo'l
 app.get('/', (req, res) => {
-    // Avval public papkasidan, keyin root dan izlash
     const publicIndexPath = path.join(publicPath, 'index.html');
     fs.access(publicIndexPath, fs.constants.F_OK, (err) => {
         if (!err) {
@@ -75,17 +279,15 @@ app.get('/', (req, res) => {
             res.sendFile(path.join(__dirname, 'index.html'));
         }
     });
-    });
+});
 
 // Catch-all route for SPA - serve index.html for all other routes
 app.get('*', (req, res) => {
     const filePath = path.join(__dirname, req.path);
 
-    // Fayl mavjudligini tekshirish
     if (fs.existsSync(filePath)) {
         res.sendFile(filePath);
     } else {
-        // Agar fayl topilmasa, index.html qaytarish
         res.sendFile(path.join(__dirname, 'index.html'));
     }
 });
@@ -101,9 +303,13 @@ const CHAT_ID = process.env.CHAT_ID || '';
 // O'zingizning chat ID ngizni bu yerga qo'shing
 const ALLOWED_USERS = process.env.ALLOWED_USERS ? process.env.ALLOWED_USERS.split(',') : [];
 
+// Environment validation
 if (!BOT_TOKEN || !CHAT_ID) {
     console.warn('⚠️ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
-    console.warn('   .env faylini yarating yoki server.js da qiymatlarni o\'rnating');
+    console.warn('   .env faylini yarating yoki Vercel environment variable\'larini sozlang.');
+    console.warn('   Qo\'llanma: README.md fayliga qarang.');
+} else {
+    console.log('✅ Telegram bot konfiguratsiyasi topildi');
 }
 
 // Ovqatlar ma'lumotlari - index.js bilan mos
@@ -304,6 +510,17 @@ app.post('/api/order', async (req, res) => {
         console.error('Xato:', error);
         res.status(500).json({ success: false, error: 'Server xatosi' });
     }
+});
+
+// Health check endpoint (for debugging Vercel deployment)
+app.get('/api/health', (req, res) => {
+    const health = {
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        botConfigured: !!(BOT_TOKEN && CHAT_ID),
+        environment: process.env.NODE_ENV || 'development'
+    };
+    res.json(health);
 });
 
 // Menyu olish API

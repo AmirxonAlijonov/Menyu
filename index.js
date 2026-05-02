@@ -673,8 +673,15 @@ function submitOrder() {
 
             // Check if response is OK
             if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
+                return response.json().then(errData => {
+                    // Try to get error message from JSON response
+                    const errorMsg = errData.error || errData.message || 'Noma\'lum xatolik';
+                    throw new Error('Server xatosi (' + response.status + '): ' + errorMsg);
+                }).catch(jsonError => {
+                    // If JSON parsing fails, use text
+                    return response.text().then(text => {
+                        throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
+                    });
                 });
             }
 
@@ -719,7 +726,8 @@ function submitOrder() {
                 saveOrderToQueue(orderData);
                 showToast('📱 Offline holatda!', 'Internetga ulanish yo\'q. Buyurtmangiz saqlandi va internet tiklanganda avtomatik yuboriladi.', '#e67e22');
             } else {
-                showToast('⚠️ Serverga ulanish mumkin emas!', 'Server ishlamayotgan bo\'lishi mumkin. Internetga ulanishni tekshiring yoki qayta urinib ko\'ring. URL: ' + apiUrl, '#e74c3c');
+                // Show actual error message from server
+                showToast('⚠️ Xatolik!', error.message, '#e74c3c');
             }
         });
 
