@@ -130,23 +130,67 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
    ```
    Bu endpoint server ishlayotganini tekshirish uchun. Agar bu endpoint ishlasa, server sozlangan.
 
-2. **Environment variable'larni tekshirish:**
+2. **Debug endpoint'ni tekshirish (maxfiy ma'lumotlar yo'q):**
+   ```
+   https://menyu-wheat.vercel.app/api/debug
+   ```
+   Bu endpoint environment variable'lar sozlanganganligini ko'rsatadi (tokenlar yashirin).
+
+3. **Vercel logs'ni ko'rish:**
+
+   **Vercel Dashboard orqali:**
+   - Vercel.com ga kiring
+   - Project'ni tanlang: `menyu-wheat`
+   - Chap panelda "Logs" ni bosing
+   - "Production" branch'ni tanlang
+   - So'nggi so'rovlarni ko'rish uchun "Functions" yoki "Deployments" dan foydalaning
+
+   **Vercel CLI orqali:**
+   ```bash
+   # Vercel CLI o'rnatish (agar o'rnatilmagan bo'lsa)
+   npm install -g vercel
+
+   # Logs'ni ko'rish
+   vercel logs menyu-wheat.vercel.app --since 1h
+   ```
+
+   **Logs'da qanday qidirish kerak:**
+   - `🔍 Health check` - health endpoint so'rovlari
+   - `⚠️ BOT_TOKEN` - environment variable xatosi
+   - `Buyurtma keldi` - buyurtma so'rovlari
+   - `❌` - xatoliklar
+
+4. **Environment variable'larni tekshirish:**
    - Vercel dashboard'da: Project -> Settings -> Environment Variables
    - Quyidagilar qo'shilganligini tekshiring:
      - `BOT_TOKEN` (yashirin bo'lishi kerak)
      - `CHAT_ID`
      - `ALLOWED_USERS` (optional)
 
-3. **Vercel logs'ni ko'rish:**
-   ```bash
-   vercel logs menyu-wheat.vercel.app
-   ```
+   **Diqqat:** Environment variable'lar o'zgartirilgandan so'ng, **qayta deploy qilish** shart!
 
-4. **Qayta deploy qilish:**
-   Environment variable'lar o'zgartirilgandan so'ng, qayta deploy qilish shart:
+5. **Qayta deploy qilish:**
    ```bash
    vercel --prod --force
    ```
+
+6. **Odatacha xatoliklar:**
+
+   | Xatolik | Sabab | Javob |
+   |---------|-------|-------|
+   | 401 Unauthorized | BOT_TOKEN noto'g'ri yoki yo'q | Environment variable'ni tekshiring |
+   | 401 Unauthorized | Vercel project "Password Protection" yoqilgan | Vercel dashboard'da Password Protection'ni o'chiring |
+   | 503 Service Unavailable | BOT_TOKEN/CHAT_ID sozlanmagan | Environment variable'lar qo'shing |
+   | 404 Not Found | Noto'g'ri URL | Health endpoint'ni tekshiring |
+   | CORS xatosi | Frontend noto'g'ri URL'ga so'rov yuboryapti | API URL to'g'ri bo'lishi kerak |
+
+   **Muhim:** Vercel'da "Password Protection" sozlamasi yoqilgan bo'lsa, barcha so'rovlar 401 qaytaradi. Buni o'chirish uchun:
+   - Project Settings → General → Password Protection → Disable
+
+7. **Frontend console logs'ni tekshirish:**
+   - Veb-sahifada F12 -> Console
+   - Xatolik xabarlari ko'rsatiladi
+   - `API URL:` ni ko'rish orqali qaysi endpoint'ga so'rov yuborilayotganini tekshirish mumkin
 
 ---
 

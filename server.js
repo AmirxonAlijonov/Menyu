@@ -19,6 +19,13 @@ const cors = require('cors');
 
 const app = express();
 
+// Request logging middleware (helps debug Vercel issues)
+app.use((req, res, next) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[${timestamp}] ${req.method} ${req.url} - IP: ${req.ip || req.connection.remoteAddress || 'unknown'}`);
+    next();
+});
+
 // Security headers (must be first)
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -514,13 +521,38 @@ app.post('/api/order', async (req, res) => {
 
 // Health check endpoint (for debugging Vercel deployment)
 app.get('/api/health', (req, res) => {
+    console.log('🔍 Health check requested from:', req.ip || req.connection.remoteAddress);
     const health = {
         status: 'ok',
         timestamp: new Date().toISOString(),
         botConfigured: !!(BOT_TOKEN && CHAT_ID),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        nodeEnv: process.env.NODE_ENV,
+        hasBotToken: !!BOT_TOKEN,
+        hasChatId: !!CHAT_ID,
+        allowedUsersCount: ALLOWED_USERS.length
     };
     res.json(health);
+});
+
+// Debug endpoint - shows configuration status (no secrets)
+app.get('/api/debug', (req, res) => {
+    console.log('🐛 Debug endpoint accessed');
+    const debug = {
+        env: {
+            NODE_ENV: process.env.NODE_ENV || 'not set',
+            PORT: process.env.PORT || 'not set',
+            BOT_TOKEN_SET: !!BOT_TOKEN,
+            CHAT_ID_SET: !!CHAT_ID,
+            ALLOWED_USERS_COUNT: ALLOWED_USERS.length
+        },
+        server: {
+            uptime: process.uptime(),
+            memoryUsage: process.memoryUsage(),
+            platform: process.platform
+        }
+    };
+    res.json(debug);
 });
 
 // Menyu olish API
