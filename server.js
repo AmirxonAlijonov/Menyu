@@ -235,6 +235,16 @@ app.post('/api/order', async (req, res) => {
         console.log('First item:', req.body.items[0]);
     }
 
+    // Check bot configuration first
+    if (!BOT_TOKEN || !CHAT_ID) {
+        console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Buyurtma qabul qilinmadi.');
+        return res.status(503).json({ 
+            success: false, 
+            error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
+            code: 'BOT_NOT_CONFIGURED'
+        });
+    }
+
     const { items, tableNumber, kabinaNumber, tabchaNumber, address } = req.body;
 
     // Validate items array
@@ -380,7 +390,12 @@ app.post('/webhook', async (req, res) => {
 // Offline buyurtma xabar endpointi - sayt offline rejimda buyurtma qilinganda telegram botga xabar yuboradi
 app.post('/api/notify-offline', async (req, res) => {
     if (!BOT_TOKEN || !CHAT_ID) {
-        return res.json({ success: false, error: 'Bot konfiguratsiyasi topilmadi' });
+        console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Offline buyurtma yuborilmadi.');
+        return res.status(503).json({ 
+            success: false, 
+            error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
+            code: 'BOT_NOT_CONFIGURED'
+        });
     }
 
     const { product, quantity, price, tableNumber, kabinaNumber, tabchaNumber } = req.body;

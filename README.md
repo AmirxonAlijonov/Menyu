@@ -82,4 +82,43 @@ menu/
 
 ---
 
+## 🚀 Vercel'ga joylash (Deploy)
+
+### Vercel uchun sozlamalar
+
+1. **Vercel'ga ulashing:**
+   ```bash
+   npm install -g vercel
+   vercel --prod
+   ```
+
+2. **Environment variable'larni sozlash:**
+
+   Vercel dashboard'da quyidagi environment variable'larni qo'shing:
+
+   - **BOT_TOKEN** - @BotFather dan olingan bot token
+   - **CHAT_ID** - Sizning chat ID ngiz
+   - **ALLOWED_USERS** (optional) - Ruxsat etilgan foydalanuvchilar ID lari (vergul bilan ajratilgan)
+
+   **Vercel dashboard'da:**
+   - Project -> Settings -> Environment Variables
+   - Har bir variable uchun qiymatni kiriting
+   - Value sifatida .env faylidagi qiymatlardan foydalaning
+
+3. **Qayta deploy qilish:**
+   ```bash
+   vercel --prod
+   ```
+
+### 401 Xatosi Tushuntirishi
+
+Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
+
+- ❌ BOT_TOKEN noto'g'ri yoki o'rnatilmagan
+- ❌ CHAT_ID noto'g'ri yoki o'rnatilmagan
+
+**Javob:** Vercel environment variable'larini tekshirib ko'ring.
+
+---
+
 Yaratuvchi: Restaurant Menu Team
