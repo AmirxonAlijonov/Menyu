@@ -71,7 +71,7 @@ menu/
 ├── server.js       # Server kodi (Telegram bot)
 ├── index.html      # Veb-sahifa
 ├── index.js        # JavaScript
-└── CSS/
+└── css/
     └── style.css   # Stillar
 ```
 
@@ -193,7 +193,7 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
    | 401 Unauthorized | Vercel project "Password Protection" yoqilgan | Vercel dashboard'da Password Protection'ni o'chiring |
    | 503 Service Unavailable | BOT_TOKEN/CHAT_ID sozlanmagan | Environment variable'lar qo'shing |
    | 404 Not Found | Noto'g'ri URL | Health endpoint'ni tekshiring |
-   | CSS/JS yuklanmayapti | vercel.json routing noto'g'ri | Filesystem handler qo'shish (qarang yuqorida) |
+   | CSS/JS yuklanmayapti | vercel.json routing noto'g'ri yoki folder case sensitivity | Filesystem handler qo'shish, folder nomini lowercase qilish |
    | CORS xatosi | Frontend noto'g'ri URL'ga so'rov yuboryapti | API URL to'g'ri bo'lishi kerak |
 
    **Muhim:** Vercel'da "Password Protection" sozlamasi yoqilgan bo'lsa, barcha so'rovlar 401 qaytaradi. Buni o'chirish uchun:
