@@ -119,6 +119,7 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
 
 - ❌ BOT_TOKEN noto'g'ri yoki o'rnatilmagan
 - ❌ CHAT_ID noto'g'ri yoki o'rnatilmagan
+- ❌ Vercel "Password Protection" yoqilgan
 
 **Javob:** Vercel environment variable'larini tekshirib ko'ring.
 
@@ -136,7 +137,17 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
    ```
    Bu endpoint environment variable'lar sozlanganganligini ko'rsatadi (tokenlar yashirin).
 
-3. **Vercel logs'ni ko'rish:**
+3. **Static fayllar ishlamayotgan bo'lsa:**
+   - Vercel dashboard'da `vercel.json` routing sozlamalarini tekshiring
+   - Quyidagi route tartibi bo'lishi kerak:
+     ```
+     1. /api/(.*) → server.js
+     2. filesystem handler
+     3. /(.*) → server.js
+     ```
+   - Agar filesystem handler yo'q bo'lsa, CSS/JS fayllar yuklanmaydi
+
+4. **Vercel logs'ni ko'rish:**
 
    **Vercel Dashboard orqali:**
    - Vercel.com ga kiring
@@ -182,10 +193,14 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
    | 401 Unauthorized | Vercel project "Password Protection" yoqilgan | Vercel dashboard'da Password Protection'ni o'chiring |
    | 503 Service Unavailable | BOT_TOKEN/CHAT_ID sozlanmagan | Environment variable'lar qo'shing |
    | 404 Not Found | Noto'g'ri URL | Health endpoint'ni tekshiring |
+   | CSS/JS yuklanmayapti | vercel.json routing noto'g'ri | Filesystem handler qo'shish (qarang yuqorida) |
    | CORS xatosi | Frontend noto'g'ri URL'ga so'rov yuboryapti | API URL to'g'ri bo'lishi kerak |
 
    **Muhim:** Vercel'da "Password Protection" sozlamasi yoqilgan bo'lsa, barcha so'rovlar 401 qaytaradi. Buni o'chirish uchun:
    - Project Settings → General → Password Protection → Disable
+
+   **Static fayllar (CSS/JS) ishlamasa:**
+   vercel.json routing sozlamalarida `"handle": "filesystem"` qatorlari bo'lishi kerak. Agar yo'q bo'lsa, Vercel static fayllarni server.js orqali emas, to'g'ridan-to'g'ri serv qiladi.
 
 7. **Frontend console logs'ni tekshirish:**
    - Veb-sahifada F12 -> Console
