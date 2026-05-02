@@ -58,12 +58,12 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
     const pathname = url.pathname;
     const isImage = url.pathname.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i);
-    
+
     // Skip non-GET requests
     if (event.request.method !== 'GET') {
         return;
     }
-    
+
     // API requests - cache-first with network fallback
     if (pathname.startsWith('/api/')) {
         console.log('[SW] API request - cache first:', pathname);
@@ -76,7 +76,7 @@ self.addEventListener('fetch', (event) => {
                                 console.log('[SW] Serving API from cache:', pathname);
                                 return cachedResponse;
                             }
-                            
+
                             console.log('[SW] Fetching API from network:', pathname);
                             return fetch(event.request)
                                 .then((response) => {
@@ -109,7 +109,7 @@ self.addEventListener('fetch', (event) => {
         );
         return;
     }
-    
+
     // sw.js request - return current script
     if (pathname === '/sw.js' || pathname.endsWith('/sw.js')) {
         event.respondWith(
@@ -120,7 +120,7 @@ self.addEventListener('fetch', (event) => {
         );
         return;
     }
-    
+
     // Images - stale-while-revalidate (fast + fresh)
     if (isImage) {
         console.log('[SW] Image request - stale-while-revalidate:', pathname);
@@ -140,7 +140,7 @@ self.addEventListener('fetch', (event) => {
                                 .catch((err) => {
                                     console.log('[SW] Image network fetch failed:', err);
                                 });
-                            
+
                             // Return cached response immediately if available, otherwise wait for network
                             return cachedResponse || fetchPromise;
                         });
@@ -148,8 +148,8 @@ self.addEventListener('fetch', (event) => {
         );
         return;
     }
-    
-// Static assets - stale-while-revalidate strategy
+
+    // Static assets - stale-while-revalidate strategy
     // First serve from cache, then update cache in background
     console.log('[SW] Static request - stale-while-revalidate:', pathname);
     event.respondWith(
@@ -164,11 +164,11 @@ self.addEventListener('fetch', (event) => {
                                 if (!response || response.status !== 200) {
                                     return response;
                                 }
-                                
+
                                 // Clone and cache the new response
                                 const responseToCache = response.clone();
                                 cache.put(event.request, responseToCache);
-                                
+
                                 return response;
                             })
                             .catch((err) => {
@@ -178,7 +178,7 @@ self.addEventListener('fetch', (event) => {
                                     return caches.match('/index.html');
                                 }
                             });
-                        
+
                         // Return cached response immediately if available
                         // Otherwise wait for network response
                         return cachedResponse || fetchPromise;
@@ -190,11 +190,11 @@ self.addEventListener('fetch', (event) => {
 // Handle messages from the main app
 self.addEventListener('message', (event) => {
     console.log('[SW] Xabar keldi:', event.data);
-    
+
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
-    
+
     // Javob yuborish (kanalni yopmaslik uchun)
     event.ports[0]?.postMessage({ status: 'ok' });
 });

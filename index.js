@@ -238,10 +238,10 @@ function openCategory(category) {
     document.getElementById('mains1Page').classList.remove('active');
     document.getElementById('mains2Page').classList.remove('active');
     document.getElementById('drinksPage').classList.remove('active');
-    
+
     // Tanlangan sahifani ko'rsatish
     document.getElementById(category + 'Page').classList.add('active');
-    
+
     // Joriy bo'limni saqlash
     currentCategory = category;
     currentIndexCategory = 0;
@@ -254,10 +254,10 @@ function showMainPage() {
     document.getElementById('mains1Page').classList.remove('active');
     document.getElementById('mains2Page').classList.remove('active');
     document.getElementById('drinksPage').classList.remove('active');
-    
+
     // Bosh sahifani ko'rsatish
     document.getElementById('mainPage').classList.add('active');
-    
+
     // Avtomatik aylanishni to'xtatish
     // clearInterval(autoSlide);
 }
@@ -267,11 +267,11 @@ function showSlideCategory(index) {
     const page = document.getElementById(currentCategory + 'Page');
     const slides = page.querySelectorAll('.slide');
     const thumbs = page.querySelectorAll('.thumb');
-    
+
     // Barcha slaydlarni va kichik rasmlarni o'chirish
     slides.forEach(slide => slide.classList.remove('active'));
     thumbs.forEach(thumb => thumb.classList.remove('active'));
-    
+
     // Tanlanganini ko'rsatish
     slides[index].classList.add('active');
     thumbs[index].classList.add('active');
@@ -311,7 +311,7 @@ function openFullscreen(category) {
     modalImg.src = foodInfo.image;
     modalImg.alt = foodInfo.title;
     // Image error handling - show fallback
-    modalImg.onerror = function() {
+    modalImg.onerror = function () {
         this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="16"%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E';
         this.style.background = 'linear-gradient(135deg, #f0f0f0 0%25, #e0e0e0 100%25)';
     };
@@ -319,14 +319,14 @@ function openFullscreen(category) {
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
     document.getElementById('modalPrice').dataset.basePrice = foodInfo.price;
-    
+
     // Asosiy narxni global o'zgaruvchida saqlash
     baseProductPrice = parseInt(foodInfo.price.replace(/[^0-9]/g, ''));
-    
+
     // Size selectionni ko'rsatish yoki yashirish
     const sizeContainer = document.getElementById('sizeSelectContainer');
     const weightContainer = document.getElementById('weightSelectContainer');
-    
+
     if (foodInfo.hasSizes && sizeContainer) {
         sizeContainer.style.display = 'flex';
         if (weightContainer) weightContainer.style.display = 'none';
@@ -341,7 +341,7 @@ function openFullscreen(category) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         if (weightContainer) weightContainer.style.display = 'none';
     }
-    
+
     // Miqdorni 1 ga qaytarish
     const quantityInput = document.getElementById('modalQuantity');
     if (quantityInput) {
@@ -366,7 +366,7 @@ function openMobileCard(category, index) {
     modalImg.src = foodInfo.image;
     modalImg.alt = foodInfo.title;
     // Image error handling - show fallback
-    modalImg.onerror = function() {
+    modalImg.onerror = function () {
         this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect fill="%23f0f0f0" width="300" height="200"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="16"%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E';
         this.style.background = 'linear-gradient(135deg, #f0f0f0 0%25, #e0e0e0 100%25)';
     };
@@ -374,14 +374,14 @@ function openMobileCard(category, index) {
     document.getElementById('modalDesc').textContent = foodInfo.description;
     document.getElementById('modalPrice').textContent = foodInfo.price;
     document.getElementById('modalPrice').dataset.basePrice = foodInfo.price;
-    
+
     // Asosiy narxni global o'zgaruvchida saqlash
     baseProductPrice = parseInt(foodInfo.price.replace(/[^0-9]/g, ''));
-    
+
     // Size selectionni ko'rsatish yoki yashirish
     const sizeContainer = document.getElementById('sizeSelectContainer');
     const weightContainer = document.getElementById('weightSelectContainer');
-    
+
     if (foodInfo.hasSizes && sizeContainer) {
         sizeContainer.style.display = 'flex';
         if (weightContainer) weightContainer.style.display = 'none';
@@ -396,7 +396,7 @@ function openMobileCard(category, index) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         if (weightContainer) weightContainer.style.display = 'none';
     }
-    
+
     // Miqdorni 1 ga qaytarish
     const quantityInput = document.getElementById('modalQuantity');
     if (quantityInput) {
@@ -416,13 +416,13 @@ function openMobileCard(category, index) {
 function closeFullscreen() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
-    
+
     // Miqdorni 1 ga qaytarish
     const quantityInput = document.getElementById('modalQuantity');
     if (quantityInput) {
         quantityInput.value = 1;
     }
-    
+
     // Asosiy narxni tiklash (keyinchalik ishlatish uchun)
     baseProductPrice = 0;
 }
@@ -432,14 +432,14 @@ function changeQuantity(delta) {
     const quantityInput = document.getElementById('modalQuantity');
     let currentValue = parseInt(quantityInput.value) || 1;
     let newValue = currentValue + delta;
-    
+
     // Minimal qiymat 1
     if (newValue < 1) newValue = 1;
     // Maksimal qiymat 99
     if (newValue > 99) newValue = 99;
-    
+
     quantityInput.value = newValue;
-    
+
     // Narxni yangilash
     updateModalPrice();
 }
@@ -464,7 +464,7 @@ function selectSize(size, foodInfo) {
             }
         }
     }
-    
+
     // Size container ni ko'rsatish
     const sizeContainer = document.getElementById('sizeSelectContainer');
     if (sizeContainer) {
@@ -475,19 +475,19 @@ function selectSize(size, foodInfo) {
             return;
         }
     }
-    
+
     if (!foodInfo || !foodInfo.hasSizes || !foodInfo.sizes) {
         return;
     }
-    
+
     const sizeData = foodInfo.sizes[size];
     if (!sizeData) {
         return;
     }
-    
+
     // Base pricer yangilash
     baseProductPrice = sizeData.price;
-    
+
     // Tugmalarni yangilash
     const buttons = document.querySelectorAll('.size-btn');
     buttons.forEach(btn => {
@@ -497,7 +497,7 @@ function selectSize(size, foodInfo) {
             btn.classList.remove('selected');
         }
     });
-    
+
     // Narxni yangilash
     updateModalPrice();
 }
@@ -506,10 +506,10 @@ function selectSize(size, foodInfo) {
 function updateModalPrice() {
     const quantityInput = document.getElementById('modalQuantity');
     const quantity = parseInt(quantityInput.value) || 1;
-    
+
     // Asosiy narxni olish: avval global, keyin dataset, oxirgi fallback foodData
     let basePrice = 0;
-    
+
     if (baseProductPrice > 0) {
         basePrice = baseProductPrice;
     } else {
@@ -519,7 +519,7 @@ function updateModalPrice() {
             basePrice = parseInt(priceEl.dataset.basePrice.replace(/[^0-9]/g, ''));
         }
     }
-    
+
     // Og'irlik bo'lsa, narxni yangilash
     const weightInput = document.getElementById('modalWeight');
     if (weightInput) {
@@ -543,10 +543,10 @@ function updateModalPrice() {
             basePrice = weight * foodInfo.pricePerGram;
         }
     }
-    
+
     // Jami narx: asosiy narx * miqdor
     const totalPrice = basePrice * quantity;
-    
+
     // Natijani ko'rsatish
     document.getElementById('modalPrice').textContent = totalPrice.toLocaleString() + " so'm";
 }
@@ -576,24 +576,24 @@ function updateWeightPrice() {
 // Buyurtma yuborish funksiyasi
 function submitOrder() {
     console.log('submitOrder ishga tushdi');
-    
+
     const quantityInput = document.getElementById('modalQuantity');
     if (!quantityInput) {
         showToast('❌ Xato!', 'Miqdor input topilmadi', '#e74c3c');
         return;
     }
     let quantity = parseInt(quantityInput.value);
-    
+
     // Miqdor tekshirish
     if (isNaN(quantity) || quantity <= 0) {
         showToast('❌ Xato!', 'Miqdorni faqat musbat sonlarda kiriting.', '#e74c3c');
         return;
     }
-    
+
     // Joylashuv ma'lumotlarini olish
     let tableType = null, tableNumber = null, kabinaNumber = null, tabchaNumber = null;
     const locationAddress = userLocation.address;
-    
+
     if (locationAddress) {
         if (locationAddress.includes('Stol raqami:')) {
             tableType = 'stol';
@@ -611,10 +611,10 @@ function submitOrder() {
         showToast('❌ Xato!', 'Iltimos, avval joylashuvni tanlang!', '#e74c3c');
         return;
     }
-    
+
     const title = document.getElementById('modalTitle').textContent;
     const priceText = document.getElementById('modalPrice').textContent;
-    
+
     // Narxni to'g'ri hisoblash
     let totalPriceText;
     if (baseProductPrice > 0) {
@@ -624,14 +624,14 @@ function submitOrder() {
         const basePrice = parseInt(priceText.replace(/[^0-9]/g, ''));
         totalPriceText = basePrice.toLocaleString() + " so'm";
     }
-    
+
     // Loading ko'rsatish
     const orderBtn = document.getElementById('orderBtn');
     if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
-    
+
     // Buyurtma ma'lumotlarini tayyorlash
     console.log('Buyurtma tayyorlanmoqda:', { tableType, tableNumber, kabinaNumber, tabchaNumber, title, quantity });
-    
+
     const orderData = {
         items: [{
             product: title,
@@ -644,12 +644,12 @@ function submitOrder() {
         address: tableType === 'address' ? locationAddress : null,
         timestamp: new Date().toISOString()
     };
-    
+
     console.log('Yuboriladigan data:', JSON.stringify(orderData));
-    
+
     // Serverga buyurtma yuborish
     console.log('Buyurtma yuborilmoqda...');
-    
+
     // Vercel/Production yoki local server uchun URL
     let apiUrl;
     if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
@@ -659,7 +659,7 @@ function submitOrder() {
         apiUrl = 'http://localhost:3001/api/order';
     }
     console.log('API URL:', apiUrl);
-    
+
     fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -667,62 +667,62 @@ function submitOrder() {
         },
         body: JSON.stringify(orderData)
     })
-    .then(response => {
-        console.log('Response status:', response.status);
-        console.log('Response type:', response.headers.get('content-type'));
-        
-        // Check if response is OK
-        if (!response.ok) {
-            return response.text().then(text => {
-                throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
-            });
-        }
-        
-        // Check content type
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            return response.text().then(text => {
-                throw new Error('Server JSON emas, HTML qaytaryapti. Server ishlamayotgan bolishi mumkin. Response: ' + text.substring(0, 200));
-            });
-        }
-        
-        return response.json();
-    })
-    .then(data => {
-        // Buyurtma tugagandan so'ng tugma matnini qayta tiklaymiz
-        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
-        
-        if (data.success) {
-            // Joylashuv matnini tayyorlash
-            let locationMsg = '';
-            if (tableType === 'tabcha') {
-                locationMsg = 'Tabchan: ' + tabchaNumber;
-            } else if (tableType === 'kabina') {
-                locationMsg = 'Kabina: ' + kabinaNumber;
-            } else if (tableType === 'stol') {
-                locationMsg = 'Stol: ' + tableNumber;
-            } else {
-                locationMsg = 'Manzil: ' + locationAddress;
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response type:', response.headers.get('content-type'));
+
+            // Check if response is OK
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
+                });
             }
-            showToast('✅ Buyurtmangiz qabul qilindi!', `🎉 Buyurtmangiz muvaffaqiyatli yuborildi!\n\n📦 Mahsulot: ${title}\n📊 Miqdor: ${quantity}\n💰 Jami narx: ${totalPriceText}\n📍 ${locationMsg}\n\n✨ Rahmat! Tez orada operator siz bilan bog'lanadi!`, '#27ae60', '🎉');
-        } else {
-            showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
-        }
-    })
-    .catch(error => {
-        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
-        console.error('Buyurtma yuborish xatosi:', error);
-        
-        // Offline yoki server xatosini aniqlash
-        if (!navigator.onLine) {
-            // Offline holatda - buyurtmani saqlash
-            saveOrderToQueue(orderData);
-            showToast('📱 Offline holatda!', 'Internetga ulanish yo\'q. Buyurtmangiz saqlandi va internet tiklanganda avtomatik yuboriladi.', '#e67e22');
-        } else {
-            showToast('⚠️ Serverga ulanish mumkin emas!', 'Server ishlamayotgan bo\'lishi mumkin. Internetga ulanishni tekshiring yoki qayta urinib ko\'ring. URL: ' + apiUrl, '#e74c3c');
-        }
-    });
-    
+
+            // Check content type
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                return response.text().then(text => {
+                    throw new Error('Server JSON emas, HTML qaytaryapti. Server ishlamayotgan bolishi mumkin. Response: ' + text.substring(0, 200));
+                });
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            // Buyurtma tugagandan so'ng tugma matnini qayta tiklaymiz
+            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+
+            if (data.success) {
+                // Joylashuv matnini tayyorlash
+                let locationMsg = '';
+                if (tableType === 'tabcha') {
+                    locationMsg = 'Tabchan: ' + tabchaNumber;
+                } else if (tableType === 'kabina') {
+                    locationMsg = 'Kabina: ' + kabinaNumber;
+                } else if (tableType === 'stol') {
+                    locationMsg = 'Stol: ' + tableNumber;
+                } else {
+                    locationMsg = 'Manzil: ' + locationAddress;
+                }
+                showToast('✅ Buyurtmangiz qabul qilindi!', `🎉 Buyurtmangiz muvaffaqiyatli yuborildi!\n\n📦 Mahsulot: ${title}\n📊 Miqdor: ${quantity}\n💰 Jami narx: ${totalPriceText}\n📍 ${locationMsg}\n\n✨ Rahmat! Tez orada operator siz bilan bog'lanadi!`, '#27ae60', '🎉');
+            } else {
+                showToast('⚠️ Diqqat!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
+            }
+        })
+        .catch(error => {
+            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+            console.error('Buyurtma yuborish xatosi:', error);
+
+            // Offline yoki server xatosini aniqlash
+            if (!navigator.onLine) {
+                // Offline holatda - buyurtmani saqlash
+                saveOrderToQueue(orderData);
+                showToast('📱 Offline holatda!', 'Internetga ulanish yo\'q. Buyurtmangiz saqlandi va internet tiklanganda avtomatik yuboriladi.', '#e67e22');
+            } else {
+                showToast('⚠️ Serverga ulanish mumkin emas!', 'Server ishlamayotgan bo\'lishi mumkin. Internetga ulanishni tekshiring yoki qayta urinib ko\'ring. URL: ' + apiUrl, '#e74c3c');
+            }
+        });
+
     closeFullscreen();
 }
 
@@ -771,7 +771,7 @@ async function processOrderQueue() {
         return;
     }
     console.log(`Queue da ${queue.length} ta buyurtma yuborilmoqda...`);
-    
+
     // Vercel/Production yoki local server uchun URL
     let apiUrl;
     if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
@@ -839,14 +839,14 @@ function showToast(title, message, color, icon = null) {
             <p style="white-space: pre-line;">${message}</p>
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     // Show the notification with animation
     setTimeout(() => {
         notification.classList.add('show');
     }, 100);
-    
+
     // 5 soniyadan so'ng bildirishnomani olib tashlash
     setTimeout(() => {
         notification.classList.add('toast-hide');
@@ -922,15 +922,15 @@ function addToCartFromModal() {
     var price = document.getElementById('modalPrice').textContent;
     var img = document.getElementById('modalImg').src;
     var qty = parseInt(document.getElementById('modalQuantity').value);
-    
+
     if (isNaN(qty) || qty <= 0) {
         showToast('❌ Xato!', 'Miqdorni to\'g\'ri kiriting', '#e74c3c');
         return;
     }
-    
+
     // Narxni son sifatida olish
     var priceNum = parseInt(price.replace(/[^0-9]/g, ''));
-    
+
     var item = {
         id: Date.now(),
         title: title,
@@ -939,7 +939,7 @@ function addToCartFromModal() {
         quantity: qty,
         image: img
     };
-    
+
     // Mavjud itemni tekshirish
     const existingItem = cart.find(c => c.title === item.title);
     if (existingItem) {
@@ -947,7 +947,7 @@ function addToCartFromModal() {
     } else {
         cart.push(item);
     }
-    
+
     saveCart();
     updateCartBadge();
     // Badge bounce animation
@@ -1130,13 +1130,13 @@ function checkout() {
         alert('Savat bo\'sh!');
         return;
     }
-    
+
     // Agar oldin tanlangan location bo'lsa, shuni ishlat
     if (userLocation.address) {
         // Determine delivery type based on location format
         let deliveryType = 'come';
         let locationInfo = userLocation.address;
-        
+
         if (userLocation.address.includes('Stol raqami:')) {
             deliveryType = 'table';
         } else if (userLocation.address.includes('Kabina raqami:')) {
@@ -1146,11 +1146,11 @@ function checkout() {
         } else {
             deliveryType = 'address';
         }
-        
+
         processOrder(locationInfo, deliveryType);
         return;
     }
-    
+
     // Agar location tanlanmagan bo'lsa, initial modalni ko'rsatish
     const tableSelectModal = document.getElementById('tableSelectModal');
     if (tableSelectModal) {
@@ -1166,10 +1166,10 @@ function processOrder(locationInfo, deliveryType) {
         showToast('❌ Xato!', 'Savat bo\'sh!', '#e74c3c');
         return;
     }
-    
+
     // Determine table/kabina/tabcha numbers from location
     let tableNumber = null, kabinaNumber = null, tabchaNumber = null, address = null;
-    
+
     if (locationInfo.includes('Stol raqami:')) {
         tableNumber = locationInfo.replace('Stol raqami:', '').trim();
     } else if (locationInfo.includes('Kabina raqami:')) {
@@ -1179,7 +1179,7 @@ function processOrder(locationInfo, deliveryType) {
     } else {
         address = locationInfo;
     }
-    
+
     // Create a single order with all cart items
     const orderData = {
         items: cart.map(item => ({
@@ -1193,7 +1193,7 @@ function processOrder(locationInfo, deliveryType) {
         address: address,
         timestamp: new Date().toISOString()
     };
-    
+
     // Vercel/Production yoki local server uchun URL
     let apiUrl;
     if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
@@ -1201,52 +1201,52 @@ function processOrder(locationInfo, deliveryType) {
     } else {
         apiUrl = 'http://localhost:3001/api/order';
     }
-    
+
     // Show loading state
     const orderBtn = document.getElementById('orderBtn');
     if (orderBtn) orderBtn.textContent = '⏳ Yuborilmoqda...';
-    
+
     // Send single order
     fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.text().then(text => {
-                throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
-            });
-        }
-        
-        // Check content type
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            return response.text().then(text => {
-                throw new Error('Server JSON emas, HTML qaytaryapti. Server ishlamayotgan bolishi mumkin. Response: ' + text.substring(0, 200));
-            });
-        }
-        
-        return response.json();
-    })
-    .then(data => {
-        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
-        
-        if (data.success) {
-            closeCart();
-            showToast('✅ Muvaffaqiyat!', `Barcha ${cart.length} ta mahsulot bitta buyurtmada yuborildi!`, '#27ae60', '🎉');
-            // Clear cart after successful order
-            cart = [];
-            saveCart();
-            updateCartBadge();
-        } else {
-            showToast('⚠️ Xato!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
-        }
-    })
-    .catch(error => {
-        if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
-        console.error('Buyurtma yuborish xatosi:', error);
-        
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error('Server xatosi: ' + response.status + ' - ' + (text.substring(0, 100) || 'Unknown'));
+                });
+            }
+
+            // Check content type
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                return response.text().then(text => {
+                    throw new Error('Server JSON emas, HTML qaytaryapti. Server ishlamayotgan bolishi mumkin. Response: ' + text.substring(0, 200));
+                });
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+
+            if (data.success) {
+                closeCart();
+                showToast('✅ Muvaffaqiyat!', `Barcha ${cart.length} ta mahsulot bitta buyurtmada yuborildi!`, '#27ae60', '🎉');
+                // Clear cart after successful order
+                cart = [];
+                saveCart();
+                updateCartBadge();
+            } else {
+                showToast('⚠️ Xato!', data.error || 'Buyurtma yuborishda xatolik yuz berdi.', '#e67e22');
+            }
+        })
+        .catch(error => {
+            if (orderBtn) orderBtn.textContent = '📦 Buyurtma berish';
+            console.error('Buyurtma yuborish xatosi:', error);
+
             // Offline holatda - saqlash
             if (!navigator.onLine) {
                 // Save all cart items as a single order in queue for consistency
@@ -1264,15 +1264,15 @@ function processOrder(locationInfo, deliveryType) {
                     offline: true
                 };
                 saveOrderToQueue(orderData);
-            showToast('📱 Offline!', 'Buyurtmalar saqlandi. Internet tiklanganda yuboriladi.', '#e67e22');
-            cart = [];
-            saveCart();
-            updateCartBadge();
-            closeCart();
-        } else {
-            showToast('❌ Xato!', 'Buyurtma yuborishda xatolik: ' + error.message, '#e74c3c');
-        }
-    });
+                showToast('📱 Offline!', 'Buyurtmalar saqlandi. Internet tiklanganda yuboriladi.', '#e67e22');
+                cart = [];
+                saveCart();
+                updateCartBadge();
+                closeCart();
+            } else {
+                showToast('❌ Xato!', 'Buyurtma yuborishda xatolik: ' + error.message, '#e74c3c');
+            }
+        });
 }
 
 // ==================== INITIAL LOCATION SELECTION ====================
@@ -1282,12 +1282,12 @@ function toggleTableInputInitial() {
     const stolContainer = document.getElementById('stolInputContainerInitial');
     const kabinaContainer = document.getElementById('kabineInputContainerInitial');
     const tabchaContainer = document.getElementById('tabchaInputContainerInitial');
-    
+
     // Hide all first
     if (stolContainer) stolContainer.style.display = 'none';
     if (kabinaContainer) kabinaContainer.style.display = 'none';
     if (tabchaContainer) tabchaContainer.style.display = 'none';
-    
+
     // Show selected
     if (tableType === 'stol' && stolContainer) {
         stolContainer.style.display = 'flex';
@@ -1306,7 +1306,7 @@ function toggleTableInputInitial() {
 function saveInitialLocation() {
     const tableType = document.getElementById('tableTypeInitial').value;
     let locationNumber = null;
-    
+
     if (tableType === 'stol') {
         locationNumber = document.getElementById('tableNumberInitial').value;
         if (!locationNumber || locationNumber < 1 || locationNumber > 18) {
@@ -1315,7 +1315,7 @@ function saveInitialLocation() {
         }
         userLocation.address = 'Stol raqami: ' + locationNumber;
         userLocation.deliveryAvailable = false;
-        
+
         // Hide modal and show notification
         document.getElementById('tableSelectModal').style.display = 'none';
         showNotification('📍 ' + userLocation.address + ' tanlandi!');
@@ -1328,7 +1328,7 @@ function saveInitialLocation() {
         }
         userLocation.address = 'Kabina raqami: ' + locationNumber;
         userLocation.deliveryAvailable = false;
-        
+
         // Hide modal and show notification
         document.getElementById('tableSelectModal').style.display = 'none';
         showNotification('📍 ' + userLocation.address + ' tanlandi!');
@@ -1341,7 +1341,7 @@ function saveInitialLocation() {
         }
         userLocation.address = 'Tabchan raqami: ' + locationNumber;
         userLocation.deliveryAvailable = false;
-        
+
         // Hide modal and show notification
         document.getElementById('tableSelectModal').style.display = 'none';
         showNotification('📍 ' + userLocation.address + ' tanlandi!');
@@ -1361,21 +1361,21 @@ function closeLocationModal() {
 // Save delivery location
 function saveDeliveryLocation() {
     const address = document.getElementById('deliveryAddress').value.trim();
-    
+
     if (!address) {
         alert('Iltimos, manzilingizni kiriting!');
         return;
     }
-    
+
     userLocation.address = address;
     userLocation.deliveryAvailable = true;
-    
+
     // Hide modal
     document.getElementById('locationModal').style.display = 'none';
-    
+
     // Show notification
     showNotification('📍 Manzil saqlandi!');
-    
+
     console.log('Delivery location saved:', userLocation);
 }
 
@@ -1406,7 +1406,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
     showMainPage();
     loadCart();
-    
+
     // Show initial location selection modal if location not set
     if (!userLocation.address) {
         const locationModal = document.getElementById('tableSelectModal');
@@ -1416,7 +1416,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleTableInputInitial();
         }
     }
-    
+
     // Service Worker ro'yhatga olish (PWA uchun)
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')

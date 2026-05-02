@@ -80,7 +80,7 @@ app.get('/', (req, res) => {
 // Barcha boshqa fayllar uchun (index.js, CSS, sw.js, manifest.json)
 app.get('*', (req, res) => {
     const filePath = path.join(__dirname, req.path);
-    
+
     // Fayl mavjudligini tekshirish
     if (fs.existsSync(filePath)) {
         res.sendFile(filePath);
@@ -150,13 +150,13 @@ const foodData = {
 function createMenuMessage(category) {
     const items = foodData[category];
     let message = `🍽️ *${getCategoryName(category)}*\n\n`;
-    
+
     items.forEach((item, index) => {
         message += `${index + 1}. *${item.title}*\n`;
         message += `   ${item.description}\n`;
         message += `   💰 Narx: ${item.price}\n\n`;
     });
-    
+
     return message;
 }
 
@@ -183,22 +183,22 @@ async function sendToTelegram(message, chatId = CHAT_ID) {
     console.log('BOT_TOKEN mavjud:', BOT_TOKEN ? 'Ha' : 'Yo\'q');
     console.log('CHAT_ID:', CHAT_ID);
     console.log('Xabar:', message.substring(0, 100));
-    
+
     if (!BOT_TOKEN || !CHAT_ID) {
         console.error('❌ BOT_TOKEN yoki CHAT_ID yo\'q!');
         return false;
     }
-    
+
     try {
         const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
         console.log('URL:', url.replace(BOT_TOKEN, '***HIDDEN***'));
-        
+
         const response = await axios.post(url, {
             chat_id: chatId,
             text: message,
             parse_mode: 'Markdown'
         });
-        
+
         console.log('✅ Telegram ga xabar yuborildi:', response.data);
         return true;
     } catch (error) {
@@ -227,28 +227,30 @@ function isUserAllowed(userId) {
 app.post('/api/order', async (req, res) => {
     console.log('=== Buyurtma keldi ===');
     console.log('Body:', req.body);
-    
+    console.log('Body type:', typeof req.body);
+    console.log('Items:', req.body?.items);
+    console.log('Items type:', typeof req.body?.items);
+    if (req.body?.items) {
+        console.log('Items length:', req.body.items.length);
+        console.log('First item:', req.body.items[0]);
+    }
+
     const { items, tableNumber, kabinaNumber, tabchaNumber, address } = req.body;
-    
+
     // Validate items array
     if (!items || !Array.isArray(items) || items.length === 0) {
         console.log('Xato: Mahsulotlar kiritilmagan');
         return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
     }
-    
-    // Validate all items
-    if (!items || !Array.isArray(items) || items.length === 0) {
-        console.log('Xato: Mahsulotlar kiritilmagan');
-        return res.status(400).json({ error: 'Mahsulotlar kiritilmagan', success: false });
-    }
-    
+
+    // Validate each item
     for (const item of items) {
         if (!item.product || !item.quantity) {
             console.log('Xato: Mahsulot yoki miqdor kiritilmagan');
             return res.status(400).json({ error: 'Mahsulot yoki miqdor kiritilmagan', success: false });
         }
     }
-    
+
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
@@ -260,27 +262,27 @@ app.post('/api/order', async (req, res) => {
     } else if (address) {
         locationText = `📍 Manzil: ${escapeMarkdown(address)}`;
     }
-    
+
     // Build order text with all items
     let orderText = `📦 *YANGI BUYURTMA*\n\n`;
-    
+
     items.forEach((item, index) => {
         orderText += `${index + 1}. 📦 ${escapeMarkdown(item.product)}\n`;
         orderText += `   📊 Miqdor: ${escapeMarkdown(item.quantity)}\n`;
         orderText += `   💰 Narx: ${escapeMarkdown(item.price)}\n\n`;
     });
-    
+
     if (locationText) {
         orderText += `${locationText}\n`;
     }
-    
+
     orderText += `⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
-    
+
     console.log('Telegram ga yuborilmoqda...');
-    
+
     try {
         const success = await sendToTelegram(orderText);
-        
+
         if (success) {
             console.log('Buyurtma muvaffaqiyatli yuborildi');
             res.json({ success: true, message: 'Buyurtma yuborildi!' });
@@ -302,66 +304,66 @@ app.get('/api/menu', (req, res) => {
 // Telegram webhook (ixtiyoriy)
 app.post('/webhook', async (req, res) => {
     const message = req.body.message;
-    
+
     if (!message || !message.text) {
         return res.send('OK');
     }
-    
+
     const text = message.text;
     const chatId = message.chat.id;
     const userId = message.from.id;
-    
+
     // Foydalanuvchi ruxsatini tekshirish
     if (!isUserAllowed(userId)) {
         console.log(`❌ Ruxsatsiz foydalanuvchi kirishga urindi: ${userId}`);
         return res.send('OK');
     }
-    
+
     let response = '';
-    
+
     switch (text) {
         case '/menu':
         case '/start':
             response = `🍽️ *Restoran Menyu*\n\nQuyidagilardan birini tanlang:\n\n` +
-                       `🥗 /salads - Salatlar\n` +
-                       `🍖 /mains - Asosiy Taomlar\n` +
-                       `🥤 /drinks - Ichimliklar\n` +
-                       `🍰 /deserts - Desertlar\n\n` +
-                       `🛒 /order - Buyurtma berish`;
+                `🥗 /salads - Salatlar\n` +
+                `🍖 /mains - Asosiy Taomlar\n` +
+                `🥤 /drinks - Ichimliklar\n` +
+                `🍰 /deserts - Desertlar\n\n` +
+                `🛒 /order - Buyurtma berish`;
             break;
-            
+
         case '/salads':
             response = createMenuMessage('salads');
             break;
-            
+
         case '/mains':
             response = createMenuMessage('mains');
             break;
-            
+
         case '/drinks':
             response = createMenuMessage('drinks');
             break;
-            
+
         case '/deserts':
             response = createMenuMessage('deserts');
             break;
-            
+
         case '/order':
             response = `🛒 *Buyurtma berish*\n\nBuyurtmangizni yozing va yuboring!\n\n` +
-                       `Misol: \n"2 ta jiz, 1 ta cola"`;
+                `Misol: \n"2 ta jiz, 1 ta cola"`;
             break;
-            
+
         default:
             if (text.length > 5) {
                 await sendToTelegram(`📝 Xabar: ${text}`);
                 response = `✅ Xabaringiz qabul qilindi!\n\nRahmat! 🍴`;
             } else {
                 response = `❌ Noma'lum buyruq.\n\n` +
-                           `/menu - Menyuni ko'rish\n` +
-                           `/order - Buyurtma berish`;
+                    `/menu - Menyuni ko'rish\n` +
+                    `/order - Buyurtma berish`;
             }
     }
-    
+
     try {
         await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
             chat_id: chatId,
@@ -371,7 +373,7 @@ app.post('/webhook', async (req, res) => {
     } catch (error) {
         console.error('Xato:', error.message);
     }
-    
+
     res.send('OK');
 });
 
@@ -434,33 +436,39 @@ function getLocalIP() {
     return 'localhost';
 }
 
-app.listen(PORT, HOSTNAME, () => {
-    console.log('==========================================');
-    console.log('🚀 Server ishga tushdi: http://localhost:' + PORT);
-    console.log('🌐 Tarmoq uchun: http://' + getLocalIP() + ':' + PORT);
-    console.log('📱 Telegram bot ishga tushirilmoqda...');
-    console.log('==========================================');
-    
-    // Bot ishga tushganligini tekshirish
-    if (BOT_TOKEN && CHAT_ID) {
-        axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getMe`)
-            .then(response => {
-                console.log('✅ Bot muvaffaqiyatli ulandi!');
-                console.log('Bot nomi:', response.data.result.first_name);
-                console.log('Bot username:', '@' + response.data.result.username);
-            })
-            .catch(error => {
-                console.error('❌ Bot ulanishda xato:', error.message);
-            });
-        
-        // Chat ID ni tekshirish
-        axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getChat?chat_id=${CHAT_ID}`)
-            .then(response => {
-                console.log('✅ Chat ma\'lumotlari olish muvaffaqiyatli!');
-                console.log('Chat nomi:', response.data.result.first_name || response.data.result.title);
-            })
-            .catch(error => {
-                console.error('⚠️ Chat ID xato yoki bot bu chatda emas:', error.message);
-            });
-    }
-});
+// Export the app for Vercel
+module.exports = app;
+
+// Only start the server if running directly
+if (require.main === module) {
+    app.listen(PORT, HOSTNAME, () => {
+        console.log('==========================================');
+        console.log('🚀 Server ishga tushdi: http://localhost:' + PORT);
+        console.log('🌐 Tarmoq uchun: http://' + getLocalIP() + ':' + PORT);
+        console.log('📱 Telegram bot ishga tushirilmoqda...');
+        console.log('==========================================');
+
+        // Bot ishga tushganligini tekshirish
+        if (BOT_TOKEN && CHAT_ID) {
+            axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getMe`)
+                .then(response => {
+                    console.log('✅ Bot muvaffaqiyatli ulandi!');
+                    console.log('Bot nomi:', response.data.result.first_name);
+                    console.log('Bot username:', '@' + response.data.result.username);
+                })
+                .catch(error => {
+                    console.error('❌ Bot ulanishda xato:', error.message);
+                });
+
+            // Chat ID ni tekshirish
+            axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getChat?chat_id=${CHAT_ID}`)
+                .then(response => {
+                    console.log('✅ Chat ma\'lumotlari olish muvaffaqiyatli!');
+                    console.log('Chat nomi:', response.data.result.first_name || response.data.result.title);
+                })
+                .catch(error => {
+                    console.error('⚠️ Chat ID xato yoki bot bu chatda emas:', error.message);
+                });
+        }
+    });
+}
