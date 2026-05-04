@@ -276,6 +276,18 @@ if (fs.existsSync(publicPath)) {
 }
 app.use(express.static(__dirname));
 
+// Explicit routes for PWA files (service worker and manifest)
+app.get('/sw.js', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Content-Type', 'application/javascript');
+    res.sendFile(path.join(__dirname, 'sw.js'));
+});
+app.get('/manifest.json', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Content-Type', 'application/manifest+json');
+    res.sendFile(path.join(__dirname, 'manifest.json'));
+});
+
 // index.html uchun alohida yo'l
 app.get('/', (req, res) => {
     const publicIndexPath = path.join(publicPath, 'index.html');
@@ -290,13 +302,7 @@ app.get('/', (req, res) => {
 
 // Catch-all route for SPA - serve index.html for all other routes
 app.get('*', (req, res) => {
-    const filePath = path.join(__dirname, req.path);
-
-    if (fs.existsSync(filePath)) {
-        res.sendFile(filePath);
-    } else {
-        res.sendFile(path.join(__dirname, 'index.html'));
-    }
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // ============================================
