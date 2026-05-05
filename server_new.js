@@ -274,7 +274,7 @@ const publicPath = path.join(__dirname, 'public');
 if (fs.existsSync(publicPath)) {
     app.use(express.static(publicPath));
 }
-app.use(express.static(__dirname));
+REMOVED
 
 // Explicit routes for PWA files (service worker and manifest)
 app.get('/sw.js', (req, res) => {
@@ -737,3 +737,4 @@ if (require.main === module) {
         }
     });
 }
+
