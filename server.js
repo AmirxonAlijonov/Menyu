@@ -477,7 +477,7 @@ function isUserAllowed(userId) {
 // Server ishga tushirish
 // SPA fallback: serve index.html for all other GET requests
 app.get('*', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
+    res.sendFile(path.join(publicPath, "index.html"));
 });
 
 const PORT = process.env.PORT || 3001; // Default port 3001 to avoid conflict
