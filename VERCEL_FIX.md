@@ -25,7 +25,7 @@ Vercelda sayt ochilganda faqat HTML yuklanib, CSS va JavaScript fayllari ishlama
 ### 3. Tekshiruv
 - Barcha statik fayllar `public/` papkasida mavjud:
   - ✅ `public/index.js`
-  - ✅ `public/CSS/style.css`
+  - ✅ `public/css/style.css`
   - ✅ `public/manifest.json`
   - ✅ `public/sw.js`
   - ✅ `public/index.html`

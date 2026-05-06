@@ -9,7 +9,7 @@ const staticAssets = [
     '/',
     '/index.html',
     '/index.js',
-    '/CSS/style.css',
+    '/css/style.css',
     '/manifest.json',
     '/sw.js'
 ];
