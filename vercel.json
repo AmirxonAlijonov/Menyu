@@ -12,15 +12,9 @@
             "dest": "/server.js"
         },
         {
-            "handle": "filesystem"
-        },
-        {
             "src": "/(.*)",
             "dest": "/server.js",
-            "method": "GET",
-            "headers": {
-                "Cache-Control": "no-cache, no-store, must-revalidate"
-            }
+            "method": "GET"
         }
     ],
     "env": {
