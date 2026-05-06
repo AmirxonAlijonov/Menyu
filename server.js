@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Telegram Bot Server
  * Restoran menyusi uchun Telegram bot
  * 
@@ -78,7 +78,7 @@ app.post('/api/order', async (req, res) => {
 
     // Check bot configuration first
     if (!BOT_TOKEN || !CHAT_ID) {
-        console.warn('вљ пёЏ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Buyurtma qabul qilinmadi.');
+        console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Buyurtma qabul qilinmadi.');
         return res.status(503).json({ 
             success: false, 
             error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
@@ -105,29 +105,29 @@ app.post('/api/order', async (req, res) => {
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
-        locationText = `рџ›ЏпёЏ Tabchan raqami: ${escapeMarkdown(tabchaNumber)}`;
+        locationText = `🛏️ Tabchan raqami: ${escapeMarkdown(tabchaNumber)}`;
     } else if (kabinaNumber) {
-        locationText = `рџљЄ Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
+        locationText = `🚪 Kabina raqami: ${escapeMarkdown(kabinaNumber)}`;
     } else if (tableNumber) {
-        locationText = `рџЄ‘ Stol raqami: ${escapeMarkdown(tableNumber)}`;
+        locationText = `🪑 Stol raqami: ${escapeMarkdown(tableNumber)}`;
     } else if (address) {
-        locationText = `рџ“Ќ Manzil: ${escapeMarkdown(address)}`;
+        locationText = `📍 Manzil: ${escapeMarkdown(address)}`;
     }
 
     // Build order text with all items
-    let orderText = `рџ“¦ *YANGI BUYURTMA*\n\n`;
+    let orderText = `📦 *YANGI BUYURTMA*\n\n`;
 
     items.forEach((item, index) => {
-        orderText += `${index + 1}. рџ“¦ ${escapeMarkdown(item.product)}\n`;
-        orderText += `   рџ“Љ Miqdor: ${escapeMarkdown(item.quantity)}\n`;
-        orderText += `   рџ’° Narx: ${escapeMarkdown(item.price)}\n\n`;
+        orderText += `${index + 1}. 📦 ${escapeMarkdown(item.product)}\n`;
+        orderText += `   📊 Miqdor: ${escapeMarkdown(item.quantity)}\n`;
+        orderText += `   💰 Narx: ${escapeMarkdown(item.price)}\n\n`;
     });
 
     if (locationText) {
         orderText += `${locationText}\n`;
     }
 
-    orderText += `вЏ° Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
+    orderText += `⏰ Vaqt: ${new Date().toLocaleString('uz-UZ')}`;
 
     console.log('Telegram ga yuborilmoqda...');
 
@@ -149,7 +149,7 @@ app.post('/api/order', async (req, res) => {
 
 // Health check endpoint (for debugging Vercel deployment)
 app.get('/api/health', (req, res) => {
-    console.log('рџ”Ќ Health check requested from:', req.ip || req.connection.remoteAddress);
+    console.log('🔍 Health check requested from:', req.ip || req.connection.remoteAddress);
     const health = {
         status: 'ok',
         timestamp: new Date().toISOString(),
@@ -165,7 +165,7 @@ app.get('/api/health', (req, res) => {
 
 // Debug endpoint - shows configuration status (no secrets)
 app.get('/api/debug', (req, res) => {
-    console.log('рџђ› Debug endpoint accessed');
+    console.log('🐛 Debug endpoint accessed');
     const debug = {
         env: {
             NODE_ENV: process.env.NODE_ENV || 'not set',
@@ -202,7 +202,7 @@ app.post('/webhook', async (req, res) => {
 
     // Foydalanuvchi ruxsatini tekshirish
     if (!isUserAllowed(userId)) {
-        console.log(`вќЊ Ruxsatsiz foydalanuvchi kirishga urindi: ${userId}`);
+        console.log(`❌ Ruxsatsiz foydalanuvchi kirishga urindi: ${userId}`);
         return res.send('OK');
     }
 
@@ -211,12 +211,12 @@ app.post('/webhook', async (req, res) => {
     switch (text) {
         case '/menu':
         case '/start':
-            response = `рџЌЅпёЏ *Restoran Menyu*\n\nQuyidagilardan birini tanlang:\n\n` +
-                `рџҐ— /salads - Salatlar\n` +
-                `рџЌ– /mains - Asosiy Taomlar\n` +
-                `рџҐ¤ /drinks - Ichimliklar\n` +
-                `рџЌ° /deserts - Desertlar\n\n` +
-                `рџ›’ /order - Buyurtma berish`;
+            response = `🍽️ *Restoran Menyu*\n\nQuyidagilardan birini tanlang:\n\n` +
+                `🥗 /salads - Salatlar\n` +
+                `🍖 /mains - Asosiy Taomlar\n` +
+                `🥤 /drinks - Ichimliklar\n` +
+                `🍰 /deserts - Desertlar\n\n` +
+                `🛒 /order - Buyurtma berish`;
             break;
 
         case '/salads':
@@ -236,16 +236,16 @@ app.post('/webhook', async (req, res) => {
             break;
 
         case '/order':
-            response = `рџ›’ *Buyurtma berish*\n\nBuyurtmangizni yozing va yuboring!\n\n` +
+            response = `🛒 *Buyurtma berish*\n\nBuyurtmangizni yozing va yuboring!\n\n` +
                 `Misol: \n"2 ta jiz, 1 ta cola"`;
             break;
 
         default:
             if (text.length > 5) {
-                await sendToTelegram(`рџ“ќ Xabar: ${text}`);
-                response = `вњ… Xabaringiz qabul qilindi!\n\nRahmat! рџЌґ`;
+                await sendToTelegram(`📝 Xabar: ${text}`);
+                response = `✅ Xabaringiz qabul qilindi!\n\nRahmat! 🍴`;
             } else {
-                response = `вќЊ Noma'lum buyruq.\n\n` +
+                response = `❌ Noma'lum buyruq.\n\n` +
                     `/menu - Menyuni ko'rish\n` +
                     `/order - Buyurtma berish`;
             }
@@ -267,7 +267,7 @@ app.post('/webhook', async (req, res) => {
 // Offline buyurtma xabar endpointi - sayt offline rejimda buyurtma qilinganda telegram botga xabar yuboradi
 app.post('/api/notify-offline', async (req, res) => {
     if (!BOT_TOKEN || !CHAT_ID) {
-        console.warn('вљ пёЏ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Offline buyurtma yuborilmadi.');
+        console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Offline buyurtma yuborilmadi.');
         return res.status(503).json({ 
             success: false, 
             error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
@@ -281,19 +281,19 @@ app.post('/api/notify-offline', async (req, res) => {
     // Joylashuv matnini tayyorlash
     let locationText = '';
     if (tabchaNumber) {
-        locationText = `рџ›ЏпёЏ Tabchan: ${tabchaNumber}`;
+        locationText = `🛏️ Tabchan: ${tabchaNumber}`;
     } else if (kabinaNumber) {
-        locationText = `рџљЄ Kabina: ${kabinaNumber}`;
+        locationText = `🚪 Kabina: ${kabinaNumber}`;
     } else if (tableNumber) {
-        locationText = `рџЄ‘ Stol: ${tableNumber}`;
+        locationText = `🪑 Stol: ${tableNumber}`;
     }
 
-    const message = `рџ“¦ *YANGI BUYURTMA (OFFLINE)*\n\n` +
-        `рџ“¦ Mahsulot: ${product}\n` +
-        `рџ“Љ Miqdor: ${quantity}\n` +
-        `рџ’° Narx: ${price}\n` +
+    const message = `📦 *YANGI BUYURTMA (OFFLINE)*\n\n` +
+        `📦 Mahsulot: ${product}\n` +
+        `📊 Miqdor: ${quantity}\n` +
+        `💰 Narx: ${price}\n` +
         `${locationText ? locationText + '\n' : ''}` +
-        `вЏ° Vaqt: ${timestamp}\n\n` +
+        `⏰ Vaqt: ${timestamp}\n\n` +
         `_Al-safar Restoran Menyusi_`;
 
     try {
@@ -302,7 +302,7 @@ app.post('/api/notify-offline', async (req, res) => {
             text: message,
             parse_mode: 'Markdown'
         });
-        console.log('рџ“± Offline buyurtma xabari yuborildi:', product);
+        console.log('📱 Offline buyurtma xabari yuborildi:', product);
         res.json({ success: true });
     } catch (error) {
         console.error('Offline buyurtma xabar xatosi:', error.message);
@@ -313,9 +313,9 @@ app.post('/api/notify-offline', async (req, res) => {
 // Statik fayllarni serv qilish (API dan KEYIN)
 const publicPath = path.join(__dirname, 'public');
 if (fs.existsSync(publicPath)) {
-    app.use(express.static(publicPath));
+    app.use(express.static(publicPath, { maxAge: 86400000, etag: true, lastModified: true }));
 }
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, { maxAge: 86400000, etag: true, lastModified: true }));
 
 // Explicit routes for PWA files (service worker and manifest)
 app.get('/sw.js', (req, res) => {
@@ -354,11 +354,11 @@ const ALLOWED_USERS = process.env.ALLOWED_USERS ? process.env.ALLOWED_USERS.spli
 
 // Environment validation
 if (!BOT_TOKEN || !CHAT_ID) {
-    console.warn('вљ пёЏ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
+    console.warn('⚠️ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
     console.warn('   .env faylini yarating yoki Vercel environment variable\'larini sozlang.');
     console.warn('   Qo\'llanma: README.md fayliga qarang.');
 } else {
-    console.log('вњ… Telegram bot konfiguratsiyasi topildi');
+    console.log('✅ Telegram bot konfiguratsiyasi topildi');
 }
 
 // Ovqatlar ma'lumotlari - index.js bilan mos
@@ -404,12 +404,12 @@ const foodData = {
 // Menyu matnini yaratish
 function createMenuMessage(category) {
     const items = foodData[category];
-    let message = `рџЌЅпёЏ *${getCategoryName(category)}*\n\n`;
+    let message = `🍽️ *${getCategoryName(category)}*\n\n`;
 
     items.forEach((item, index) => {
         message += `${index + 1}. *${item.title}*\n`;
         message += `   ${item.description}\n`;
-        message += `   рџ’° Narx: ${item.price}\n\n`;
+        message += `   💰 Narx: ${item.price}\n\n`;
     });
 
     return message;
@@ -418,10 +418,10 @@ function createMenuMessage(category) {
 // Kategoriya nomini olish
 function getCategoryName(category) {
     const names = {
-        salads: "рџҐ— Salatlar",
-        mains: "рџЌ– Asosiy Taomlar",
-        drinks: "рџҐ¤ Ichimliklar",
-        deserts: "рџЌ° Desertlar"
+        salads: "🥗 Salatlar",
+        mains: "🍖 Asosiy Taomlar",
+        drinks: "🥤 Ichimliklar",
+        deserts: "🍰 Desertlar"
     };
     return names[category] || category;
 }
@@ -440,7 +440,7 @@ async function sendToTelegram(message, chatId = CHAT_ID) {
     console.log('Xabar:', message.substring(0, 100));
 
     if (!BOT_TOKEN || !CHAT_ID) {
-        console.error('вќЊ BOT_TOKEN yoki CHAT_ID yo\'q!');
+        console.error('❌ BOT_TOKEN yoki CHAT_ID yo\'q!');
         return false;
     }
 
@@ -454,10 +454,10 @@ async function sendToTelegram(message, chatId = CHAT_ID) {
             parse_mode: 'Markdown'
         });
 
-        console.log('вњ… Telegram ga xabar yuborildi:', response.data);
+        console.log('✅ Telegram ga xabar yuborildi:', response.data);
         return true;
     } catch (error) {
-        console.error('вќЊ Telegram xato:');
+        console.error('❌ Telegram xato:');
         console.error('Status:', error.response?.status);
         console.error('Data:', error.response?.data);
         console.error('Message:', error.message);
@@ -504,31 +504,31 @@ module.exports = app;
 if (require.main === module) {
     app.listen(PORT, HOSTNAME, () => {
         console.log('==========================================');
-        console.log('рџљЂ Server ishga tushdi: http://localhost:' + PORT);
-        console.log('рџЊђ Tarmoq uchun: http://' + getLocalIP() + ':' + PORT);
-        console.log('рџ“± Telegram bot ishga tushirilmoqda...');
+        console.log('🚀 Server ishga tushdi: http://localhost:' + PORT);
+        console.log('🌐 Tarmoq uchun: http://' + getLocalIP() + ':' + PORT);
+        console.log('📱 Telegram bot ishga tushirilmoqda...');
         console.log('==========================================');
 
         // Bot ishga tushganligini tekshirish
         if (BOT_TOKEN && CHAT_ID) {
             axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getMe`)
                 .then(response => {
-                    console.log('вњ… Bot muvaffaqiyatli ulandi!');
+                    console.log('✅ Bot muvaffaqiyatli ulandi!');
                     console.log('Bot nomi:', response.data.result.first_name);
                     console.log('Bot username:', '@' + response.data.result.username);
                 })
                 .catch(error => {
-                    console.error('вќЊ Bot ulanishda xato:', error.message);
+                    console.error('❌ Bot ulanishda xato:', error.message);
                 });
 
             // Chat ID ni tekshirish
             axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getChat?chat_id=${CHAT_ID}`)
                 .then(response => {
-                    console.log('вњ… Chat ma\'lumotlari olish muvaffaqiyatli!');
+                    console.log('✅ Chat ma\'lumotlari olish muvaffaqiyatli!');
                     console.log('Chat nomi:', response.data.result.first_name || response.data.result.title);
                 })
                 .catch(error => {
-                    console.error('вљ пёЏ Chat ID xato yoki bot bu chatda emas:', error.message);
+                    console.error('⚠️ Chat ID xato yoki bot bu chatda emas:', error.message);
                 });
         }
     });
