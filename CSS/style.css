@@ -3137,8 +3137,11 @@ body::before {
         transform: scale(0.98);
     }
 
-    .select-btn:hover,
-    .back-btn:hover {
+    .category-page .back-btn:hover {
+        transform: translateX(-50%);
+    }
+
+    .select-btn:hover {
         transform: none;
     }
 
