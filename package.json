@@ -8,8 +8,12 @@
     "dev": "node server.js"
   },
   "keywords": ["telegram", "bot", "restaurant", "menu"],
-  "author": "",
+  "author": "Al-safar Restoran",
   "license": "ISC",
+  "private": true,
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "axios": "^1.6.0",
