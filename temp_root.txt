@@ -1,0 +1,5 @@
+<button class="back-btn" onclick="showMainPage()">Orqaga</button>
+<button class="back-btn" onclick="showMainPage()">Orqaga</button>
+<button class="back-btn" onclick="showMainPage()">Orqaga</button>
+<button class="back-btn" onclick="showMainPage()">Orqaga</button>
+<button class="back-btn" onclick="closeCart()" style="text-align: center; margin-top: 10px;">🛍️ Xaridni
