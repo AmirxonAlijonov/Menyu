@@ -127,13 +127,13 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
 
 1. **Health endpoint'ni tekshirish:**
    ```
-   https://menyu-wheat.vercel.app/api/health
+   https://YOUR-PROJECT.vercel.app/api/health
    ```
    Bu endpoint server ishlayotganini tekshirish uchun. Agar bu endpoint ishlasa, server sozlangan.
 
 2. **Debug endpoint'ni tekshirish (maxfiy ma'lumotlar yo'q):**
    ```
-   https://menyu-wheat.vercel.app/api/debug
+   https://YOUR-PROJECT.vercel.app/api/debug
    ```
    Bu endpoint environment variable'lar sozlanganganligini ko'rsatadi (tokenlar yashirin).
 
@@ -162,7 +162,7 @@ Agar Vercel'da 401 xatosi chiqsa, bu quyidagilarni anglatadi:
    npm install -g vercel
 
    # Logs'ni ko'rish
-   vercel logs menyu-wheat.vercel.app --since 1h
+   vercel logs YOUR_PROJECT.vercel.app --since 1h
    ```
 
    **Logs'da qanday qidirish kerak:**
