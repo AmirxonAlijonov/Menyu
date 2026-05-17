@@ -130,8 +130,14 @@ app.post('/api/order', async (req, res) => {
         orderText += `   💵 Jami: ${formatPrice(itemTotal)}\n\n`;
     });
 
+    const serviceFee = Math.round(totalAmount * 0.08);
+    const finalTotal = totalAmount + serviceFee;
+
     orderText += `━━━━━━━━━━━━━━━━━━\n`;
-    orderText += `🧾 *Jami summa: ${formatPrice(totalAmount)}*\n`;
+    orderText += `🧾 Mahsulotlar jami: ${formatPrice(totalAmount)}\n`;
+    orderText += `📊 Xizmat haqi (8%): ${formatPrice(serviceFee)}\n`;
+    orderText += `━━━━━━━━━━━━━━━━━━\n`;
+    orderText += `💳 *Jami to'lov: ${formatPrice(finalTotal)}*\n`;
     orderText += `━━━━━━━━━━━━━━━━━━\n`;
 
     if (locationText) {
