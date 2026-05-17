@@ -83,36 +83,36 @@ onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg
 <div class="menu-container">
 <h1 class="menu-title">🥗 Salatlar</h1>
 <div class="mobile-cards-container">
-<div class="mobile-card" onclick="openMobileCard('salads', 0)">
+<div class="mobile-card" data-category="salads" data-index="0" onclick="openMobileCard('salads', 0)">
 <img src="https://api.silkphoto.uz/storage/ResourceThumbnail/c47ad3b4-fc99-4df6-a580-0b623ee89b41/YzQ3YWQzYjQtZmM5OS00ZGY2LWE1ODAtMGI2MjNlZTg5YjQxLTE3MzY5NTEyNTc=.webp"
 alt="Chiroqchi Salati" width="500" height="350" loading="lazy" fetchpriority="high">
 <div class="info">
 <h2>Chiroqchi Salati</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('salads', 1)">
+<div class="mobile-card" data-category="salads" data-index="1" onclick="openMobileCard('salads', 1)">
 <img src="https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=500" alt="Sezer Salati"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Sezer Salati</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('salads', 2)">
+<div class="mobile-card" data-category="salads" data-index="2" onclick="openMobileCard('salads', 2)">
 <img src="https://shar-shara.ru/wp-content/uploads/2024/10/IMG_0254.jpg" alt="Svejiy Salat"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Svejiy Salat</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('salads', 3)">
+<div class="mobile-card" data-category="salads" data-index="3" onclick="openMobileCard('salads', 3)">
 <img src="https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600"
 alt="Achchiq Chuchuk Salat" width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Achchiq Chuchuk Salat</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
 </div>
@@ -124,7 +124,7 @@ alt="Achchiq Chuchuk Salat" width="500" height="350" loading="lazy">
 <div class="menu-container">
 <h1 class="menu-title">🍲 1-ovqatlar (birinchisi)</h1>
 <div class="mobile-cards-container">
-<div class="mobile-card" onclick="openMobileCard('mains1', 0)">
+<div class="mobile-card" data-category="mains1" data-index="0" onclick="openMobileCard('mains1', 0)">
 <img src="https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg" alt="Mastava" width="500"
 height="350" loading="lazy">
 <div class="info">
@@ -132,15 +132,15 @@ height="350" loading="lazy">
 <span class="price">35,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains1', 1)">
+<div class="mobile-card" data-category="mains1" data-index="1" onclick="openMobileCard('mains1', 1)">
 <img src="https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" alt="Qaynatma Sho'rva"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Qaynatma Sho'rva</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains1', 2)">
+<div class="mobile-card" data-category="mains1" data-index="2" onclick="openMobileCard('mains1', 2)">
 <img src="https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg"
 alt="Grechka" width="500" height="350" loading="lazy">
 <div class="info">
@@ -148,15 +148,15 @@ alt="Grechka" width="500" height="350" loading="lazy">
 <span class="price">35,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains1', 3)">
+<div class="mobile-card" data-category="mains1" data-index="3" onclick="openMobileCard('mains1', 3)">
 <img src="https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" alt="Ko'za Sho'rva"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Ko'za Sho'rva</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains1', 4)">
+<div class="mobile-card" data-category="mains1" data-index="4" onclick="openMobileCard('mains1', 4)">
 <img src="https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" alt="Tushonka Sho'rva"
 width="500" height="350" loading="lazy">
 <div class="info">
@@ -172,7 +172,7 @@ width="500" height="350" loading="lazy">
 <div class="menu-container">
 <h1 class="menu-title">🍖 Asosiy taomlar (ikkichisi)</h1>
 <div class="mobile-cards-container">
-<div class="mobile-card" onclick="openMobileCard('mains2', 0)">
+<div class="mobile-card" data-category="mains2" data-index="0" onclick="openMobileCard('mains2', 0)">
 <img src="https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" alt="Jiz" width="500"
 height="350" loading="lazy">
 <div class="info">
@@ -180,15 +180,15 @@ height="350" loading="lazy">
 <span class="price">250,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 1)">
+<div class="mobile-card" data-category="mains2" data-index="1" onclick="openMobileCard('mains2', 1)">
 <img src="https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&"
 alt="Tabaka" width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Tabaka</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 2)">
+<div class="mobile-card" data-category="mains2" data-index="2" onclick="openMobileCard('mains2', 2)">
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
 alt="Vag'ori" width="500" height="350" loading="lazy">
 <div class="info">
@@ -196,31 +196,31 @@ alt="Vag'ori" width="500" height="350" loading="lazy">
 <span class="price">250,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 3)">
+<div class="mobile-card" data-category="mains2" data-index="3" onclick="openMobileCard('mains2', 3)">
 <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500" alt="KFS" width="500"
 height="350" loading="lazy">
 <div class="info">
 <h2>KFS</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 4)">
+<div class="mobile-card" data-category="mains2" data-index="4" onclick="openMobileCard('mains2', 4)">
 <img src="https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg"
 alt="Barbekyu" width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Barbekyu</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 5)">
+<div class="mobile-card" data-category="mains2" data-index="5" onclick="openMobileCard('mains2', 5)">
 <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=500" alt="Shashlik"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Mol Go'shti Shashlik</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 6)">
+<div class="mobile-card" data-category="mains2" data-index="6" onclick="openMobileCard('mains2', 6)">
 <img src="https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg" alt="Qozon Kabob"
 width="500" height="350" loading="lazy">
 <div class="info">
@@ -228,20 +228,20 @@ width="500" height="350" loading="lazy">
 <span class="price">250,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 7)">
+<div class="mobile-card" data-category="mains2" data-index="7" onclick="openMobileCard('mains2', 7)">
 <img src="https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png" alt="Manti"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Manti</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('mains2', 8)">
+<div class="mobile-card" data-category="mains2" data-index="8" onclick="openMobileCard('mains2', 8)">
 <img src="https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg" alt="Tandir Somsa" width="500"
 height="350" loading="lazy">
 <div class="info">
 <h2>Tandir Somsa</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
 </div>
@@ -253,23 +253,23 @@ height="350" loading="lazy">
 <div class="menu-container">
 <h1 class="menu-title">🥤 Ichimliklar</h1>
 <div class="mobile-cards-container">
-<div class="mobile-card" onclick="openMobileCard('drinks', 0)">
+<div class="mobile-card" data-category="drinks" data-index="0" onclick="openMobileCard('drinks', 0)">
 <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500" alt="Cola" width="500"
 height="350" loading="lazy">
 <div class="info">
 <h2>Coca Cola</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 1)">
+<div class="mobile-card" data-category="drinks" data-index="1" onclick="openMobileCard('drinks', 1)">
 <img src="https://homiladorlik.uz/wp-content/uploads/2022/05/kok-choy.webp" alt="Ko'k Choy"
 width="500" height="350" loading="lazy">
 <div class="info">
 <h2>Ko'k Choy</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 2)">
+<div class="mobile-card" data-category="drinks" data-index="2" onclick="openMobileCard('drinks', 2)">
 <img src="https://thumbs.dreamstime.com/b/can-fanta-orange-moscow-russia-april-coca-cola-company-soft-drink-ice-global-brand-fruit-flavored-carbonated-63824545.jpg"
 alt="Fanta" width="500" height="350" loading="lazy">
 <div class="info">
@@ -277,7 +277,7 @@ alt="Fanta" width="500" height="350" loading="lazy">
 <span class="price">17,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 3)">
+<div class="mobile-card" data-category="drinks" data-index="3" onclick="openMobileCard('drinks', 3)">
 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5xpJ6WWLQZvHlDhrZrL5JtPZlf2Ul8CgbQ&s"
 alt="Pepsi" width="500" height="350" loading="lazy">
 <div class="info">
@@ -285,31 +285,31 @@ alt="Pepsi" width="500" height="350" loading="lazy">
 <span class="price">17,000 so'm</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 4)">
+<div class="mobile-card" data-category="drinks" data-index="4" onclick="openMobileCard('drinks', 4)">
 <img src="https://xabar.uz/static/crop/1/2/736_736_95_1223447726.jpg" alt="Qora Choy" width="500"
 height="350" loading="lazy">
 <div class="info">
 <h2>Qora Choy</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 5)">
+<div class="mobile-card" data-category="drinks" data-index="5" onclick="openMobileCard('drinks', 5)">
 <img src="https://data.daryo.uz/media/2023/10/651f186ece54c.jpg" alt="Limon Choy" width="500"
 height="350" loading="lazy">
 <div class="info">
 <h2>Limon Choy</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 6)">
+<div class="mobile-card" data-category="drinks" data-index="6" onclick="openMobileCard('drinks', 6)">
 <img src="https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500" alt="Sok" width="500"
 height="350" loading="lazy">
 <div class="info">
 <h2>Sok</h2>
-<span class="price">Buyurtma Berish</span>
+                        <span class="price" onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma Berish</span>
 </div>
 </div>
-<div class="mobile-card" onclick="openMobileCard('drinks', 7)">
+<div class="mobile-card" data-category="drinks" data-index="7" onclick="openMobileCard('drinks', 7)">
 <img src="https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2609175503.jpg"
 alt="Sprite" width="500" height="350" loading="lazy">
 <div class="info">
@@ -366,8 +366,7 @@ onchange="updateWeightPrice()" oninput="updateWeightPrice()">
 </div>
 </div>
 <button class="add-cart-btn" onclick="addToCartFromModal()">🛒 Savatga qo'shish</button>
-<button class="order-btn" id="orderBtn" onclick="submitOrder(); return false;">📦 Buyurtma
-berish</button>
+                <button class="order-btn" id="orderBtn" onclick="submitOrder(); return false;">📦 Buyurtma berish</button>
 </div>
 </div>
 </div>
@@ -431,8 +430,10 @@ rows="3"></textarea>
 <div class="cart-items" id="cartItems">
 </div>
 <div class="cart-total" id="cartTotalContainer" style="display: none;">
-<p>Jami: <span id="cartTotal">0 so'm</span></p>
-</div>
+                <p>Mahsulotlar: <span id="cartSubtotal">0 so'm</span></p>
+                <p>Yetkazib berish (8%): <span id="cartDeliveryFee">0 so'm</span></p>
+                <p class="cart-total-final">Jami: <span id="cartTotal">0 so'm</span></p>
+            </div>
 <div class="cart-actions">
 <button class="order-btn" id="checkoutBtn" onclick="checkout()">📦 Buyurtma berish</button>
 <button class="back-btn" onclick="closeCart()" style="text-align: center; margin-top: 10px;">🛍️ Xaridni

@@ -965,6 +965,7 @@ function addToCartFromModal() {
         setTimeout(() => badge.classList.remove('bounce'), 400);
     }
     showNotification(`${item.title} savatga qo'shildi!`);
+    closeFullscreen();
 }
 
 // Mahsulotni savatga qo'shish
@@ -1029,6 +1030,8 @@ function formatPrice(price) {
 function renderCartItems() {
     const container = document.getElementById('cartItems');
     const totalContainer = document.getElementById('cartTotalContainer');
+    const subtotalElement = document.getElementById('cartSubtotal');
+    const deliveryFeeElement = document.getElementById('cartDeliveryFee');
     const totalElement = document.getElementById('cartTotal');
     if (cart.length === 0) {
         container.innerHTML = '<p class="empty-cart">Savat bo\'sh</p>';
@@ -1054,16 +1057,27 @@ function renderCartItems() {
             <button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button>
         </div>`;
     }).join('');
+    // 8% yetkazib berish haqi (500 dan katta qoldiq yuqoriga, kichik pastga)
+    const rawDeliveryFee = total * 0.08;
+    const remainder = rawDeliveryFee % 1000;
+    const deliveryFee = remainder >= 500 ? Math.ceil(rawDeliveryFee / 1000) * 1000 : Math.floor(rawDeliveryFee / 1000) * 1000;
+    const grandTotal = total + deliveryFee;
     totalContainer.style.display = 'block';
-    totalElement.textContent = formatPrice(total);
+    if (subtotalElement) subtotalElement.textContent = formatPrice(total);
+    if (deliveryFeeElement) deliveryFeeElement.textContent = formatPrice(deliveryFee);
+    totalElement.textContent = formatPrice(grandTotal);
 }
 
 // Mahsulotni savatdan o'chirish
 function removeFromCart(id) {
+    const removedItem = cart.find(item => item.id === id);
     cart = cart.filter(item => item.id !== id);
     saveCart();
     updateCartBadge();
     renderCartItems();
+    if (removedItem) {
+        showNotification('🗑 ' + removedItem.title + ' savatdan ochirildi!');
+    }
 }
 
 // Savatdagi miqdorni oshirish
