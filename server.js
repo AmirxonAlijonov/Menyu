@@ -117,11 +117,22 @@ app.post('/api/order', async (req, res) => {
     // Build order text with all items
     let orderText = `📦 *YANGI BUYURTMA*\n\n`;
 
+    let totalAmount = 0;
+
     items.forEach((item, index) => {
+        const itemPrice = parsePrice(item.price);
+        const itemTotal = itemPrice * item.quantity;
+        totalAmount += itemTotal;
+
         orderText += `${index + 1}. 📦 ${escapeMarkdown(item.product)}\n`;
         orderText += `   📊 Miqdor: ${escapeMarkdown(item.quantity)}\n`;
-        orderText += `   💰 Narx: ${escapeMarkdown(item.price)}\n\n`;
+        orderText += `   💰 Narx: ${escapeMarkdown(item.price)}\n`;
+        orderText += `   💵 Jami: ${formatPrice(itemTotal)}\n\n`;
     });
+
+    orderText += `━━━━━━━━━━━━━━━━━━\n`;
+    orderText += `🧾 *Jami summa: ${formatPrice(totalAmount)}*\n`;
+    orderText += `━━━━━━━━━━━━━━━━━━\n`;
 
     if (locationText) {
         orderText += `${locationText}\n`;
@@ -430,6 +441,18 @@ function getCategoryName(category) {
 function escapeMarkdown(str) {
     if (!str) return '';
     return String(str).replace(/([-_*`\[\]()~`>#+\|={}.!])/g, '\\$1');
+}
+
+// Narxni "20,000 so'm" formatidan son ga o'tkazish
+function parsePrice(priceStr) {
+    if (!priceStr) return 0;
+    const cleaned = String(priceStr).replace(/[^\d]/g, '');
+    return parseInt(cleaned, 10) || 0;
+}
+
+// Narxni formatlash: 20000 -> "20,000 so'm"
+function formatPrice(amount) {
+    return amount.toLocaleString('uz-UZ') + " so'm";
 }
 
 // Telegram ga xabar yuborish
