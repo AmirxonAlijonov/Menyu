@@ -165,13 +165,13 @@ const foodData = {
                 "1l": { price: 12000, desc: "1 litr" },
                 "0.5l": { price: 8000, desc: "0.5 litr" }
             },
-            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=800"
+            image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=800&q=80"
         },
         {
             title: "Ko'k Choy",
             description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.",
             price: "2,000 so'm",
-            image: "https://homiladorlik.uz/wp-content/uploads/2022/05/kok-choy.webp"
+            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80"
         },
         {
             title: "Fanta",
@@ -183,7 +183,7 @@ const foodData = {
                 "1l": { price: 12000, desc: "1 litr" },
                 "0.5l": { price: 8000, desc: "0.5 litr" }
             },
-            image: "https://thumbs.dreamstime.com/b/can-fanta-orange-moscow-russia-april-coca-cola-company-soft-drink-ice-global-brand-fruit-flavored-carbonated-63824545.jpg"
+            image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=800&q=80"
         },
         {
             title: "Pepsi",
@@ -195,25 +195,25 @@ const foodData = {
                 "1l": { price: 12000, desc: "1 litr" },
                 "0.5l": { price: 8000, desc: "0.5 litr" }
             },
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5xpJ6WWLQZvHlDhrZrL5JtPZlf2Ul8CgbQ&s"
+            image: "https://images.unsplash.com/photo-1600271886742-f049cd4153de?w=800&q=80"
         },
         {
             title: "Qora Choy",
             description: "Issiq qora choy suty bilan. An'anaviy ichimlik.",
             price: "5,000 so'm",
-            image: "https://xabar.uz/static/crop/1/2/736_736_95_1223447726.jpg"
+            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80"
         },
         {
             title: "Limon Choy",
             description: "Maxsus tayyorlangan limonli choy - yangi limon va choy bilan tayyorlangan.",
             price: "20,000 so'm",
-            image: "https://data.daryo.uz/media/2023/10/651f186ece54c.jpg"
+            image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800&q=80"
         },
         {
             title: "Sok",
             description: "Tabiiy meva sharbati - aralash mevalar.",
             price: "20,000 so'm",
-            image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=800"
+            image: "https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=800&q=80"
         },
         {
             title: "Sprite",
@@ -225,7 +225,25 @@ const foodData = {
                 "1l": { price: 12000, desc: "1 litr" },
                 "0.5l": { price: 8000, desc: "0.5 litr" }
             },
-            image: "https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2609175503.jpg"
+            image: "https://images.unsplash.com/photo-1600271886742-f049cd4153de?w=800&q=80"
+        },
+        {
+            title: "Lipton",
+            description: "Lipton choy. Issiq va sovuq variantlarda mavjud.",
+            price: "12,000 so'm",
+            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80"
+        },
+        {
+            title: "Fuse Tea",
+            description: "Fuse Tea ichimligi. Turli xil ta'm variantlari.",
+            price: "15,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "1.5l": { price: 15000, desc: "1.5 litr" },
+                "1l": { price: 12000, desc: "1 litr" },
+                "0.5l": { price: 8000, desc: "0.5 litr" }
+            },
+            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800&q=80"
         }
     ]
 };

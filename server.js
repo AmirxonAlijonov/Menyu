@@ -79,8 +79,8 @@ app.post('/api/order', async (req, res) => {
     // Check bot configuration first
     if (!BOT_TOKEN || !CHAT_ID) {
         console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Buyurtma qabul qilinmadi.');
-        return res.status(503).json({ 
-            success: false, 
+        return res.status(503).json({
+            success: false,
             error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
             code: 'BOT_NOT_CONFIGURED'
         });
@@ -285,8 +285,8 @@ app.post('/webhook', async (req, res) => {
 app.post('/api/notify-offline', async (req, res) => {
     if (!BOT_TOKEN || !CHAT_ID) {
         console.warn('⚠️ BOT_TOKEN yoki CHAT_ID o\'rnatilmagan! Offline buyurtma yuborilmadi.');
-        return res.status(503).json({ 
-            success: false, 
+        return res.status(503).json({
+            success: false,
             error: 'Xizmat vaqtincha mavjud emas. Telegram bot konfiguratsiyasi topilmadi.',
             code: 'BOT_NOT_CONFIGURED'
         });
@@ -410,7 +410,9 @@ const foodData = {
         { title: "Qora Choy", description: "Issiq qora choy suty bilan. An'anaviy ichimlik.", price: "5,000 so'm" },
         { title: "Limon Choy", description: "Maxsus tayyorlangan limonli choy - yangi limon va choy bilan tayyorlangan.", price: "20,000 so'm" },
         { title: "Sok", description: "Tabiiy meva sharbati - aralash mevalar.", price: "20,000 so'm" },
-        { title: "Sprite", description: "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } }
+        { title: "Sprite", description: "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
+        { title: "Lipton", description: "Lipton choy. Issiq va sovuq variantlarda mavjud.", price: "12,000 so'm" },
+        { title: "Fuse Tea", description: "Fuse Tea ichimligi. Turli xil ta'm variantlari.", price: "15,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 15000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } }
     ]
 };
 
