@@ -135,14 +135,6 @@
             <h1 class="menu-title">🍲 1-ovqatlar (birinchisi)</h1>
             <div class="mobile-cards-container">
                 <div class="mobile-card" data-category="mains1" data-index="0" onclick="openMobileCard('mains1', 0)">
-                    <img src="https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg" alt="Mastava" width="500"
-                        height="350" loading="lazy">
-                    <div class="info">
-                        <h2>Mastava</h2>
-                        <span class="price">35,000 so'm</span>
-                    </div>
-                </div>
-                <div class="mobile-card" data-category="mains1" data-index="1" onclick="openMobileCard('mains1', 1)">
                     <img src="https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" alt="Qaynatma Sho'rva"
                         width="500" height="350" loading="lazy">
                     <div class="info">
@@ -152,15 +144,17 @@
                             Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" data-category="mains1" data-index="2" onclick="openMobileCard('mains1', 2)">
+                <div class="mobile-card" data-category="mains1" data-index="1" onclick="openMobileCard('mains1', 1)">
                     <img src="https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg"
                         alt="Grechka" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Grechka</h2>
-                        <span class="price">35,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" data-category="mains1" data-index="3" onclick="openMobileCard('mains1', 3)">
+                <div class="mobile-card" data-category="mains1" data-index="2" onclick="openMobileCard('mains1', 2)">
                     <img src="https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" alt="Ko'za Sho'rva"
                         width="500" height="350" loading="lazy">
                     <div class="info">
@@ -170,12 +164,14 @@
                             Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" data-category="mains1" data-index="4" onclick="openMobileCard('mains1', 4)">
+                <div class="mobile-card" data-category="mains1" data-index="3" onclick="openMobileCard('mains1', 3)">
                     <img src="https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" alt="Tushonka Sho'rva"
                         width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Tushonka Sho'rva</h2>
-                        <span class="price">35,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
             </div>
@@ -191,7 +187,9 @@
                         height="350" loading="lazy">
                     <div class="info">
                         <h2>Jiz</h2>
-                        <span class="price">250,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="mains2" data-index="1" onclick="openMobileCard('mains2', 1)">
@@ -209,7 +207,9 @@
                         alt="Vag'ori" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Vag'ori</h2>
-                        <span class="price">250,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="mains2" data-index="3" onclick="openMobileCard('mains2', 3)">
@@ -247,7 +247,9 @@
                         width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Qozon Kabob</h2>
-                        <span class="price">250,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="mains2" data-index="7" onclick="openMobileCard('mains2', 7)">
@@ -304,7 +306,9 @@
                         alt="Fanta" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Fanta</h2>
-                        <span class="price">17,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="drinks" data-index="3" onclick="openMobileCard('drinks', 3)">
@@ -312,7 +316,9 @@
                         alt="Pepsi" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Pepsi</h2>
-                        <span class="price">17,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="drinks" data-index="4" onclick="openMobileCard('drinks', 4)">
@@ -350,7 +356,9 @@
                         alt="Sprite" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Sprite</h2>
-                        <span class="price">17,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="drinks" data-index="8" onclick="openMobileCard('drinks', 8)">
@@ -358,7 +366,9 @@
                         loading="lazy">
                     <div class="info">
                         <h2>Lipton</h2>
-                        <span class="price">12,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
                 <div class="mobile-card" data-category="drinks" data-index="9" onclick="openMobileCard('drinks', 9)">
@@ -366,7 +376,9 @@
                         alt="Fuse Tea" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Fuse Tea</h2>
-                        <span class="price">15,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
             </div>

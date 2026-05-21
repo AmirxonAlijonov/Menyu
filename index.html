@@ -135,14 +135,6 @@
             <h1 class="menu-title">🍲 1-ovqatlar (birinchisi)</h1>
             <div class="mobile-cards-container">
                 <div class="mobile-card" data-category="mains1" data-index="0" onclick="openMobileCard('mains1', 0)">
-                    <img src="https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg" alt="Mastava" width="500"
-                        height="350" loading="lazy">
-                    <div class="info">
-                        <h2>Mastava</h2>
-                        <span class="price">35,000 so'm</span>
-                    </div>
-                </div>
-                <div class="mobile-card" data-category="mains1" data-index="1" onclick="openMobileCard('mains1', 1)">
                     <img src="https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" alt="Qaynatma Sho'rva"
                         width="500" height="350" loading="lazy">
                     <div class="info">
@@ -152,15 +144,17 @@
                             Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" data-category="mains1" data-index="2" onclick="openMobileCard('mains1', 2)">
+                <div class="mobile-card" data-category="mains1" data-index="1" onclick="openMobileCard('mains1', 1)">
                     <img src="https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg"
                         alt="Grechka" width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Grechka</h2>
-                        <span class="price">35,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" data-category="mains1" data-index="3" onclick="openMobileCard('mains1', 3)">
+                <div class="mobile-card" data-category="mains1" data-index="2" onclick="openMobileCard('mains1', 2)">
                     <img src="https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" alt="Ko'za Sho'rva"
                         width="500" height="350" loading="lazy">
                     <div class="info">
@@ -170,12 +164,14 @@
                             Berish</span>
                     </div>
                 </div>
-                <div class="mobile-card" data-category="mains1" data-index="4" onclick="openMobileCard('mains1', 4)">
+                <div class="mobile-card" data-category="mains1" data-index="3" onclick="openMobileCard('mains1', 3)">
                     <img src="https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" alt="Tushonka Sho'rva"
                         width="500" height="350" loading="lazy">
                     <div class="info">
                         <h2>Tushonka Sho'rva</h2>
-                        <span class="price">35,000 so'm</span>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
                     </div>
                 </div>
             </div>

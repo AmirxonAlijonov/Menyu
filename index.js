@@ -47,12 +47,6 @@ const foodData = {
     ],
     mains1: [
         {
-            title: "Mastava",
-            description: "Guruch, go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek sho'rvasi.",
-            price: "35,000 so'm",
-            image: "https://zira.uz/wp-content/uploads/2018/02/mastava-1.jpg"
-        },
-        {
             title: "Qaynatma Sho'rva",
             description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.",
             price: "35,000 so'm",
