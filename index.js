@@ -75,10 +75,10 @@ const foodData = {
         {
             title: "Jiz",
             description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.",
-            price: "250,000 so'm",
+            price: "260,000 so'm",
             hasWeight: true,
             baseWeight: 1000,
-            pricePerGram: 250,
+            pricePerGram: 260,
             minWeight: 300,
             image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg"
         },
@@ -91,10 +91,10 @@ const foodData = {
         {
             title: "Vag'ori",
             description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
-            price: "250,000 so'm",
+            price: "260,000 so'm",
             hasWeight: true,
             baseWeight: 1000,
-            pricePerGram: 250,
+            pricePerGram: 260,
             minWeight: 300,
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s"
         },
@@ -111,10 +111,10 @@ const foodData = {
         {
             title: "Barbekyu",
             description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
-            price: "250,000 so'm",
+            price: "260,000 so'm",
             hasWeight: true,
             baseWeight: 1000,
-            pricePerGram: 250,
+            pricePerGram: 260,
             minWeight: 300,
             image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg"
         },
@@ -127,10 +127,10 @@ const foodData = {
         {
             title: "Qozon Kabob",
             description: "Qozonda pishirilgan mazali kabob. Go'sht, sabzavotlar va maxsus ziravorlar bilan.",
-            price: "250,000 so'm",
+            price: "260,000 so'm",
             hasWeight: true,
             baseWeight: 1000,
-            pricePerGram: 250,
+            pricePerGram: 260,
             minWeight: 300,
             image: "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg"
         },
@@ -239,40 +239,40 @@ const foodData = {
             },
             image: "https://img.fix-price.com/insecure/rs:fit:800:800/plain/bit/_marketplace/images/origin/8d/8dff92def967b2dd5f238695c5877501.jpg"
         }
-    ]
+     ]
 };
 
 // Bo'limni ochish funksiyasi
 function openCategory(category) {
-    // Hamma sahifalarni yashirish
-    document.getElementById('mainPage').classList.remove('active');
-    document.getElementById('saladsPage').classList.remove('active');
-    document.getElementById('mains1Page').classList.remove('active');
-    document.getElementById('mains2Page').classList.remove('active');
-    document.getElementById('drinksPage').classList.remove('active');
-
-    // Tanlangan sahifani ko'rsatish
-    document.getElementById(category + 'Page').classList.add('active');
-
-    // Joriy bo'limni saqlash
-    currentCategory = category;
-    currentIndexCategory = 0;
-}
+     // Hamma sahifalarni yashirish
+     document.getElementById('mainPage').classList.remove('active');
+     document.getElementById('saladsPage').classList.remove('active');
+     document.getElementById('mains1Page').classList.remove('active');
+     document.getElementById('mains2Page').classList.remove('active');
+     document.getElementById('drinksPage').classList.remove('active');
+ 
+     // Tanlangan sahifani ko'rsatish
+     document.getElementById(category + 'Page').classList.add('active');
+ 
+     // Joriy bo'limni saqlash
+     currentCategory = category;
+     currentIndexCategory = 0;
+ }
 
 // Bosh sahifani ko'rsatish
 function showMainPage() {
-    // Hamma category sahifalarini yashirish
-    document.getElementById('saladsPage').classList.remove('active');
-    document.getElementById('mains1Page').classList.remove('active');
-    document.getElementById('mains2Page').classList.remove('active');
-    document.getElementById('drinksPage').classList.remove('active');
-
-    // Bosh sahifani ko'rsatish
-    document.getElementById('mainPage').classList.add('active');
-
-    // Avtomatik aylanishni to'xtatish
-    // clearInterval(autoSlide);
-}
+      // Hamma category sahifalarini yashirish
+      document.getElementById('saladsPage').classList.remove('active');
+      document.getElementById('mains1Page').classList.remove('active');
+      document.getElementById('mains2Page').classList.remove('active');
+      document.getElementById('drinksPage').classList.remove('active');
+ 
+      // Bosh sahifani ko'rsatish
+      document.getElementById('mainPage').classList.add('active');
+ 
+      // Avtomatik aylanishni to'xtatish
+      // clearInterval(autoSlide);
+ }
 
 // Slaydni ko'rsatish funksiyasi (category uchun)
 function showSlideCategory(index) {
@@ -342,8 +342,9 @@ function openFullscreen(category) {
     if (foodInfo.hasSizes && sizeContainer) {
         sizeContainer.style.display = 'flex';
         if (weightContainer) weightContainer.style.display = 'none';
-        // Default tanlov: 1.5l
-        selectSize('1.5l', foodInfo);
+        // Default tanlov: birinchi hajm
+        const firstSizeKey = Object.keys(foodInfo.sizes)[0];
+        selectSize(firstSizeKey, foodInfo);
     } else if (foodInfo.hasWeight && weightContainer) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         weightContainer.style.display = 'flex';
@@ -397,8 +398,9 @@ function openMobileCard(category, index) {
     if (foodInfo.hasSizes && sizeContainer) {
         sizeContainer.style.display = 'flex';
         if (weightContainer) weightContainer.style.display = 'none';
-        // Default tanlov: 1.5l
-        selectSize('1.5l', foodInfo);
+        // Default tanlov: birinchi hajm
+        const firstSizeKey = Object.keys(foodInfo.sizes)[0];
+        selectSize(firstSizeKey, foodInfo);
     } else if (foodInfo.hasWeight && weightContainer) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         weightContainer.style.display = 'flex';
