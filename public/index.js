@@ -86,6 +86,11 @@ const foodData = {
             title: "Tabaka",
             description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.",
             price: "60,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "Butun": { price: 60000, desc: "Butun tabaka" },
+                "Yarim": { price: 35000, desc: "Yarim tabaka" }
+            },
             image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&"
         },
         {
@@ -238,6 +243,12 @@ const foodData = {
                 "0.5l": { price: 8000, desc: "0.5 litr" }
             },
             image: "https://img.fix-price.com/insecure/rs:fit:800:800/plain/bit/_marketplace/images/origin/8d/8dff92def967b2dd5f238695c5877501.jpg"
+        },
+        {
+            title: "Chortoq",
+            description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.",
+            price: "15,000 so'm",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS5GyZ0N0_1dD3rAhe3vTvLUW0rIyVWxM5ryTy86FpGjovOlFRWLRgAQ1y&s=10"
         }
      ]
 };
@@ -397,8 +408,11 @@ function openMobileCard(category, index) {
     if (foodInfo.hasSizes && sizeContainer) {
         sizeContainer.style.display = 'flex';
         if (weightContainer) weightContainer.style.display = 'none';
-        // Default tanlov: 1.5l
-        selectSize('1.5l', foodInfo);
+        // Default tanlov: birinchi hajm
+        const firstSizeKey = Object.keys(foodInfo.sizes)[0];
+        selectSize(firstSizeKey, foodInfo);
+        // Size tugmalarini yangilash
+        updateSizeButtons(foodInfo);
     } else if (foodInfo.hasWeight && weightContainer) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         weightContainer.style.display = 'flex';
@@ -514,6 +528,36 @@ function selectSize(size, foodInfo) {
     updateModalPrice();
 }
 
+// Size tugmalarini yangilash funksiyasi
+function updateSizeButtons(foodInfo) {
+    if (!foodInfo || !foodInfo.hasSizes || !foodInfo.sizes) {
+        return;
+    }
+
+    const sizeContainer = document.getElementById('sizeSelectContainer');
+    if (!sizeContainer) {
+        return;
+    }
+
+    const sizeOptions = sizeContainer.querySelector('.size-options');
+    if (!sizeOptions) {
+        return;
+    }
+
+    // Eski tugmalarni tozalash
+    sizeOptions.innerHTML = '';
+
+    // Yangi tugmalarni yaratish
+    Object.entries(foodInfo.sizes).forEach(([key, data]) => {
+        const btn = document.createElement('button');
+        btn.className = 'size-btn';
+        btn.dataset.size = key;
+        btn.textContent = `${data.desc} - ${data.price.toLocaleString('uz-UZ')} so'm`;
+        btn.onclick = () => selectSize(key, foodInfo);
+        sizeOptions.appendChild(btn);
+    });
+}
+
 // Modal narxini yangilash
 function updateModalPrice() {
     const quantityInput = document.getElementById('modalQuantity');
@@ -547,11 +591,6 @@ function updateModalPrice() {
             }
         }
         if (foodInfo && foodInfo.pricePerGram) {
-            // Minimal hajm tekshiruv
-            if (weight < foodInfo.minWeight) {
-                weight = foodInfo.minWeight;
-                weightInput.value = weight;
-            }
             basePrice = weight * foodInfo.pricePerGram;
         }
     }
@@ -568,12 +607,6 @@ function setDefaultWeight(foodInfo) {
     const weightInput = document.getElementById('modalWeight');
     if (weightInput && foodInfo && foodInfo.baseWeight) {
         weightInput.value = foodInfo.baseWeight;
-        weightInput.min = foodInfo.minWeight || 300;
-        // Hint yangilash
-        const hint = document.querySelector('.weight-hint');
-        if (hint) {
-            hint.textContent = 'Minimal og\'irlik: ' + (foodInfo.minWeight || 300) + 'g';
-        }
     }
     updateModalPrice();
 }

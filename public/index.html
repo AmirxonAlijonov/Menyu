@@ -381,6 +381,16 @@
                             Berish</span>
                     </div>
                 </div>
+                <div class="mobile-card" data-category="drinks" data-index="10" onclick="openMobileCard('drinks', 10)">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS5GyZ0N0_1dD3rAhe3vTvLUW0rIyVWxM5ryTy86FpGjovOlFRWLRgAQ1y&s=10"
+                        alt="Chortoq" width="500" height="350" loading="lazy">
+                    <div class="info">
+                        <h2>Chortoq</h2>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard(this.closest('.mobile-card').dataset.category, parseInt(this.closest('.mobile-card').dataset.index))">Buyurtma
+                            Berish</span>
+                    </div>
+                </div>
             </div>
         </div>
         <button class="back-btn" onclick="showMainPage()">Orqaga</button>
@@ -415,11 +425,11 @@
                 <div class="weight-select" id="weightSelectContainer">
                     <label>Narxini hisoblash uchun hajmni kiriting (gramm):</label>
                     <div class="weight-input-wrapper">
-                        <input type="number" id="modalWeight" value="1000" min="300" step="100"
+                        <input type="number" id="modalWeight" value="1000"
                             onchange="updateWeightPrice()" oninput="updateWeightPrice()">
                         <span>gramm</span>
                     </div>
-                    <p class="weight-hint">Minimal hajm: 300g</p>
+                    <p class="weight-hint">Gramm kiriting:</p>
                 </div>
                 <div class="quantity-container">
                     <label>Miqdor:</label>

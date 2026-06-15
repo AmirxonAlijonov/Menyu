@@ -392,7 +392,7 @@ const foodData = {
         { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm", image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
         { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm", image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" },
         { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" },
-        { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm", image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" },
+        { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm", hasSizes: true, sizes: { "Butun": { price: 60000, desc: "Butun tabaka" }, "Yarim": { price: 35000, desc: "Yarim tabaka" } }, image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" },
         { title: "Vag'ori", description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" },
         { title: "KFS", description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.", price: "80,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 80, minWeight: 300, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800" },
         { title: "Barbekyu", description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg" },
@@ -411,7 +411,8 @@ const foodData = {
         { title: "Sok", description: "Tabiiy meva sharbati - aralash mevalar.", price: "20,000 so'm" },
         { title: "Sprite", description: "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
         { title: "Lipton", description: "Lipton choy. Issiq va sovuq variantlarda mavjud.", price: "12,000 so'm" },
-        { title: "Fuse Tea", description: "Fuse Tea ichimligi. Turli xil ta'm variantlari.", price: "15,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 15000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } }
+        { title: "Fuse Tea", description: "Fuse Tea ichimligi. Turli xil ta'm variantlari.", price: "15,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 15000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
+        { title: "Chortoq", description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.", price: "15,000 so'm" }
     ]
 };
 
