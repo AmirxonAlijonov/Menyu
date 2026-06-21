@@ -50,12 +50,22 @@ const foodData = {
             title: "Qaynatma Sho'rva",
             description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.",
             price: "35,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "Butun": { price: 35000, desc: "Butun" },
+                "Yarim": { price: 30000, desc: "Yarim" }
+            },
             image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg"
         },
         {
             title: "Grechka",
             description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.",
             price: "35,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "Butun": { price: 35000, desc: "Butun" },
+                "Yarim": { price: 30000, desc: "Yarim" }
+            },
             image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg"
         },
         {
@@ -68,6 +78,11 @@ const foodData = {
             title: "Tushonka Sho'rva",
             description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.",
             price: "35,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "Butun": { price: 35000, desc: "Butun" },
+                "Yarim": { price: 30000, desc: "Yarim" }
+            },
             image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg"
         }
     ],
@@ -114,8 +129,8 @@ const foodData = {
             image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800"
         },
         {
-            title: "Barbekyu",
-            description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
+            title: "Mol Go'shtli Barbekyu",
+            description: "Mol go'shtini maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
             price: "260,000 so'm",
             hasWeight: true,
             baseWeight: 1000,
@@ -124,14 +139,40 @@ const foodData = {
             image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg"
         },
         {
+            title: "Tovuq Go'shtli Barbekyu",
+            description: "Tovuq go'shtini maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
+            price: "60,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 60,
+            minWeight: 300,
+            image: "https://img.freepik.com/premium-photo/chicken-legs-grill_165536-9962.jpg"
+        },
+        {
             title: "Mol Go'shti Shashlik",
             description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
-            price: "110,000 so'm",
+            price: "30,000 so'm",
             image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800"
         },
         {
-            title: "Qozon Kabob",
-            description: "Qozonda pishirilgan mazali kabob. Go'sht, sabzavotlar va maxsus ziravorlar bilan.",
+            title: "Qo'y Go'shti Shashlik",
+            description: "Maxsus marinadlangan qo'y go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
+            price: "35,000 so'm",
+            image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500"
+        },
+        {
+            title: "Mol Go'shtli Qozon Kabob",
+            description: "Qozonda pishirilgan mol go'shtli mazali kabob. Sabzavotlar va maxsus ziravorlar bilan.",
+            price: "260,000 so'm",
+            hasWeight: true,
+            baseWeight: 1000,
+            pricePerGram: 260,
+            minWeight: 300,
+            image: "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg"
+        },
+        {
+            title: "Qo'y Go'shtli Qozon Kabob",
+            description: "Qozonda pishirilgan qo'y go'shtli mazali kabob. Sabzavotlar va maxsus ziravorlar bilan.",
             price: "260,000 so'm",
             hasWeight: true,
             baseWeight: 1000,
@@ -249,6 +290,23 @@ const foodData = {
             description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.",
             price: "15,000 so'm",
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS5GyZ0N0_1dD3rAhe3vTvLUW0rIyVWxM5ryTy86FpGjovOlFRWLRgAQ1y&s=10"
+        },
+        {
+            title: "Gazli Suv",
+            description: "Gazli suv. Tetiklashtiruvchi va sovuq ichimlik.",
+            price: "5,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "1l": { price: 5000, desc: "1 litr" },
+                "1.5l": { price: 6000, desc: "1.5 litr" }
+            },
+            image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500"
+        },
+        {
+            title: "Gazsiz Suv",
+            description: "Gazsiz suv. Tabiiy va toza ichimlik.",
+            price: "5,000 so'm",
+            image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500"
         }
      ]
 };
