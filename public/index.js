@@ -300,13 +300,25 @@ const foodData = {
                 "1l": { price: 5000, desc: "1 litr" },
                 "1.5l": { price: 6000, desc: "1.5 litr" }
             },
-            image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500"
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT39jy3EVzgwDxl2GJmJJZSf3bBD_qr7WiNpyQ9vptd54PJEmtheR-tnZY&s=10"
         },
         {
             title: "Gazsiz Suv",
             description: "Gazsiz suv. Tabiiy va toza ichimlik.",
             price: "5,000 so'm",
-            image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500"
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6obLN0Bw0xWabzQOGpXmWiTMD9WV8FDy_BTQq9e0evVYePY6FnojCI-8&s=10"
+        },
+        {
+            title: "Ayron",
+            description: "Ayron. Yog'li va tetiklashtiruvchi ichimlik.",
+            price: "10,000 so'm",
+            image: "https://havasfood.uz/wp-content/uploads/2023/06/photo_2023-06-26_15-04-59-691x412.jpg"
+        },
+        {
+            title: "Akroshka",
+            description: "Akroshka. Sut va gazli suv aralashmasi.",
+            price: "12,000 so'm",
+            image: "https://natashaskitchen.com/wp-content/uploads/2010/08/okroshka-1.jpg"
         }
      ]
 };
