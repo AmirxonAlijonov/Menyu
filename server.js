@@ -389,7 +389,7 @@ const foodData = {
     mains: [
         { title: "Qaynatma Sho'rva", description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.", price: "35,000 so'm", image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" },
         { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "35,000 so'm", image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" },
-        { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm", image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
+        { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm", hasSizes: true, sizes: { "Butun": { price: 70000, desc: "Butun" }, "Yarim": { price: 35000, desc: "Yarim" } }, image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
         { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm", image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" },
         { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" },
         { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm", hasSizes: true, sizes: { "Butun": { price: 60000, desc: "Butun tabaka" }, "Yarim": { price: 35000, desc: "Yarim tabaka" } }, image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" },
@@ -403,7 +403,7 @@ const foodData = {
     ],
     drinks: [
         { title: "Coca Cola", description: "Gazli ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Yashil Choy", description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.", price: "2,000 so'm" },
+        { title: "Yashil Choy", description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.", price: "3,000 so'm" },
         { title: "Fanta", description: "Gazli apelsinli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
         { title: "Pepsi", description: "Gazli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
         { title: "Qora Choy", description: "Issiq qora choy suty bilan. An'anaviy ichimlik.", price: "5,000 so'm" },

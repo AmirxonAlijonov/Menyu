@@ -72,6 +72,11 @@ const foodData = {
             title: "Ko'za Sho'rva",
             description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.",
             price: "70,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "Butun": { price: 70000, desc: "Butun" },
+                "Yarim": { price: 35000, desc: "Yarim" }
+            },
             image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg"
         },
         {
@@ -210,7 +215,7 @@ const foodData = {
         {
             title: "Ko'k Choy",
             description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.",
-            price: "2,000 so'm",
+            price: "3,000 so'm",
             image: "https://homiladorlik.uz/wp-content/uploads/2022/05/kok-choy.webp"
         },
         {
