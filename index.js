@@ -1057,13 +1057,14 @@ function addToCartFromModal() {
         return;
     }
 
-    // Narxni son sifatida olish
-    var priceNum = parseInt(price.replace(/[^0-9]/g, ''));
+    // Narxni son sifatida olish (birlik narxini olish uchun jami narxni miqdorga bo'lish)
+    var priceNum = Math.round(parseInt(price.replace(/[^0-9]/g, '')) / qty);
+    var unitPrice = priceNum.toLocaleString() + " so'm";
 
     var item = {
         id: Date.now(),
         title: title,
-        price: price,
+        price: unitPrice,
         priceNum: priceNum,
         quantity: qty,
         image: img
