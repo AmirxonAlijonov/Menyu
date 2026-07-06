@@ -157,13 +157,19 @@ const foodData = {
             title: "Mol Go'shti Shashlik",
             description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
             price: "30,000 so'm",
-            image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800"
+            image: "https://back.baxtrestoran.uz/storage/Product/64/image_path/693ae16867ca0_original.webp"
         },
         {
             title: "Qo'y Go'shti Shashlik",
             description: "Maxsus marinadlangan qo'y go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
             price: "35,000 so'm",
-            image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500"
+            image: "https://i.ytimg.com/vi/6GCe_xxk0pM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAZ_MsmpVmsSyEyLvUEbqspRr8Jow"
+        },
+        {
+            title: "Qiyma (G'ijduvon) Shashlik",
+            description: "G'ijduvon usulida tayyorlangan qiyma go'sht shashlik. Maxsus ziravorlar bilan marinadlangan va kokilarda pishirilgan mazali taom.",
+            price: "27,500 so'm",
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV9z348_d950o5KDWK2SDrm65q8TUxne0WYSaNoZVZOU1qVGW2kt6ThX_S&s=10"
         },
         {
             title: "Mol Go'shtli Qozon Kabob",
@@ -295,6 +301,12 @@ const foodData = {
             description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.",
             price: "15,000 so'm",
             image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS5GyZ0N0_1dD3rAhe3vTvLUW0rIyVWxM5ryTy86FpGjovOlFRWLRgAQ1y&s=10"
+        },
+        {
+            title: "Qatiq",
+            description: "Qatiq. Yog'li va foydali ichimlik.",
+            price: "5,000 so'm",
+            image: "https://data.daryo.uz/media/cache/2018/03/b6189afe6f9513c214f7aeeed87920fe-640x425.jpg"
         },
         {
             title: "Gazli Suv",

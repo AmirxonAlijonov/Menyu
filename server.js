@@ -396,7 +396,9 @@ const foodData = {
         { title: "Vag'ori", description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" },
         { title: "KFS", description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.", price: "80,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 80, minWeight: 300, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800" },
         { title: "Barbekyu", description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg" },
-        { title: "Mol Go'shti Shashlik", description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "110,000 so'm", image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800" },
+        { title: "Mol Go'shti Shashlik", description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "30,000 so'm", image: "https://back.baxtrestoran.uz/storage/Product/64/image_path/693ae16867ca0_original.webp" },
+        { title: "Qo'y Go'shti Shashlik", description: "Maxsus marinadlangan qo'y go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "35,000 so'm", image: "https://i.ytimg.com/vi/6GCe_xxk0pM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAZ_MsmpVmsSyEyLvUEbqspRr8Jow" },
+        { title: "Qiyma (G'ijduvon) Shashlik", description: "G'ijduvon usulida tayyorlangan qiyma go'sht shashlik. Maxsus ziravorlar bilan marinadlangan va kokilarda pishirilgan mazali taom.", price: "27,500 so'm", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV9z348_d950o5KDWK2SDrm65q8TUxne0WYSaNoZVZOU1qVGW2kt6ThX_S&s=10" },
         { title: "Qozon Kabob", description: "Qozonda pishirilgan mazali kabob. Go'sht, sabzavotlar va maxsus ziravorlar bilan.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg" },
         { title: "Manti", description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.", price: "7,000 so'm", image: "https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png" },
         { title: "Tandir Somsa", description: "Tandirda pishirilgan go'shtli an'anaviy somsa.", price: "15,000 so'm", image: "https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg" }
@@ -412,7 +414,8 @@ const foodData = {
         { title: "Sprite", description: "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
         { title: "Lipton", description: "Lipton choy. Issiq va sovuq variantlarda mavjud.", price: "12,000 so'm" },
         { title: "Fuse Tea", description: "Fuse Tea ichimligi. Turli xil ta'm variantlari.", price: "15,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 15000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Chortoq", description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.", price: "15,000 so'm" }
+        { title: "Chortoq", description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.", price: "15,000 so'm" },
+        { title: "Qatiq", description: "Qatiq. Yog'li va foydali ichimlik.", price: "5,000 so'm" }
     ]
 };
 
