@@ -114,6 +114,17 @@ const foodData = {
             image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&"
         },
         {
+            title: "Jo'ja",
+            description: "Mazali jo'ja go'shti. Turli xil ziravorlar bilan tayyorlangan.",
+            price: "50,000 so'm",
+            hasSizes: true,
+            sizes: {
+                "Butun": { price: 50000, desc: "Butun jo'ja" },
+                "Yarim": { price: 40000, desc: "Yarim jo'ja" }
+            },
+            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiMBMYHjWzW8ml6KHwS5iPJr1xCmmf9pzpAxx2xCdtXQBH2XQXVLM-n8m3&s=10"
+        },
+        {
             title: "Vag'ori",
             description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
             price: "260,000 so'm",
