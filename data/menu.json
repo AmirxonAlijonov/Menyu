@@ -57,11 +57,11 @@
         "hasSizes": true,
         "sizes": {
           "Butun": {
-            "price": 35000,
+            "price": 40000,
             "desc": "Butun"
           },
           "Yarim": {
-            "price": 30000,
+            "price": 35000,
             "desc": "Yarim"
           }
         },
@@ -78,11 +78,11 @@
         "hasSizes": true,
         "sizes": {
           "Butun": {
-            "price": 35000,
+            "price": 40000,
             "desc": "Butun"
           },
           "Yarim": {
-            "price": 30000,
+            "price": 35000,
             "desc": "Yarim"
           }
         },
@@ -99,11 +99,11 @@
         "hasSizes": true,
         "sizes": {
           "Butun": {
-            "price": 70000,
+            "price": 80000,
             "desc": "Butun"
           },
           "Yarim": {
-            "price": 35000,
+            "price": 40000,
             "desc": "Yarim"
           }
         },
@@ -120,11 +120,11 @@
         "hasSizes": true,
         "sizes": {
           "Butun": {
-            "price": 35000,
+            "price": 40000,
             "desc": "Butun"
           },
           "Yarim": {
-            "price": 30000,
+            "price": 35000,
             "desc": "Yarim"
           }
         },

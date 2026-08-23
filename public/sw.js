@@ -2,7 +2,7 @@
 const CACHE_NAME = 'alsafar-menu-v3';
 const STATIC_CACHE = 'alsafar-static-v2';
 const IMAGE_CACHE = 'alsafar-images-v1';
-const API_CACHE = 'alsafar-api-cache-v1';
+const API_CACHE = 'alsafar-api-cache-v2';
 
 // Assets to cache immediately
 const staticAssets = [
@@ -205,10 +205,10 @@ function getFallbackMenu() {
             { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "15,000 so'm" }
         ],
         mains: [
-            { title: "Qaynatma Sho'rva", description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.", price: "35,000 so'm", image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" },
-            { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "35,000 so'm", image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" },
-            { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm", hasSizes: true, sizes: { "Butun": { price: 70000, desc: "Butun" }, "Yarim": { price: 35000, desc: "Yarim" } }, image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
-            { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm", image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" },
+            { title: "Qaynatma Sho'rva", description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.", price: "40,000 so'm", hasSizes: true, sizes: { "Butun": { price: 40000, desc: "Butun" }, "Yarim": { price: 35000, desc: "Yarim" } }, image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" },
+            { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "40,000 so'm", hasSizes: true, sizes: { "Butun": { price: 40000, desc: "Butun" }, "Yarim": { price: 35000, desc: "Yarim" } }, image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" },
+            { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "80,000 so'm", hasSizes: true, sizes: { "Butun": { price: 80000, desc: "Butun" }, "Yarim": { price: 40000, desc: "Yarim" } }, image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
+            { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "40,000 so'm", hasSizes: true, sizes: { "Butun": { price: 40000, desc: "Butun" }, "Yarim": { price: 35000, desc: "Yarim" } }, image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" },
             { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" },
             { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm", hasSizes: true, sizes: { "Butun": { price: 60000, desc: "Butun tabaka" }, "Yarim": { price: 35000, desc: "Yarim tabaka" } }, image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" },
             { title: "Jo'ja", description: "Mazali jo'ja go'shti. Turli xil ziravorlar bilan tayyorlangan.", price: "50,000 so'm", hasSizes: true, sizes: { "Butun": { price: 50000, desc: "Butun jo'ja" }, "Yarim": { price: 40000, desc: "Yarim jo'ja" } }, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiMBMYHjWzW8ml6KHwS5iPJr1xCmmf9pzpAxx2xCdtXQBH2XQXVLM-n8m3&s=10" },

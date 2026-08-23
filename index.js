@@ -51,44 +51,44 @@ const defaultFoodData = {
         {
             title: "Qaynatma Sho'rva",
             description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.",
-            price: "35,000 so'm",
+            price: "40,000 so'm",
             hasSizes: true,
             sizes: {
-                "Butun": { price: 35000, desc: "Butun" },
-                "Yarim": { price: 30000, desc: "Yarim" }
+                "Butun": { price: 40000, desc: "Butun" },
+                "Yarim": { price: 35000, desc: "Yarim" }
             },
             image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg"
         },
         {
             title: "Grechka",
             description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.",
-            price: "35,000 so'm",
+            price: "40,000 so'm",
             hasSizes: true,
             sizes: {
-                "Butun": { price: 35000, desc: "Butun" },
-                "Yarim": { price: 30000, desc: "Yarim" }
+                "Butun": { price: 40000, desc: "Butun" },
+                "Yarim": { price: 35000, desc: "Yarim" }
             },
             image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg"
         },
         {
             title: "Ko'za Sho'rva",
             description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.",
-            price: "70,000 so'm",
+            price: "80,000 so'm",
             hasSizes: true,
             sizes: {
-                "Butun": { price: 70000, desc: "Butun" },
-                "Yarim": { price: 35000, desc: "Yarim" }
+                "Butun": { price: 80000, desc: "Butun" },
+                "Yarim": { price: 40000, desc: "Yarim" }
             },
             image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg"
         },
         {
             title: "Tushonka Sho'rva",
             description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.",
-            price: "35,000 so'm",
+            price: "40,000 so'm",
             hasSizes: true,
             sizes: {
-                "Butun": { price: 35000, desc: "Butun" },
-                "Yarim": { price: 30000, desc: "Yarim" }
+                "Butun": { price: 40000, desc: "Butun" },
+                "Yarim": { price: 35000, desc: "Yarim" }
             },
             image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg"
         }
