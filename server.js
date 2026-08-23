@@ -152,8 +152,30 @@ const CHAT_ID = process.env.CHAT_ID || '';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Amirxon4111';
 const ALLOWED_USERS = process.env.ALLOWED_USERS ? process.env.ALLOWED_USERS.split(',') : [];
 
-// Admin sessions storage (in-memory, resets on server restart)
-const adminSessions = new Map();
+// Stateless admin session tokens (Vercel serverless da ulanishlar holatsiz bo'ladi,
+// shuning uchun xotira ichidagi Map ishlamaydi. Token HMAC bilan imzolanadi va
+// har qanday instansiyada bir xil tekshiriladi).
+const SESSION_SECRET = process.env.SESSION_SECRET || 'menyu-admin-default-secret';
+
+function createSessionToken() {
+    const payload = { exp: Date.now() + 24 * 60 * 60 * 1000 }; // 24 soat
+    const data = Buffer.from(JSON.stringify(payload)).toString('base64url');
+    const sig = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url');
+    return `${data}.${sig}`;
+}
+
+function verifySessionToken(token) {
+    if (!token || typeof token !== 'string' || !token.includes('.')) return false;
+    const [data, sig] = token.split('.');
+    const expected = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url');
+    if (sig !== expected) return false;
+    try {
+        const payload = JSON.parse(Buffer.from(data, 'base64url').toString());
+        return Date.now() <= payload.exp;
+    } catch {
+        return false;
+    }
+}
 
 // Environment validation
 if (!BOT_TOKEN || !CHAT_ID) {
@@ -172,20 +194,12 @@ function requireAdmin(req, res, next) {
     const sessionId = req.headers.authorization?.replace('Bearer ', '') || req.query.session;
     
     console.log('[requireAdmin] Session ID:', sessionId ? sessionId.substring(0, 10) + '...' : 'null');
-    console.log('[requireAdmin] Sessions count:', adminSessions.size);
     
-    if (!sessionId || !adminSessions.has(sessionId)) {
-        console.log('[requireAdmin] Session NOT found');
+    if (!verifySessionToken(sessionId)) {
+        console.log('[requireAdmin] Session NOT valid');
         return res.status(401).json({ error: 'Ruxsat berilmagan. Iltimos, tizimga kiring.' });
     }
     
-    const session = adminSessions.get(sessionId);
-    if (new Date() > session.expires) {
-        adminSessions.delete(sessionId);
-        return res.status(401).json({ error: 'Sessiya muddati tugagan. Qayta kiring.' });
-    }
-    
-    req.adminSession = session;
     next();
 }
 
@@ -379,14 +393,8 @@ app.post('/api/admin/login', (req, res) => {
     const { password } = req.body;
     
     if (password === ADMIN_PASSWORD) {
-        const sessionId = crypto.randomBytes(32).toString('hex');
+        const sessionId = createSessionToken();
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-        
-        adminSessions.set(sessionId, {
-            id: sessionId,
-            createdAt: new Date(),
-            expires: expires
-        });
         
         console.log('✅ Admin login successful');
         res.json({
@@ -402,15 +410,15 @@ app.post('/api/admin/login', (req, res) => {
 
 // Admin logout
 app.post('/api/admin/logout', requireAdmin, (req, res) => {
-    adminSessions.delete(req.adminSession.id);
+    // Stateless token: klient tomonida o'chiriladi, serverda saqlash shart emas
     res.json({ success: true });
 });
 
 // Check admin session
 app.get('/api/admin/check', requireAdmin, (req, res) => {
     res.json({ 
-        valid: true, 
-        expires: req.adminSession.expires.toISOString() 
+        valid: true,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
     });
 });
 
