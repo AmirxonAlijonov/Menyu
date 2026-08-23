@@ -633,6 +633,7 @@ async function loadOrdersPage() {
                 </td>
                 <td>
                     <button class="btn btn-sm btn-secondary" onclick="viewOrder('${order.id}')">👁️</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.id}')">🗑️</button>
                 </td>
             </tr>
         `).join('');
@@ -649,6 +650,19 @@ async function updateOrderStatus(orderId, status) {
             body: JSON.stringify({ status })
         });
         showToast('✅ Buyurtma holati yangilandi!');
+    } catch (error) {
+        showToast('Xatolik: ' + error.message, 'error');
+    }
+}
+
+async function deleteOrder(orderId) {
+    if (!confirm('Buyurtmani o\'chirishni tasdiqlaysizmi?')) return;
+    try {
+        await apiRequest(`/api/admin/orders/${orderId}`, {
+            method: 'DELETE'
+        });
+        showToast('✅ Buyurtma o\'chirildi!');
+        loadOrdersPage();
     } catch (error) {
         showToast('Xatolik: ' + error.message, 'error');
     }

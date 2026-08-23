@@ -636,6 +636,21 @@ app.put('/api/admin/orders/:id', requireAdmin, (req, res) => {
     res.json({ success: true, order: ordersData[orderIndex] });
 });
 
+// Delete order
+app.delete('/api/admin/orders/:id', requireAdmin, (req, res) => {
+    const orderIndex = ordersData.findIndex(o => o.id === req.params.id);
+
+    if (orderIndex === -1) {
+        return res.status(404).json({ error: 'Buyurtma topilmadi' });
+    }
+
+    const deleted = ordersData.splice(orderIndex, 1)[0];
+    saveOrdersData();
+
+    console.log(`🗑️ Buyurtma o'chirildi: ${deleted.id}`);
+    res.json({ success: true, order: deleted });
+});
+
 // ============================================
 // TELEGRAM WEBHOOK
 // ============================================
