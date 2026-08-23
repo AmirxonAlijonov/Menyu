@@ -7,6 +7,21 @@
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍴</text></svg>">
     <title> Al-safar Restoran Menyusi</title>
+    <script>
+        // Register the updated service worker (v3). v3 uses network-first for /api/
+        // and clears old caches on activate, so the public menu always shows fresh
+        // data (e.g. after admin adds/deletes items). On controller change (when the
+        // new SW takes over) the page reloads once to display the fresh menu.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').catch(function () {});
+                var refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', function () {
+                    if (!refreshing) { refreshing = true; location.reload(); }
+                });
+            });
+        }
+    </script>
     <base href="/">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -84,7 +99,7 @@
     <div class="slider-wrapper category-page" id="saladsPage">
         <div class="menu-container">
             <h1 class="menu-title">🥗 Salatlar</h1>
-            <div class="mobile-cards-container">
+            <div class="mobile-cards-container" id="cards-salads">
                 <div class="mobile-card" data-category="salads" data-index="0" onclick="openMobileCard('salads', 0)">
                     <img src="https://api.silkphoto.uz/storage/ResourceThumbnail/c47ad3b4-fc99-4df6-a580-0b623ee89b41/YzQ3YWQzYjQtZmM5OS00ZGY2LWE1ODAtMGI2MjNlZTg5YjQxLTE3MzY5NTEyNTc=.webp"
                         alt="Chiroqchi Salati" width="500" height="350" loading="lazy" fetchpriority="high">
@@ -133,7 +148,7 @@
     <div class="slider-wrapper category-page" id="mains1Page">
         <div class="menu-container">
             <h1 class="menu-title">🍲 1-ovqatlar (birinchisi)</h1>
-            <div class="mobile-cards-container">
+            <div class="mobile-cards-container" id="cards-mains1">
                 <div class="mobile-card" data-category="mains1" data-index="0" onclick="openMobileCard('mains1', 0)">
                     <img src="https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" alt="Qaynatma Sho'rva"
                         width="500" height="350" loading="lazy">
@@ -181,7 +196,7 @@
     <div class="slider-wrapper category-page" id="mains2Page">
         <div class="menu-container">
             <h1 class="menu-title">🍖 Asosiy taomlar (ikkichisi)</h1>
-            <div class="mobile-cards-container">
+            <div class="mobile-cards-container" id="cards-mains2">
                 <div class="mobile-card" data-category="mains2" data-index="0" onclick="openMobileCard('mains2', 0)">
                     <img src="https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" alt="Jiz" width="500"
                         height="350" loading="lazy">
@@ -330,7 +345,7 @@
     <div class="slider-wrapper category-page" id="drinksPage">
         <div class="menu-container">
             <h1 class="menu-title">🥤 Ichimliklar</h1>
-            <div class="mobile-cards-container">
+            <div class="mobile-cards-container" id="cards-drinks">
                 <div class="mobile-card" data-category="drinks" data-index="0" onclick="openMobileCard('drinks', 0)">
                     <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7?w=500&q=80" alt="Coca Cola"
                         width="500" height="350" loading="lazy">

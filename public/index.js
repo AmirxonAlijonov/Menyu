@@ -3,6 +3,8 @@ let currentCategory = 'salads';
 let currentIndexCategory = 0;
 let autoSlide;
 let baseProductPrice = 0; // Asosiy mahsulot narxi saqlash uchun
+let foodData = null; // API dan yuklangan ma'lumotlar
+let menuLoaded = false;
 
 // Modal elementlari
 const modal = document.getElementById('fullscreenModal');
@@ -17,8 +19,8 @@ let userLocation = {
 
 let cart = [];
 
-// Ovqatlar ma'lumotlari - Bo'limlar bo'yicha
-const foodData = {
+// Ovqatlar ma'lumotlari - API dan yuklanadi
+const defaultFoodData = {
     salads: [
         {
             title: "Chiroqchi Salati",
@@ -351,37 +353,112 @@ const foodData = {
      ]
 };
 
-// Bo'limni ochish funksiyasi
-function openCategory(category) {
-    // Hamma sahifalarni yashirish
-    document.getElementById('mainPage').classList.remove('active');
-    document.getElementById('saladsPage').classList.remove('active');
-    document.getElementById('mains1Page').classList.remove('active');
-    document.getElementById('mains2Page').classList.remove('active');
-    document.getElementById('drinksPage').classList.remove('active');
+// ==================== MENYU MA'LUMOTLARINI API DAN YUKLASH ====================
 
-    // Tanlangan sahifani ko'rsatish
-    document.getElementById(category + 'Page').classList.add('active');
-
-    // Joriy bo'limni saqlash
-    currentCategory = category;
-    currentIndexCategory = 0;
+async function loadMenuData() {
+    try {
+        const apiUrl = getApiUrl();
+        const response = await fetch(`${apiUrl}/api/menu`);
+        
+        if (response.ok) {
+            const data = await response.json();
+            // API dan kelgan ma'lumotlarni foodData ga moslashtirish
+            if (data.items) {
+                foodData = data.items;
+            } else if (data.salads || data.mains1 || data.mains2 || data.drinks) {
+                foodData = data;
+            }
+            menuLoaded = true;
+            console.log('✅ Menu data loaded from API');
+        } else {
+            console.warn('⚠️ API dan menyu yuklanmadi, default ma\'lumotlar ishlatilmoqda');
+            foodData = defaultFoodData;
+        }
+    } catch (error) {
+        console.error('❌ Menu yuklash xatosi:', error);
+        foodData = defaultFoodData;
+    }
+    // Menyuni dinamik yangilash (admin qo'shgan mahsulotlar ham ko'rinadi)
+    renderMenu();
 }
+
+// ==================== MENYUNI DINAMIK CHIZISH ====================
+const FALLBACK_IMG = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 200%22%3E%3Crect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22sans-serif%22 font-size=%2216%22%3ERasm yuklanmadi%3C/text%3E%3C/svg%3E";
+
+function renderMenu() {
+    if (!foodData) return;
+    const containers = {
+        salads: document.getElementById('cards-salads'),
+        mains1: document.getElementById('cards-mains1'),
+        mains2: document.getElementById('cards-mains2'),
+        drinks: document.getElementById('cards-drinks')
+    };
+    for (const category in containers) {
+        const container = containers[category];
+        if (!container) continue;
+        const items = foodData[category] || [];
+        container.innerHTML = items.map((item, index) => {
+            const img = item.image || FALLBACK_IMG;
+            const title = (item.title || '').replace(/"/g, '&quot;');
+            return `
+                <div class="mobile-card" data-category="${category}" data-index="${index}" onclick="openMobileCard('${category}', ${index})">
+                    <img src="${img}" alt="${title}" width="500" height="350" loading="lazy"
+                        onerror="this.src='${FALLBACK_IMG}'">
+                    <div class="info">
+                        <h2>${title}</h2>
+                        <span class="price"
+                            onclick="event.stopPropagation(); openMobileCard('${category}', ${index})">Buyurtma
+                            Berish</span>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+}
+
+function getApiUrl() {
+    if (window.location.origin && window.location.origin !== 'null' && window.location.origin !== 'file://') {
+        return window.location.origin;
+    }
+    return 'http://localhost:3001';
+}
+
+// ==================== BO'LIMNI OCHISH FUNKSIYASI ====================
+
+// Initialize foodData with defaults
+foodData = defaultFoodData;
+
+// Load menu data from API on page load
+loadMenuData();
+function openCategory(category) {
+     // Hamma sahifalarni yashirish
+     document.getElementById('mainPage').classList.remove('active');
+     document.getElementById('saladsPage').classList.remove('active');
+     document.getElementById('mains1Page').classList.remove('active');
+     document.getElementById('mains2Page').classList.remove('active');
+     document.getElementById('drinksPage').classList.remove('active');
+ 
+     // Tanlangan sahifani ko'rsatish
+     document.getElementById(category + 'Page').classList.add('active');
+ 
+     // Joriy bo'limni saqlash
+     currentCategory = category;
+     currentIndexCategory = 0;
+ }
 
 // Bosh sahifani ko'rsatish
 function showMainPage() {
-    // Hamma category sahifalarini yashirish
-    document.getElementById('saladsPage').classList.remove('active');
-    document.getElementById('mains1Page').classList.remove('active');
-    document.getElementById('mains2Page').classList.remove('active');
-    document.getElementById('drinksPage').classList.remove('active');
-
-    // Bosh sahifani ko'rsatish
-    document.getElementById('mainPage').classList.add('active');
-
-    // Avtomatik aylanishni to'xtatish
-    // clearInterval(autoSlide);
-}
+      // Hamma category sahifalarini yashirish
+      document.getElementById('saladsPage').classList.remove('active');
+      document.getElementById('mains1Page').classList.remove('active');
+      document.getElementById('mains2Page').classList.remove('active');
+      document.getElementById('drinksPage').classList.remove('active');
+ 
+      // Bosh sahifani ko'rsatish
+      document.getElementById('mainPage').classList.add('active');
+ 
+      // Avtomatik aylanishni to'xtatish
+      // clearInterval(autoSlide);
+ }
 
 // Slaydni ko'rsatish funksiyasi (category uchun)
 function showSlideCategory(index) {
@@ -451,8 +528,9 @@ function openFullscreen(category) {
     if (foodInfo.hasSizes && sizeContainer) {
         sizeContainer.style.display = 'flex';
         if (weightContainer) weightContainer.style.display = 'none';
-        // Default tanlov: 1.5l
-        selectSize('1.5l', foodInfo);
+        // Default tanlov: birinchi hajm
+        const firstSizeKey = Object.keys(foodInfo.sizes)[0];
+        selectSize(firstSizeKey, foodInfo);
     } else if (foodInfo.hasWeight && weightContainer) {
         if (sizeContainer) sizeContainer.style.display = 'none';
         weightContainer.style.display = 'flex';

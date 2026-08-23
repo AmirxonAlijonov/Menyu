@@ -1,0 +1,610 @@
+{
+  "items": {
+    "salads": [
+      {
+        "id": "salad_1",
+        "title": "Chiroqchi Salati",
+        "description": "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.",
+        "price": "20,000 so'm",
+        "priceValue": 20000,
+        "image": "https://api.silkphoto.uz/storage/ResourceThumbnail/c47ad3b4-fc99-4df6-a580-0b623ee89b41/YzQ3YWQzYjQtZmM5OS00ZGY2LWE1ODAtMGI2MjNlZTg5YjQxLTE3MzY5NTEyNTc=.webp",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "salad_2",
+        "title": "Sezer Salati",
+        "description": "Romsalat, parmesan, croutons va caesar sousi bilan.",
+        "price": "30,000 so'm",
+        "priceValue": 30000,
+        "image": "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=800",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "salad_3",
+        "title": "Svejiy Salat",
+        "description": "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.",
+        "price": "15,000 so'm",
+        "priceValue": 15000,
+        "image": "https://shar-shara.ru/wp-content/uploads/2024/10/IMG_0254.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "salad_4",
+        "title": "Achchiq Chuchuk Salat",
+        "description": "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.",
+        "price": "15,000 so'm",
+        "priceValue": 15000,
+        "image": "https://avatars.mds.yandex.net/get-vertis-journal/4220003/e733d115-1f98-45da-9e28-9f1ba3520354.jpeg/1600x1600",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      }
+    ],
+    "mains1": [
+      {
+        "id": "main1_1",
+        "title": "Qaynatma Sho'rva",
+        "description": "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.",
+        "price": "40,000 so'm",
+        "priceValue": 40000,
+        "image": "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg",
+        "hasSizes": true,
+        "sizes": {
+          "Butun": {
+            "price": 35000,
+            "desc": "Butun"
+          },
+          "Yarim": {
+            "price": 30000,
+            "desc": "Yarim"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main1_2",
+        "title": "Grechka",
+        "description": "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.",
+        "price": "40,000 so'm",
+        "priceValue": 40000,
+        "image": "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg",
+        "hasSizes": true,
+        "sizes": {
+          "Butun": {
+            "price": 35000,
+            "desc": "Butun"
+          },
+          "Yarim": {
+            "price": 30000,
+            "desc": "Yarim"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main1_3",
+        "title": "Ko'za Sho'rva",
+        "description": "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.",
+        "price": "80,000 so'm",
+        "priceValue": 80000,
+        "image": "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg",
+        "hasSizes": true,
+        "sizes": {
+          "Butun": {
+            "price": 70000,
+            "desc": "Butun"
+          },
+          "Yarim": {
+            "price": 35000,
+            "desc": "Yarim"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main1_4",
+        "title": "Tushonka Sho'rva",
+        "description": "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.",
+        "price": "40,000 so'm",
+        "priceValue": 40000,
+        "image": "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg",
+        "hasSizes": true,
+        "sizes": {
+          "Butun": {
+            "price": 35000,
+            "desc": "Butun"
+          },
+          "Yarim": {
+            "price": 30000,
+            "desc": "Yarim"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      }
+    ],
+    "mains2": [
+      {
+        "id": "main2_1",
+        "title": "Jiz",
+        "description": "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.",
+        "price": "260,000 so'm",
+        "priceValue": 260000,
+        "image": "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg",
+        "hasSizes": false,
+        "hasWeight": true,
+        "baseWeight": 1000,
+        "pricePerGram": 260,
+        "minWeight": 300,
+        "available": true
+      },
+      {
+        "id": "main2_2",
+        "title": "Tabaka",
+        "description": "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.",
+        "price": "60,000 so'm",
+        "priceValue": 60000,
+        "image": "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&",
+        "hasSizes": true,
+        "sizes": {
+          "Butun": {
+            "price": 60000,
+            "desc": "Butun tabaka"
+          },
+          "Yarim": {
+            "price": 35000,
+            "desc": "Yarim tabaka"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main2_3",
+        "title": "Jo'ja",
+        "description": "Mazali jo'ja go'shti. Turli xil ziravorlar bilan tayyorlangan.",
+        "price": "50,000 so'm",
+        "priceValue": 50000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiMBMYHjWzW8ml6KHwS5iPJr1xCmmf9pzpAxx2xCdtXQBH2XQXVLM-n8m3&s=10",
+        "hasSizes": true,
+        "sizes": {
+          "Butun": {
+            "price": 50000,
+            "desc": "Butun jo'ja"
+          },
+          "Yarim": {
+            "price": 40000,
+            "desc": "Yarim jo'ja"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main2_4",
+        "title": "Vag'ori",
+        "description": "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.",
+        "price": "260,000 so'm",
+        "priceValue": 260000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s",
+        "hasSizes": false,
+        "hasWeight": true,
+        "baseWeight": 1000,
+        "pricePerGram": 260,
+        "minWeight": 300,
+        "available": true
+      },
+      {
+        "id": "main2_5",
+        "title": "KFS",
+        "description": "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.",
+        "price": "80,000 so'm",
+        "priceValue": 80000,
+        "image": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800",
+        "hasSizes": false,
+        "hasWeight": true,
+        "baseWeight": 1000,
+        "pricePerGram": 80,
+        "minWeight": 300,
+        "available": true
+      },
+      {
+        "id": "main2_6",
+        "title": "Mol Go'shtli Barbekyu",
+        "description": "Mol go'shtini maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
+        "price": "260,000 so'm",
+        "priceValue": 260000,
+        "image": "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg",
+        "hasSizes": false,
+        "hasWeight": true,
+        "baseWeight": 1000,
+        "pricePerGram": 260,
+        "minWeight": 300,
+        "available": true
+      },
+      {
+        "id": "main2_7",
+        "title": "Tovuq Go'shtli Barbekyu",
+        "description": "Tovuq go'shtini maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.",
+        "price": "60,000 so'm",
+        "priceValue": 60000,
+        "image": "https://img.freepik.com/premium-photo/chicken-legs-grill_165536-9962.jpg",
+        "hasSizes": false,
+        "hasWeight": true,
+        "baseWeight": 1000,
+        "pricePerGram": 60,
+        "minWeight": 300,
+        "available": true
+      },
+      {
+        "id": "main2_8",
+        "title": "Mol Go'shti Shashlik",
+        "description": "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
+        "price": "35,000 so'm",
+        "priceValue": 35000,
+        "image": "https://back.baxtrestoran.uz/storage/Product/64/image_path/693ae16867ca0_original.webp",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main2_9",
+        "title": "Qo'y Go'shti Shashlik",
+        "description": "Maxsus marinadlangan qo'y go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.",
+        "price": "40,000 so'm",
+        "priceValue": 40000,
+        "image": "https://i.ytimg.com/vi/6GCe_xxk0pM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAZ_MsmpVmsSyEyLvUEbqspRr8Jow",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main2_10",
+        "title": "Qiyma (G'ijduvon) Shashlik",
+        "description": "G'ijduvon usulida tayyorlangan qiyma go'sht shashlik. Maxsus ziravorlar bilan marinadlangan va kokilarda pishirilgan mazali taom.",
+        "price": "30,000 so'm",
+        "priceValue": 30000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV9z348_d950o5KDWK2SDrm65q8TUxne0WYSaNoZVZOU1qVGW2kt6ThX_S&s=10",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main2_11",
+        "title": "Mol Go'shtli Qozon Kabob",
+        "description": "Qozonda pishirilgan mol go'shtli mazali kabob. Sabzavotlar va maxsus ziravorlar bilan.",
+        "price": "260,000 so'm",
+        "priceValue": 260000,
+        "image": "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg",
+        "hasSizes": false,
+        "hasWeight": true,
+        "baseWeight": 1000,
+        "pricePerGram": 260,
+        "minWeight": 300,
+        "available": true
+      },
+      {
+        "id": "main2_12",
+        "title": "Manti",
+        "description": "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.",
+        "price": "9,000 so'm",
+        "priceValue": 9000,
+        "image": "https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "main2_13",
+        "title": "Tandir Somsa",
+        "description": "Tandirda pishirilgan go'shtli an'anaviy somsa.",
+        "price": "20,000 so'm",
+        "priceValue": 20000,
+        "image": "https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      }
+    ],
+    "drinks": [
+      {
+        "id": "drink_1",
+        "title": "Coca Cola",
+        "description": "Gazli ichimlik. Sovuq va tetiklashtiruvchi ichimlik.",
+        "price": "17,000 so'm",
+        "priceValue": 17000,
+        "image": "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=800&q=80",
+        "hasSizes": true,
+        "sizes": {
+          "1.5l": {
+            "price": 17000,
+            "desc": "1.5 litr"
+          },
+          "1l": {
+            "price": 12000,
+            "desc": "1 litr"
+          },
+          "0.5l": {
+            "price": 8000,
+            "desc": "0.5 litr"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_2",
+        "title": "Yashil Choy",
+        "description": "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.",
+        "price": "3,000 so'm",
+        "priceValue": 3000,
+        "image": "https://homiladorlik.uz/wp-content/uploads/2022/05/kok-choy.webp",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_3",
+        "title": "Fanta",
+        "description": "Gazli apelsinli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.",
+        "price": "17,000 so'm",
+        "priceValue": 17000,
+        "image": "https://rstrading.co/cdn/shop/files/b2f5b25daeb2a66a5b15cc1ee76fece2.jpg?v=1729347644",
+        "hasSizes": true,
+        "sizes": {
+          "1.5l": {
+            "price": 17000,
+            "desc": "1.5 litr"
+          },
+          "1l": {
+            "price": 12000,
+            "desc": "1 litr"
+          },
+          "0.5l": {
+            "price": 8000,
+            "desc": "0.5 litr"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_4",
+        "title": "Pepsi",
+        "description": "Gazli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.",
+        "price": "17,000 so'm",
+        "priceValue": 17000,
+        "image": "https://sigemart.com/cdn/shop/files/N21.5_27699102-0adf-4bcc-bfdf-009ad3f0f7bd.jpg?v=1764691111",
+        "hasSizes": true,
+        "sizes": {
+          "1.5l": {
+            "price": 17000,
+            "desc": "1.5 litr"
+          },
+          "1l": {
+            "price": 12000,
+            "desc": "1 litr"
+          },
+          "0.5l": {
+            "price": 8000,
+            "desc": "0.5 litr"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_5",
+        "title": "Qora Choy",
+        "description": "Issiq qora choy suty bilan. An'anaviy ichimlik.",
+        "price": "5,000 so'm",
+        "priceValue": 5000,
+        "image": "https://xabar.uz/static/crop/1/2/736_736_95_1223447726.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_6",
+        "title": "Limon Choy",
+        "description": "Maxsus tayyorlangan limonli choy - yangi limon va choy bilan tayyorlangan.",
+        "price": "20,000 so'm",
+        "priceValue": 20000,
+        "image": "https://data.daryo.uz/media/2022/11/photo_2022-11-19_11-17-09.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_7",
+        "title": "Sok",
+        "description": "Tabiiy meva sharbati - aralash mevalar.",
+        "price": "20,000 so'm",
+        "priceValue": 20000,
+        "image": "https://naturaljuice.uz/wp-content/uploads/2025/08/%D0%9C%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D1%84%D1%80%D1%83%D0%BA%D1%82.png",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_8",
+        "title": "Sprite",
+        "description": "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.",
+        "price": "17,000 so'm",
+        "priceValue": 17000,
+        "image": "https://www.shutterstock.com/image-photo/poznan-pol-apr-02-2025-260nw-2611900329.jpg",
+        "hasSizes": true,
+        "sizes": {
+          "1.5l": {
+            "price": 17000,
+            "desc": "1.5 litr"
+          },
+          "1l": {
+            "price": 12000,
+            "desc": "1 litr"
+          },
+          "0.5l": {
+            "price": 8000,
+            "desc": "0.5 litr"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_9",
+        "title": "Lipton",
+        "description": "Lipton choy. Issiq va sovuq variantlarda mavjud.",
+        "price": "12,000 so'm",
+        "priceValue": 12000,
+        "image": "https://images.uzum.uz/d38ggdniub30vbrv2o4g/original.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_10",
+        "title": "Fuse Tea",
+        "description": "Fuse Tea ichimligi. Turli xil ta'm variantlari.",
+        "price": "15,000 so'm",
+        "priceValue": 15000,
+        "image": "https://img.fix-price.com/insecure/rs:fit:800:800/plain/bit/_marketplace/images/origin/8d/8dff92def967b2dd5f238695c5877501.jpg",
+        "hasSizes": true,
+        "sizes": {
+          "1.5l": {
+            "price": 15000,
+            "desc": "1.5 litr"
+          },
+          "1l": {
+            "price": 12000,
+            "desc": "1 litr"
+          },
+          "0.5l": {
+            "price": 8000,
+            "desc": "0.5 litr"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_11",
+        "title": "Chortoq",
+        "description": "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.",
+        "price": "15,000 so'm",
+        "priceValue": 15000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQS5GyZ0N0_1dD3rAhe3vTvLUW0rIyVWxM5ryTy86FpGjovOlFRWLRgAQ1y&s=10",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_12",
+        "title": "Qatiq",
+        "description": "Qatiq. Yog'li va foydali ichimlik.",
+        "price": "5,000 so'm",
+        "priceValue": 5000,
+        "image": "https://data.daryo.uz/media/cache/2018/03/b6189afe6f9513c214f7aeeed87920fe-640x425.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_14",
+        "title": "Gazli Suv",
+        "description": "Gazli suv. Tetiklashtiruvchi va sovuq ichimlik.",
+        "price": "5,000 so'm",
+        "priceValue": 5000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT39jy3EVzgwDxl2GJmJJZSf3bBD_qr7WiNpyQ9vptd54PJEmtheR-tnZY&s=10",
+        "hasSizes": true,
+        "sizes": {
+          "1l": {
+            "price": 5000,
+            "desc": "1 litr"
+          },
+          "1.5l": {
+            "price": 6000,
+            "desc": "1.5 litr"
+          }
+        },
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_15",
+        "title": "Gazsiz Suv",
+        "description": "Gazsiz suv. Tabiiy va toza ichimlik.",
+        "price": "5,000 so'm",
+        "priceValue": 5000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6obLN0Bw0xWabzQOGpXmWiTMD9WV8FDy_BTQq9e0evVYePY6FnojCI-8&s=10",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_16",
+        "title": "Ayron",
+        "description": "Ayron. Yog'li va tetiklashtiruvchi ichimlik.",
+        "price": "10,000 so'm",
+        "priceValue": 10000,
+        "image": "https://havasfood.uz/wp-content/uploads/2023/06/photo_2023-06-26_15-04-59-691x412.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drink_17",
+        "title": "Akroshka",
+        "description": "Akroshka. Sut va gazli suv aralashmasi.",
+        "price": "12,000 so'm",
+        "priceValue": 12000,
+        "image": "https://natashaskitchen.com/wp-content/uploads/2010/08/okroshka-1.jpg",
+        "hasSizes": false,
+        "hasWeight": false,
+        "available": true
+      },
+      {
+        "id": "drinks_1787468667242",
+        "title": "Limonad",
+        "description": "Limon tamli salqinlashtiruvchi yaxna ichimlik",
+        "price": "15,000 so'm",
+        "priceValue": 15000,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpT60wxO5QRtyveSPFWRNpH1GY6ORLn5CIhU3290XAtA&s=10",
+        "hasSizes": false,
+        "sizes": {},
+        "hasWeight": false,
+        "baseWeight": 1000,
+        "pricePerGram": 0,
+        "minWeight": 300,
+        "available": true
+      }
+    ]
+  },
+  "categories": {
+    "salads": {
+      "name": "🥗 Salatlar",
+      "icon": "🥗"
+    },
+    "mains1": {
+      "name": "🍲 Suyuq ovqatlar",
+      "icon": "🍲"
+    },
+    "mains2": {
+      "name": "🍖 Asosiy taomlar",
+      "icon": "🍖"
+    },
+    "drinks": {
+      "name": "🥤 Ichimliklar",
+      "icon": "🥤"
+    }
+  }
+}

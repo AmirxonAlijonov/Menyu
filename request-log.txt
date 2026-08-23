@@ -1,0 +1,43 @@
+{"time":"2026-08-23T05:47:42.697Z","method":"POST","url":"/api/admin/login","auth":"NONE","body":{"password":"admin123"}}
+{"time":"2026-08-23T05:47:42.708Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:47:42.767Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:48:10.564Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:48:12.377Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:48:20.631Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:53:38.954Z","method":"POST","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2...","body":{"category":"drinks","title":"Limonad","description":"Limon tamli salqinlashtiruvchi ichimlik","price":"15,000","priceValue":15000,"image":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe8KTM_kJpurlRMXtiWrF_7JGezACfLs8kUMbESxPHry5C2cUVdsSxFVg&s=10","hasSizes":false,"hasWeight":false,"available":true}}
+{"time":"2026-08-23T05:53:38.975Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:53:38.995Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:00.570Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:00.584Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:03.787Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:03.802Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:09.573Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:43.967Z","method":"DELETE","url":"/api/admin/menu/drink_13","auth":"Bearer 92b787acd402fd8ff2...","body":{}}
+{"time":"2026-08-23T05:54:43.986Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:44.004Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:47.485Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:47.516Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:54:50.041Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:55:06.904Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:55:06.920Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:57:09.368Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:57:09.391Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:57:15.448Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:57:15.471Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:57:33.167Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T05:57:33.218Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:06:09.084Z","method":"POST","url":"/api/admin/login","auth":"NONE","body":{"password":"admin123"}}
+{"time":"2026-08-23T06:07:13.290Z","method":"POST","url":"/api/admin/menu","auth":"Bearer a64024dd4aa678f135...","body":{"category":"drinks","title":"SWTEST ITEM","description":"sw test","price":"9999","priceValue":9999,"available":true}}
+{"time":"2026-08-23T06:07:59.250Z","method":"DELETE","url":"/api/admin/menu/drinks_1787465233292","auth":"Bearer a64024dd4aa678f135...","body":{}}
+{"time":"2026-08-23T06:08:44.857Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:08:44.884Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:08:47.147Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:08:47.162Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:10:05.733Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:10:05.771Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:15:49.310Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:15:49.321Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:15:52.178Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:15:52.198Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:15:54.823Z","method":"GET","url":"/api/admin/menu","auth":"Bearer 92b787acd402fd8ff2..."}
+{"time":"2026-08-23T06:15:54.856Z","method":"GET","url":"/api/admin/orders","auth":"Bearer 92b787acd402fd8ff2..."}

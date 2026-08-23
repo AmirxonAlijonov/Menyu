@@ -7,6 +7,7 @@
  * 2. Quyidagi o'zgaruvchilarni o'zingizning ma'lumotlaringizga o'zgartiring:
  *    - BOT_TOKEN: @BotFather dan olingan token
  *    - CHAT_ID: Sizning chat ID ngiz
+ *    - ADMIN_PASSWORD: Admin panel paroli (ixtiyoriy, default: admin123)
  * 3. Serverni ishga tushiring: node server.js
  */
 
@@ -16,6 +17,7 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const crypto = require('crypto');
 
 const app = express();
 
@@ -33,6 +35,16 @@ app.use((req, res, next) => {
     res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; img-src 'self' https: data:; connect-src 'self' https:;");
+    next();
+});
+
+// Prevent caching of admin panel (sensitive data, always fresh)
+app.use((req, res, next) => {
+    if (req.url.startsWith('/admin') || req.url.startsWith('/api/admin')) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    }
     next();
 });
 
@@ -63,7 +75,124 @@ app.use((req, res, next) => {
     next();
 });
 
-// API routes (must be before static file serving)
+// ============================================
+// MA'LUMOTLARNI YUKLASH
+// ============================================
+
+// Data directory
+const dataDir = path.join(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
+
+// Menu data file
+const menuDataPath = path.join(dataDir, 'menu.json');
+let menuData = { categories: {}, items: {} };
+
+// Load menu data from file
+function loadMenuData() {
+    try {
+        if (fs.existsSync(menuDataPath)) {
+            const data = fs.readFileSync(menuDataPath, 'utf8');
+            menuData = JSON.parse(data);
+            console.log('✅ Menu data loaded from file');
+        } else {
+            console.log('⚠️ Menu data file not found, using defaults');
+            saveMenuData();
+        }
+    } catch (error) {
+        console.error('❌ Error loading menu data:', error.message);
+    }
+}
+
+// Save menu data to file
+function saveMenuData() {
+    try {
+        fs.writeFileSync(menuDataPath, JSON.stringify(menuData, null, 2), 'utf8');
+        console.log('✅ Menu data saved to file');
+    } catch (error) {
+        console.error('❌ Error saving menu data:', error.message);
+    }
+}
+
+// Orders data file
+const ordersDataPath = path.join(dataDir, 'orders.json');
+let ordersData = [];
+
+function loadOrdersData() {
+    try {
+        if (fs.existsSync(ordersDataPath)) {
+            const data = fs.readFileSync(ordersDataPath, 'utf8');
+            ordersData = JSON.parse(data);
+            console.log('✅ Orders data loaded from file');
+        }
+    } catch (error) {
+        console.error('❌ Error loading orders data:', error.message);
+    }
+}
+
+function saveOrdersData() {
+    try {
+        fs.writeFileSync(ordersDataPath, JSON.stringify(ordersData, null, 2), 'utf8');
+    } catch (error) {
+        console.error('❌ Error saving orders data:', error.message);
+    }
+}
+
+// Load data on startup
+loadMenuData();
+loadOrdersData();
+
+// ============================================
+// KONFIGURATSIYA
+// ============================================
+
+const BOT_TOKEN = process.env.BOT_TOKEN || '';
+const CHAT_ID = process.env.CHAT_ID || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Amirxon4111';
+const ALLOWED_USERS = process.env.ALLOWED_USERS ? process.env.ALLOWED_USERS.split(',') : [];
+
+// Admin sessions storage (in-memory, resets on server restart)
+const adminSessions = new Map();
+
+// Environment validation
+if (!BOT_TOKEN || !CHAT_ID) {
+    console.warn('⚠️ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
+    console.warn('   .env faylini yarating yoki Vercel environment variable\'larini sozlang.');
+    console.warn('   Qo\'llanma: README.md fayliga qarang.');
+} else {
+    console.log('✅ Telegram bot konfiguratsiyasi topildi');
+}
+
+// ============================================
+// ADMIN AUTHENTICATION MIDDLEWARE
+// ============================================
+
+function requireAdmin(req, res, next) {
+    const sessionId = req.headers.authorization?.replace('Bearer ', '') || req.query.session;
+    
+    console.log('[requireAdmin] Session ID:', sessionId ? sessionId.substring(0, 10) + '...' : 'null');
+    console.log('[requireAdmin] Sessions count:', adminSessions.size);
+    
+    if (!sessionId || !adminSessions.has(sessionId)) {
+        console.log('[requireAdmin] Session NOT found');
+        return res.status(401).json({ error: 'Ruxsat berilmagan. Iltimos, tizimga kiring.' });
+    }
+    
+    const session = adminSessions.get(sessionId);
+    if (new Date() > session.expires) {
+        adminSessions.delete(sessionId);
+        return res.status(401).json({ error: 'Sessiya muddati tugagan. Qayta kiring.' });
+    }
+    
+    req.adminSession = session;
+    next();
+}
+
+// ============================================
+// API ROUTES
+// ============================================
+
 // Buyurtma yuborish API
 app.post('/api/order', async (req, res) => {
     console.log('=== Buyurtma keldi ===');
@@ -148,12 +277,33 @@ app.post('/api/order', async (req, res) => {
 
     console.log('Telegram ga yuborilmoqda...');
 
+    // Buyurtmani saqlash (admin panelga ko'rsatish uchun)
+    const orderId = `order_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+    const newOrder = {
+        id: orderId,
+        items: items,
+        tableNumber: tableNumber || null,
+        kabinaNumber: kabinaNumber || null,
+        tabchaNumber: tabchaNumber || null,
+        address: address || null,
+        totalAmount: totalAmount,
+        serviceFee: serviceFee,
+        finalTotal: finalTotal,
+        status: 'pending',
+        timestamp: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    };
+
+    ordersData.push(newOrder);
+    saveOrdersData();
+    console.log('✅ Buyurtma saqlandi (admin panel uchun):', orderId);
+
     try {
         const success = await sendToTelegram(orderText);
 
         if (success) {
             console.log('Buyurtma muvaffaqiyatli yuborildi');
-            res.json({ success: true, message: 'Buyurtma yuborildi!' });
+            res.json({ success: true, message: 'Buyurtma yuborildi!', orderId: orderId });
         } else {
             console.log('Telegram ga yuborish muvaffaqiyatsiz');
             res.status(500).json({ success: false, error: 'Telegram ga yuborishda xatolik' });
@@ -175,7 +325,8 @@ app.get('/api/health', (req, res) => {
         nodeEnv: process.env.NODE_ENV,
         hasBotToken: !!BOT_TOKEN,
         hasChatId: !!CHAT_ID,
-        allowedUsersCount: ALLOWED_USERS.length
+        allowedUsersCount: ALLOWED_USERS.length,
+        menuItemsCount: Object.values(menuData.items || {}).flat().length
     };
     res.json(health);
 });
@@ -200,12 +351,287 @@ app.get('/api/debug', (req, res) => {
     res.json(debug);
 });
 
-// Menyu olish API
+// ============================================
+// MENYU API (Public)
+// ============================================
+
+// Get full menu
 app.get('/api/menu', (req, res) => {
-    res.json(foodData);
+    res.json(menuData);
 });
 
-// Telegram webhook (ixtiyoriy)
+// Get menu by category
+app.get('/api/menu/:category', (req, res) => {
+    const category = req.params.category;
+    if (menuData.items && menuData.items[category]) {
+        res.json(menuData.items[category]);
+    } else {
+        res.status(404).json({ error: 'Kategoriya topilmadi' });
+    }
+});
+
+// ============================================
+// ADMIN AUTHENTICATION API
+// ============================================
+
+// Admin login
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    
+    if (password === ADMIN_PASSWORD) {
+        const sessionId = crypto.randomBytes(32).toString('hex');
+        const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+        
+        adminSessions.set(sessionId, {
+            id: sessionId,
+            createdAt: new Date(),
+            expires: expires
+        });
+        
+        console.log('✅ Admin login successful');
+        res.json({
+            success: true,
+            session: sessionId,
+            expires: expires.toISOString()
+        });
+    } else {
+        console.log('❌ Admin login failed - wrong password');
+        res.status(401).json({ error: 'Noto\'g\'ri parol' });
+    }
+});
+
+// Admin logout
+app.post('/api/admin/logout', requireAdmin, (req, res) => {
+    adminSessions.delete(req.adminSession.id);
+    res.json({ success: true });
+});
+
+// Check admin session
+app.get('/api/admin/check', requireAdmin, (req, res) => {
+    res.json({ 
+        valid: true, 
+        expires: req.adminSession.expires.toISOString() 
+    });
+});
+
+// ============================================
+// ADMIN MENU CRUD API
+// ============================================
+
+// Get all menu items (admin)
+app.get('/api/admin/menu', requireAdmin, (req, res) => {
+    res.json(menuData);
+});
+
+// Get single item by ID
+app.get('/api/admin/menu/item/:id', requireAdmin, (req, res) => {
+    const itemId = req.params.id;
+    let foundItem = null;
+    let foundCategory = null;
+    
+    for (const category in menuData.items) {
+        const item = menuData.items[category].find(i => i.id === itemId);
+        if (item) {
+            foundItem = item;
+            foundCategory = category;
+            break;
+        }
+    }
+    
+    if (foundItem) {
+        res.json({ ...foundItem, category: foundCategory });
+    } else {
+        res.status(404).json({ error: 'Mahsulot topilmadi' });
+    }
+});
+
+// Create new menu item
+app.post('/api/admin/menu', requireAdmin, (req, res) => {
+    const { category, title, description, price, priceValue, image, hasSizes, sizes, hasWeight, baseWeight, pricePerGram, minWeight, available } = req.body;
+    
+    if (!category || !title || !price) {
+        return res.status(400).json({ error: 'Kategoriya, nom va narx majburiy' });
+    }
+    
+    if (!menuData.items[category]) {
+        return res.status(400).json({ error: 'Noto\'g\'ri kategoriya' });
+    }
+    
+    const newItem = {
+        id: `${category}_${Date.now()}`,
+        title,
+        description: description || '',
+        price,
+        priceValue: priceValue || parseInt(price.replace(/[^\d]/g, '')) || 0,
+        image: image || '',
+        hasSizes: hasSizes || false,
+        sizes: sizes || {},
+        hasWeight: hasWeight || false,
+        baseWeight: baseWeight || 1000,
+        pricePerGram: pricePerGram || 0,
+        minWeight: minWeight || 300,
+        available: available !== false
+    };
+    
+    menuData.items[category].push(newItem);
+    saveMenuData();
+    
+    console.log(`✅ New item created: ${title} in ${category}`);
+    res.json({ success: true, item: newItem });
+});
+
+// Update menu item
+app.put('/api/admin/menu/:id', requireAdmin, (req, res) => {
+    const itemId = req.params.id;
+    const updates = req.body;
+    
+    let foundItem = null;
+    let foundCategory = null;
+    
+    for (const category in menuData.items) {
+        const index = menuData.items[category].findIndex(i => i.id === itemId);
+        if (index !== -1) {
+            foundItem = menuData.items[category][index];
+            foundCategory = category;
+            break;
+        }
+    }
+    
+    if (!foundItem) {
+        return res.status(404).json({ error: 'Mahsulot topilmadi' });
+    }
+    
+    // Update fields
+    const allowedFields = ['title', 'description', 'price', 'priceValue', 'image', 'hasSizes', 'sizes', 'hasWeight', 'baseWeight', 'pricePerGram', 'minWeight', 'available'];
+    allowedFields.forEach(field => {
+        if (updates[field] !== undefined) {
+            foundItem[field] = updates[field];
+        }
+    });
+    
+    saveMenuData();
+    
+    console.log(`✅ Item updated: ${foundItem.title}`);
+    res.json({ success: true, item: foundItem });
+});
+
+// Delete menu item
+app.delete('/api/admin/menu/:id', requireAdmin, (req, res) => {
+    const itemId = req.params.id;
+    
+    for (const category in menuData.items) {
+        const index = menuData.items[category].findIndex(i => i.id === itemId);
+        if (index !== -1) {
+            const deleted = menuData.items[category].splice(index, 1)[0];
+            saveMenuData();
+            console.log(`✅ Item deleted: ${deleted.title}`);
+            return res.json({ success: true, deleted: deleted.title });
+        }
+    }
+    
+    res.status(404).json({ error: 'Mahsulot topilmadi' });
+});
+
+// ============================================
+// ADMIN CATEGORIES API
+// ============================================
+
+// Get all categories
+app.get('/api/admin/categories', requireAdmin, (req, res) => {
+    res.json(menuData.categories || {});
+});
+
+// Create new category
+app.post('/api/admin/categories', requireAdmin, (req, res) => {
+    const { id, name, icon } = req.body;
+    
+    if (!id || !name) {
+        return res.status(400).json({ error: 'Kategoriya ID va nomi majburiy' });
+    }
+    
+    if (menuData.categories[id]) {
+        return res.status(400).json({ error: 'Bu kategoriya allaqachon mavjud' });
+    }
+    
+    menuData.categories[id] = { name, icon: icon || '🍽️' };
+    menuData.items[id] = [];
+    saveMenuData();
+    
+    console.log(`✅ Category created: ${name}`);
+    res.json({ success: true, category: { id, ...menuData.categories[id] } });
+});
+
+// Update category
+app.put('/api/admin/categories/:id', requireAdmin, (req, res) => {
+    const categoryId = req.params.id;
+    const { name, icon } = req.body;
+    
+    if (!menuData.categories[categoryId]) {
+        return res.status(404).json({ error: 'Kategoriya topilmadi' });
+    }
+    
+    if (name) menuData.categories[categoryId].name = name;
+    if (icon) menuData.categories[categoryId].icon = icon;
+    
+    saveMenuData();
+    res.json({ success: true, category: menuData.categories[categoryId] });
+});
+
+// Delete category
+app.delete('/api/admin/categories/:id', requireAdmin, (req, res) => {
+    const categoryId = req.params.id;
+    
+    if (!menuData.categories[categoryId]) {
+        return res.status(404).json({ error: 'Kategoriya topilmadi' });
+    }
+    
+    delete menuData.categories[categoryId];
+    delete menuData.items[categoryId];
+    saveMenuData();
+    
+    console.log(`✅ Category deleted: ${categoryId}`);
+    res.json({ success: true });
+});
+
+// ============================================
+// ADMIN ORDERS API
+// ============================================
+
+// Get all orders
+app.get('/api/admin/orders', requireAdmin, (req, res) => {
+    res.json(ordersData);
+});
+
+// Get single order
+app.get('/api/admin/orders/:id', requireAdmin, (req, res) => {
+    const order = ordersData.find(o => o.id === req.params.id);
+    if (order) {
+        res.json(order);
+    } else {
+        res.status(404).json({ error: 'Buyurtma topilmadi' });
+    }
+});
+
+// Update order status
+app.put('/api/admin/orders/:id', requireAdmin, (req, res) => {
+    const { status } = req.body;
+    const orderIndex = ordersData.findIndex(o => o.id === req.params.id);
+    
+    if (orderIndex === -1) {
+        return res.status(404).json({ error: 'Buyurtma topilmadi' });
+    }
+    
+    ordersData[orderIndex].status = status || ordersData[orderIndex].status;
+    ordersData[orderIndex].updatedAt = new Date().toISOString();
+    saveOrdersData();
+    
+    res.json({ success: true, order: ordersData[orderIndex] });
+});
+
+// ============================================
+// TELEGRAM WEBHOOK
+// ============================================
+
 app.post('/webhook', async (req, res) => {
     const message = req.body.message;
 
@@ -327,6 +753,10 @@ app.post('/api/notify-offline', async (req, res) => {
     }
 });
 
+// ============================================
+// STATIK FAYLLAR
+// ============================================
+
 // Statik fayllarni serv qilish (API dan KEYIN)
 const publicPath = path.join(__dirname, 'public');
 if (fs.existsSync(publicPath)) {
@@ -346,6 +776,15 @@ app.get('/manifest.json', (req, res) => {
     res.sendFile(path.join(__dirname, 'manifest.json'));
 });
 
+// Admin panel routes
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 // index.html uchun alohida yo'l
 app.get('/', (req, res) => {
     const publicIndexPath = path.join(publicPath, 'index.html');
@@ -358,75 +797,13 @@ app.get('/', (req, res) => {
     });
 });
 
-// REPLACED_OK// ============================================
-// KONFIGURATSIYA - BU YERDA O'ZGARTIRING!
-// ============================================
-// Foydalanuvchi muhiti o'zgaruvchilardan foydalaning yoki default qiymatlarni o'rnating
-const BOT_TOKEN = process.env.BOT_TOKEN || '';
-const CHAT_ID = process.env.CHAT_ID || '';
-
-// Ruxsat etilgan foydalanuvchilar ro'yxati (faqat bu foydalanuvchilar botdan foydalanishi mumkin)
-// O'zingizning chat ID ngizni bu yerga qo'shing
-const ALLOWED_USERS = process.env.ALLOWED_USERS ? process.env.ALLOWED_USERS.split(',') : [];
-
-// Environment validation
-if (!BOT_TOKEN || !CHAT_ID) {
-    console.warn('⚠️ Diqqat: BOT_TOKEN yoki CHAT_ID o\'rnatilmagan!');
-    console.warn('   .env faylini yarating yoki Vercel environment variable\'larini sozlang.');
-    console.warn('   Qo\'llanma: README.md fayliga qarang.');
-} else {
-    console.log('✅ Telegram bot konfiguratsiyasi topildi');
-}
-
-// Ovqatlar ma'lumotlari - index.js bilan mos
-const foodData = {
-    salads: [
-        { title: "Chiroqchi Salati", description: "Yangi sabzavotlar, pyuresi, tuxum va maxsus french sousi bilan.", price: "20,000 so'm" },
-        { title: "Sezer Salati", description: "Romsalat, parmesan, croutons va caesar sousi bilan.", price: "30,000 so'm" },
-        { title: "Svejiy Salat", description: "Yangi sabzavotlar: pomidor, bodring, ko'katlar va zaytun moyi.", price: "15,000 so'm" },
-        { title: "Achchiq Chuchuk Salat", description: "Achchiq va shirin ta'mli salad: qizilmiya, cho'chqa, pomidor va maxsus sous.", price: "15,000 so'm" }
-    ],
-    mains: [
-        { title: "Qaynatma Sho'rva", description: "Go'shtni uzoq vaqt davomida qaynatib tayyorlangan to'qimali sho'rva.", price: "35,000 so'm", image: "https://zira.uz/wp-content/uploads/2020/08/kai--natma-shurpa.jpg" },
-        { title: "Grechka", description: "Grechka yoki sovuq - go'sht va sabzavotlar bilan tayyorlangan mazali taom.", price: "35,000 so'm", image: "https://mf.b37mrtl.ru/rbthmedia/images/2021.01/original/6011771d85600a5ea5564c98.jpg" },
-        { title: "Ko'za Sho'rva", description: "Ko'zada tayyorlangan go'sht va sabzavotli an'anaviy sho'rva.", price: "70,000 so'm", hasSizes: true, sizes: { "Butun": { price: 70000, desc: "Butun" }, "Yarim": { price: 35000, desc: "Yarim" } }, image: "https://zira.uz/wp-content/uploads/2018/08/lg-schurpa-2.jpg" },
-        { title: "Tushonka Sho'rva", description: "Tushonka go'shtidan tayyorlangan mazali va to'qimali sho'rva. An'anaviy usulda pishiriladi.", price: "35,000 so'm", image: "https://www.gazeta.uz/media/img/2021/10/zlqzJT16355047115889_l.jpg" },
-        { title: "Jiz", description: "Mol go'shtidan tayyorlangan mazali taom. Qiyma go'sht, piyoz va maxsus ziravorlar bilan.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://adrastravel.com/wp-content/uploads/2023/04/jiz.jpg" },
-        { title: "Tabaka", description: "Butun tovuqni yog'da press bilan bosib tayyorlangan shirali va mazali taom.", price: "60,000 so'm", hasSizes: true, sizes: { "Butun": { price: 60000, desc: "Butun tabaka" }, "Yarim": { price: 35000, desc: "Yarim tabaka" } }, image: "https://images.getrecipekit.com/20240403145433-tabaka-for-card.jpg?aspect_ratio=16:9&quality=90&" },
-        { title: "Jo'ja", description: "Mazali jo'ja go'shti. Turli xil ziravorlar bilan tayyorlangan.", price: "50,000 so'm", hasSizes: true, sizes: { "Butun": { price: 50000, desc: "Butun jo'ja" }, "Yarim": { price: 40000, desc: "Yarim jo'ja" } }, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiMBMYHjWzW8ml6KHwS5iPJr1xCmmf9pzpAxx2xCdtXQBH2XQXVLM-n8m3&s=10" },
-        { title: "Vag'ori", description: "An'anaviy oshpazlik usulida tayyorlangan mazali Vag'ori taomi. Go'sht va sabzavotlar bilan pishiriladi.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlYjrX2TZPKi5lhLkyTGO6RwbqlRk_EvyNlQ&s" },
-        { title: "KFS", description: "Maxsus marinadlangan qovurilgan tovuq va qovurilgan kartoshka (fri) bilan. KFS - mashhur fast food taomi.", price: "80,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 80, minWeight: 300, image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800" },
-        { title: "Barbekyu", description: "Go'shtni maxsus barbekyu sousi bilan grillda pishirilgan mazali taom.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://img.theepochtimes.com/assets/uploads/2021/05/31/shutterstock_1828017947-1-1080x720.jpg" },
-        { title: "Mol Go'shti Shashlik", description: "Maxsus marinadlangan mol go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "30,000 so'm", image: "https://back.baxtrestoran.uz/storage/Product/64/image_path/693ae16867ca0_original.webp" },
-        { title: "Qo'y Go'shti Shashlik", description: "Maxsus marinadlangan qo'y go'shtidan tayyorlangan shirali shashlik. Uzun vaqt davomida kokilarda pishiriladi va ajoyib ta'mga ega bo'ladi.", price: "35,000 so'm", image: "https://i.ytimg.com/vi/6GCe_xxk0pM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAZ_MsmpVmsSyEyLvUEbqspRr8Jow" },
-        { title: "Qiyma (G'ijduvon) Shashlik", description: "G'ijduvon usulida tayyorlangan qiyma go'sht shashlik. Maxsus ziravorlar bilan marinadlangan va kokilarda pishirilgan mazali taom.", price: "27,500 so'm", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTV9z348_d950o5KDWK2SDrm65q8TUxne0WYSaNoZVZOU1qVGW2kt6ThX_S&s=10" },
-        { title: "Qozon Kabob", description: "Qozonda pishirilgan mazali kabob. Go'sht, sabzavotlar va maxsus ziravorlar bilan.", price: "260,000 so'm", hasWeight: true, baseWeight: 1000, pricePerGram: 260, minWeight: 300, image: "https://makepedia.uz/wp-content/uploads/2018/04/qozon-kabob.jpg" },
-        { title: "Manti", description: "Go'sht va sabzavotlar bilan tayyorlangan an'anaviy O'zbek taomi. Bug'da pishiriladi.", price: "7,000 so'm", image: "https://petersfoodadventures.com/wp-content/uploads/2016/05/Manti-Russian.png" },
-        { title: "Tandir Somsa", description: "Tandirda pishirilgan go'shtli an'anaviy somsa.", price: "15,000 so'm", image: "https://pbs.twimg.com/media/Gd30LNDawAA2y_p.jpg" }
-    ],
-    drinks: [
-        { title: "Coca Cola", description: "Gazli ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Yashil Choy", description: "Issiq yashil choy limon va asal bilan. Bu ichimlik sog'liq uchun juda foydali va tetiklashtiradi.", price: "3,000 so'm" },
-        { title: "Fanta", description: "Gazli apelsinli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Pepsi", description: "Gazli ichimlik. Mashhur va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Qora Choy", description: "Issiq qora choy suty bilan. An'anaviy ichimlik.", price: "5,000 so'm" },
-        { title: "Limon Choy", description: "Maxsus tayyorlangan limonli choy - yangi limon va choy bilan tayyorlangan.", price: "20,000 so'm" },
-        { title: "Sok", description: "Tabiiy meva sharbati - aralash mevalar.", price: "20,000 so'm" },
-        { title: "Sprite", description: "Gazli limonato ichimlik. Sovuq va tetiklashtiruvchi ichimlik.", price: "17,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 17000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Lipton", description: "Lipton choy. Issiq va sovuq variantlarda mavjud.", price: "12,000 so'm" },
-        { title: "Fuse Tea", description: "Fuse Tea ichimligi. Turli xil ta'm variantlari.", price: "15,000 so'm", hasSizes: true, sizes: { "1.5l": { price: 15000, desc: "1.5 litr" }, "1l": { price: 12000, desc: "1 litr" }, "0.5l": { price: 8000, desc: "0.5 litr" } } },
-        { title: "Chortoq", description: "Chortoq ichimligi. Mazali va tetiklashtiruvchi ichimlik.", price: "15,000 so'm" },
-        { title: "Qatiq", description: "Qatiq. Yog'li va foydali ichimlik.", price: "5,000 so'm" }
-    ]
-};
-
 // ============================================
 // TELEGRAM BOT FUNKTSIYALARI
 // ============================================
 
 // Menyu matnini yaratish
 function createMenuMessage(category) {
-    const items = foodData[category];
+    const items = menuData.items[category] || [];
     let message = `🍽️ *${getCategoryName(category)}*\n\n`;
 
     items.forEach((item, index) => {
@@ -509,11 +886,9 @@ function isUserAllowed(userId) {
     return ALLOWED_USERS.includes(userId.toString());
 }
 
-// Server ishga tushirish
-// SPA fallback: serve index.html for all other GET requests
-app.get('*', (req, res) => {
-    res.sendFile(path.join(publicPath, "index.html"));
-});
+// ============================================
+// SERVER ISHGA TUSHIRISH
+// ============================================
 
 const PORT = process.env.PORT || 3001; // Default port 3001 to avoid conflict
 const HOSTNAME = process.env.HOSTNAME || '0.0.0.0'; // Barcha tarmoqlar uchun
@@ -541,6 +916,7 @@ if (require.main === module) {
         console.log('==========================================');
         console.log('🚀 Server ishga tushdi: http://localhost:' + PORT);
         console.log('🌐 Tarmoq uchun: http://' + getLocalIP() + ':' + PORT);
+        console.log('🔐 Admin panel: http://localhost:' + PORT + '/admin');
         console.log('📱 Telegram bot ishga tushirilmoqda...');
         console.log('==========================================');
 

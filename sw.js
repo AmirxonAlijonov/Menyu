@@ -1,5 +1,5 @@
 // Service Worker - PWA uchun (cache-first strategiyasi)
-const CACHE_NAME = 'alsafar-menu-v2';
+const CACHE_NAME = 'alsafar-menu-v3';
 const STATIC_CACHE = 'alsafar-static-v2';
 const IMAGE_CACHE = 'alsafar-images-v1';
 const API_CACHE = 'alsafar-api-cache-v1';
@@ -64,40 +64,36 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // API requests - cache-first with network fallback
+    // Skip admin panel routes - never cache (sensitive data, always fresh)
+    if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+        return;
+    }
+
+    // API requests - network-first (always fresh, fallback to cache when offline)
+    // This ensures admin panel changes (add/delete items) appear immediately on the public menu.
     if (pathname.startsWith('/api/')) {
-        console.log('[SW] API request - cache first:', pathname);
+        console.log('[SW] API request - network first:', pathname);
         event.respondWith(
             caches.open(API_CACHE)
                 .then((apiCache) => {
-                    return apiCache.match(event.request)
-                        .then((cachedResponse) => {
-                            if (cachedResponse) {
-                                console.log('[SW] Serving API from cache:', pathname);
-                                return cachedResponse;
+                    return fetch(event.request)
+                        .then((response) => {
+                            if (response && response.status === 200) {
+                                apiCache.put(event.request, response.clone());
                             }
-
-                            console.log('[SW] Fetching API from network:', pathname);
-                            return fetch(event.request)
-                                .then((response) => {
-                                    if (response && response.status === 200) {
-                                        apiCache.put(event.request, response.clone());
-                                    }
-                                    return response;
-                                })
-                                .catch((err) => {
-                                    console.log('[SW] API fetch failed, trying cache:', err);
-                                    // Return cached menu if available
+                            return response;
+                        })
+                        .catch((err) => {
+                            console.log('[SW] API fetch failed, trying cache:', err);
+                            return apiCache.match(event.request)
+                                .then((cached) => {
+                                    if (cached) return cached;
+                                    // Return embedded fallback data for menu when fully offline
                                     if (pathname === '/api/menu') {
-                                        return apiCache.match('/api/menu')
-                                            .then(cached => {
-                                                if (cached) return cached;
-                                                // Return embedded fallback data
-                                                return new Response(JSON.stringify(getFallbackMenu()), {
-                                                    status: 200,
-                                                    headers: { 'Content-Type': 'application/json' }
-                                                });
-                                            });
+                                        return new Response(JSON.stringify(getFallbackMenu()), {
+                                            status: 200,
+                                            headers: { 'Content-Type': 'application/json' }
+                                        });
                                     }
                                     return new Response(JSON.stringify({ error: 'Serverga ulanish mumkin emas', offline: true }), {
                                         status: 503,
