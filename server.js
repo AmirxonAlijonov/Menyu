@@ -786,11 +786,11 @@ app.get('/manifest.json', (req, res) => {
 
 // Admin panel routes
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
+    res.sendFile(path.join(publicPath, 'admin.html'));
 });
 
 app.get('/admin.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
+    res.sendFile(path.join(publicPath, 'admin.html'));
 });
 
 // index.html uchun alohida yo'l
