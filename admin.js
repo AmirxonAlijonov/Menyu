@@ -453,6 +453,8 @@ async function saveItem() {
         }
         
         closeItemModal();
+        // Serverdagi yangilangan ma'lumotlarni olish (keshdagi eski menuData o'rniga)
+        menuData = await apiRequest('/api/admin/menu');
         loadMenuItems(category);
         loadDashboard();
     } catch (error) {
@@ -476,6 +478,8 @@ async function deleteItem(itemId) {
         });
         
         showToast('✅ Mahsulot o\'chirildi!');
+        // Serverdagi yangilangan ma'lumotlarni olish (keshdagi eski menuData o'rniga)
+        menuData = await apiRequest('/api/admin/menu');
         loadMenuItems(item?.category || currentCategory);
         loadDashboard();
     } catch (error) {
@@ -571,6 +575,8 @@ async function saveCategory() {
         }
         
         closeCategoryModal();
+        // Serverdagi yangilangan ma'lumotlarni olish (keshdagi eski menuData o'rniga)
+        menuData = await apiRequest('/api/admin/menu');
         loadCategoriesPage();
         loadDashboard();
     } catch (error) {
@@ -593,6 +599,8 @@ async function deleteCategory(categoryId) {
         });
         
         showToast('✅ Kategoriya o\'chirildi!');
+        // Serverdagi yangilangan ma'lumotlarni olish (keshdagi eski menuData o'rniga)
+        menuData = await apiRequest('/api/admin/menu');
         loadCategoriesPage();
         loadDashboard();
     } catch (error) {
