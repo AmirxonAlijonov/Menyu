@@ -76,72 +76,43 @@ app.use((req, res, next) => {
 });
 
 // ============================================
-// MA'LUMOTLARNI YUKLASH
+// MA'LUMOTLARNI YUKLASH (Vercel KV + fayl fallback)
 // ============================================
+const storage = require('./storage');
 
-// Data directory
-const dataDir = path.join(__dirname, 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-}
-
-// Menu data file
-const menuDataPath = path.join(dataDir, 'menu.json');
 let menuData = { categories: {}, items: {} };
-
-// Load menu data from file
-function loadMenuData() {
-    try {
-        if (fs.existsSync(menuDataPath)) {
-            const data = fs.readFileSync(menuDataPath, 'utf8');
-            menuData = JSON.parse(data);
-            console.log('✅ Menu data loaded from file');
-        } else {
-            console.log('⚠️ Menu data file not found, using defaults');
-            saveMenuData();
-        }
-    } catch (error) {
-        console.error('❌ Error loading menu data:', error.message);
-    }
-}
-
-// Save menu data to file
-function saveMenuData() {
-    try {
-        fs.writeFileSync(menuDataPath, JSON.stringify(menuData, null, 2), 'utf8');
-        console.log('✅ Menu data saved to file');
-    } catch (error) {
-        console.error('❌ Error saving menu data:', error.message);
-    }
-}
-
-// Orders data file
-const ordersDataPath = path.join(dataDir, 'orders.json');
 let ordersData = [];
 
-function loadOrdersData() {
+// Load data on startup (async)
+(async () => {
     try {
-        if (fs.existsSync(ordersDataPath)) {
-            const data = fs.readFileSync(ordersDataPath, 'utf8');
-            ordersData = JSON.parse(data);
-            console.log('✅ Orders data loaded from file');
-        }
-    } catch (error) {
-        console.error('❌ Error loading orders data:', error.message);
+        menuData = await storage.loadMenuData();
+        console.log('✅ Menu data loaded');
+    } catch (e) {
+        console.error('❌ Menu load xatosi:', e.message);
     }
-}
-
-function saveOrdersData() {
     try {
-        fs.writeFileSync(ordersDataPath, JSON.stringify(ordersData, null, 2), 'utf8');
-    } catch (error) {
-        console.error('❌ Error saving orders data:', error.message);
+        ordersData = await storage.loadOrdersData();
+        console.log('✅ Orders data loaded');
+    } catch (e) {
+        console.error('❌ Orders load xatosi:', e.message);
     }
-}
+})();
 
-// Load data on startup
-loadMenuData();
-loadOrdersData();
+// ============================================
+// VERCEL SERVERLESS: har bir API so'rovida ma'lumotlarni
+// KV/fayldan yangilab olish (instance'lar o'rtasida sinxronlik uchun).
+// Admin panelida qilingan o'zgarish darhol asosiy saytda ko'rinishi uchun zarur.
+// ============================================
+app.use('/api/', async (req, res, next) => {
+    try {
+        menuData = await storage.loadMenuData();
+        ordersData = await storage.loadOrdersData();
+    } catch (err) {
+        console.error('❌ Ma\'lumotlarni yangilashda xato:', err.message);
+    }
+    next();
+});
 
 // ============================================
 // KONFIGURATSIYA
@@ -309,7 +280,7 @@ app.post('/api/order', async (req, res) => {
     };
 
     ordersData.push(newOrder);
-    saveOrdersData();
+    await storage.saveOrdersData(ordersData);
     console.log('✅ Buyurtma saqlandi (admin panel uchun):', orderId);
 
     try {
@@ -454,7 +425,7 @@ app.get('/api/admin/menu/item/:id', requireAdmin, (req, res) => {
 });
 
 // Create new menu item
-app.post('/api/admin/menu', requireAdmin, (req, res) => {
+app.post('/api/admin/menu', requireAdmin, async (req, res) => {
     const { category, title, description, price, priceValue, image, hasSizes, sizes, hasWeight, baseWeight, pricePerGram, minWeight, available } = req.body;
     
     if (!category || !title || !price) {
@@ -482,14 +453,14 @@ app.post('/api/admin/menu', requireAdmin, (req, res) => {
     };
     
     menuData.items[category].push(newItem);
-    saveMenuData();
+    await storage.saveMenuData(menuData);
     
     console.log(`✅ New item created: ${title} in ${category}`);
     res.json({ success: true, item: newItem });
 });
 
 // Update menu item
-app.put('/api/admin/menu/:id', requireAdmin, (req, res) => {
+app.put('/api/admin/menu/:id', requireAdmin, async (req, res) => {
     const itemId = req.params.id;
     const updates = req.body;
     
@@ -517,21 +488,21 @@ app.put('/api/admin/menu/:id', requireAdmin, (req, res) => {
         }
     });
     
-    saveMenuData();
+    await storage.saveMenuData(menuData);
     
     console.log(`✅ Item updated: ${foundItem.title}`);
     res.json({ success: true, item: foundItem });
 });
 
 // Delete menu item
-app.delete('/api/admin/menu/:id', requireAdmin, (req, res) => {
+app.delete('/api/admin/menu/:id', requireAdmin, async (req, res) => {
     const itemId = req.params.id;
     
     for (const category in menuData.items) {
         const index = menuData.items[category].findIndex(i => i.id === itemId);
         if (index !== -1) {
             const deleted = menuData.items[category].splice(index, 1)[0];
-            saveMenuData();
+            await storage.saveMenuData(menuData);
             console.log(`✅ Item deleted: ${deleted.title}`);
             return res.json({ success: true, deleted: deleted.title });
         }
@@ -550,7 +521,7 @@ app.get('/api/admin/categories', requireAdmin, (req, res) => {
 });
 
 // Create new category
-app.post('/api/admin/categories', requireAdmin, (req, res) => {
+app.post('/api/admin/categories', requireAdmin, async (req, res) => {
     const { id, name, icon } = req.body;
     
     if (!id || !name) {
@@ -563,14 +534,14 @@ app.post('/api/admin/categories', requireAdmin, (req, res) => {
     
     menuData.categories[id] = { name, icon: icon || '🍽️' };
     menuData.items[id] = [];
-    saveMenuData();
+    await storage.saveMenuData(menuData);
     
     console.log(`✅ Category created: ${name}`);
     res.json({ success: true, category: { id, ...menuData.categories[id] } });
 });
 
 // Update category
-app.put('/api/admin/categories/:id', requireAdmin, (req, res) => {
+app.put('/api/admin/categories/:id', requireAdmin, async (req, res) => {
     const categoryId = req.params.id;
     const { name, icon } = req.body;
     
@@ -581,12 +552,12 @@ app.put('/api/admin/categories/:id', requireAdmin, (req, res) => {
     if (name) menuData.categories[categoryId].name = name;
     if (icon) menuData.categories[categoryId].icon = icon;
     
-    saveMenuData();
+    await storage.saveMenuData(menuData);
     res.json({ success: true, category: menuData.categories[categoryId] });
 });
 
 // Delete category
-app.delete('/api/admin/categories/:id', requireAdmin, (req, res) => {
+app.delete('/api/admin/categories/:id', requireAdmin, async (req, res) => {
     const categoryId = req.params.id;
     
     if (!menuData.categories[categoryId]) {
@@ -595,7 +566,7 @@ app.delete('/api/admin/categories/:id', requireAdmin, (req, res) => {
     
     delete menuData.categories[categoryId];
     delete menuData.items[categoryId];
-    saveMenuData();
+    await storage.saveMenuData(menuData);
     
     console.log(`✅ Category deleted: ${categoryId}`);
     res.json({ success: true });
@@ -621,7 +592,7 @@ app.get('/api/admin/orders/:id', requireAdmin, (req, res) => {
 });
 
 // Update order status
-app.put('/api/admin/orders/:id', requireAdmin, (req, res) => {
+app.put('/api/admin/orders/:id', requireAdmin, async (req, res) => {
     const { status } = req.body;
     const orderIndex = ordersData.findIndex(o => o.id === req.params.id);
     
@@ -631,13 +602,13 @@ app.put('/api/admin/orders/:id', requireAdmin, (req, res) => {
     
     ordersData[orderIndex].status = status || ordersData[orderIndex].status;
     ordersData[orderIndex].updatedAt = new Date().toISOString();
-    saveOrdersData();
+    await storage.saveOrdersData(ordersData);
     
     res.json({ success: true, order: ordersData[orderIndex] });
 });
 
 // Delete order
-app.delete('/api/admin/orders/:id', requireAdmin, (req, res) => {
+app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
     const orderIndex = ordersData.findIndex(o => o.id === req.params.id);
 
     if (orderIndex === -1) {
@@ -645,7 +616,7 @@ app.delete('/api/admin/orders/:id', requireAdmin, (req, res) => {
     }
 
     const deleted = ordersData.splice(orderIndex, 1)[0];
-    saveOrdersData();
+    await storage.saveOrdersData(ordersData);
 
     console.log(`🗑️ Buyurtma o'chirildi: ${deleted.id}`);
     res.json({ success: true, order: deleted });
