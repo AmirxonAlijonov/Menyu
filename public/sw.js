@@ -1,6 +1,6 @@
 // Service Worker - PWA uchun (cache-first strategiyasi)
-const CACHE_NAME = 'alsafar-menu-v3';
-const STATIC_CACHE = 'alsafar-static-v2';
+const CACHE_NAME = 'alsafar-menu-v4';
+const STATIC_CACHE = 'alsafar-static-v3';
 const IMAGE_CACHE = 'alsafar-images-v1';
 const API_CACHE = 'alsafar-api-cache-v2';
 
@@ -40,7 +40,7 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE && cacheName !== IMAGE_CACHE) {
+                    if (cacheName !== CACHE_NAME && cacheName !== STATIC_CACHE && cacheName !== IMAGE_CACHE && cacheName !== API_CACHE) {
                         console.log('[SW] Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
@@ -59,13 +59,16 @@ self.addEventListener('fetch', (event) => {
     const pathname = url.pathname;
     const isImage = url.pathname.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i);
 
-    // Skip non-GET requests
+    // Non-GET so'rovlarini (POST/PUT/DELETE) to'g'ridan-to'g'ri tarmoqqa yuborish.
+    // Bularni keshlamaslik va har doim serverga yuborish kerak (buyurtma o'chirish/krish va boshqalar).
     if (event.request.method !== 'GET') {
+        event.respondWith(fetch(event.request));
         return;
     }
 
-    // Skip admin panel routes - never cache (sensitive data, always fresh)
+    // Admin panel routelari - hech qachon keshlanmaydi (maxfiy ma'lumotlar, doimo yangi)
     if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+        event.respondWith(fetch(event.request));
         return;
     }
 
