@@ -126,7 +126,13 @@ async function checkSession() {
                 headers: { 'Authorization': 'Bearer ' + session }
             });
             if (res.ok) {
+                const data = await res.json();
                 currentSession = session;
+                if (data.kvEnabled === false) {
+                    showKvWarning();
+                } else {
+                    hideKvWarning();
+                }
                 showAdminPanel();
                 return true;
             }
@@ -138,6 +144,23 @@ async function checkSession() {
         localStorage.removeItem('adminSessionExpires');
     }
     return false;
+}
+
+// Vercel KV ulanmaganligi haqida ogohlantirish (o'zgarishlar saqlanmaydi)
+function showKvWarning() {
+    let banner = document.getElementById('kvWarningBanner');
+    if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'kvWarningBanner';
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#e74c3c;color:#fff;padding:10px 16px;font-size:14px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+        document.body.appendChild(banner);
+    }
+    banner.innerHTML = '⚠️ Diqqat: Vercel KV ulangan emas! Admin o\'zgarishlari (mahsulot qo\'shish/o\'zgartirish/o\'chirish) saqlanmaydi. KV_SETUP.md qo\'llanmasiga qarang.';
+}
+
+function hideKvWarning() {
+    const banner = document.getElementById('kvWarningBanner');
+    if (banner) banner.remove();
 }
 
 function showLoginError(message) {

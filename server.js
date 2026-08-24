@@ -390,9 +390,10 @@ app.post('/api/admin/logout', requireAdmin, (req, res) => {
 
 // Check admin session
 app.get('/api/admin/check', requireAdmin, (req, res) => {
-    res.json({ 
+    res.json({
         valid: true,
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        kvEnabled: storage.kvEnabled
     });
 });
 

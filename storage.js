@@ -37,7 +37,13 @@ if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
         console.warn('⚠️ @vercel/kv paketi topilmadi, fayl saqlash ishlatiladi:', e.message);
     }
 } else {
-    console.log('ℹ️ KV env o\'zgaruvchilari topilmadi - mahalliy fayl saqlash ishlatiladi');
+    if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+        console.error('⚠️⚠️ OGOHLANTIRISH: Vercel (production) muhitida KV env o\'zgaruvchilari topilmadi!');
+        console.error('⚠️⚠️ Admin o\'zgarishlari saqlanmaydi (fayl tizimi vaqtinchalik/ephemeral). Vercel KV ni ulang!');
+        console.error('⚠️⚠️ Qo\'llanma: KV_SETUP.md faylini o\'qing yoki Vercel Dashboard → Storage → KV yarating va loyihaga ulang.');
+    } else {
+        console.log('ℹ️ KV env o\'zgaruvchilari topilmadi - mahalliy fayl saqlash ishlatiladi');
+    }
 }
 
 // ============================================
