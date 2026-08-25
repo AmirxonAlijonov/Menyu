@@ -282,8 +282,8 @@ async function loadMenuPage() {
         // Generate tabs
         const tabsContainer = document.getElementById('menuTabs');
         tabsContainer.innerHTML = Object.keys(categoriesData).map(cat => `
-            <button class="tab ${cat === currentCategory ? 'active' : ''}" onclick="selectMenuCategory('${cat}')">
-                ${categoriesData[cat].icon} ${categoriesData[cat].name}
+            <button class="tab ${cat === currentCategory ? 'active' : ''}" data-category="${cat}" onclick="selectMenuCategory('${cat}')">
+                ${categoriesData[cat].name}
             </button>
         `).join('');
         
@@ -305,7 +305,7 @@ function selectMenuCategory(category) {
     
     // Update active tab
     document.querySelectorAll('#menuTabs .tab').forEach(tab => {
-        tab.classList.toggle('active', tab.textContent.includes(categoriesData[category].name));
+        tab.classList.toggle('active', tab.dataset.category === category);
     });
     
     loadMenuItems(category);
@@ -377,7 +377,7 @@ function openItemModal(itemId = null) {
     // Populate category select
     const categorySelect = document.getElementById('itemCategory');
     categorySelect.innerHTML = Object.keys(categoriesData).map(cat => 
-        `<option value="${cat}">${categoriesData[cat].icon} ${categoriesData[cat].name}</option>`
+        `<option value="${cat}">${categoriesData[cat].name}</option>`
     ).join('');
     
     if (itemId) {
