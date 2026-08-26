@@ -223,8 +223,14 @@ self.addEventListener('message', (event) => {
         self.skipWaiting();
     }
 
-    // Javob yuborish (kanalni yopmaslik uchun)
-    event.ports[0]?.postMessage({ status: 'ok' });
+    // Javob yuborish (kanal yopiq bo'lsa xato chiqmasligi uchun try/catch)
+    try {
+        if (event.ports && event.ports[0]) {
+            event.ports[0].postMessage({ status: 'ok' });
+        }
+    } catch (e) {
+        console.warn('[SW] Message port yopiq:', e.message);
+    }
 });
 
 // Fallback menu data for offline mode - index.js bilan mos

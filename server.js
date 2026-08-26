@@ -804,6 +804,12 @@ app.get('/manifest.json', (req, res) => {
     res.sendFile(path.join(__dirname, 'manifest.json'));
 });
 
+// Favicon - brauzer har doim /favicon.ico so'raydi. Fayl bo'lmasa ham
+// 404 xato chiqarmasligi uchun bo'sh javob (204) qaytaramiz.
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end();
+});
+
 // Admin panel routes
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(publicPath, 'admin.html'));
