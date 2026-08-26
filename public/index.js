@@ -362,11 +362,17 @@ async function loadMenuData() {
         
         if (response.ok) {
             const data = await response.json();
-            // API dan kelgan ma'lumotlarni foodData ga moslashtirish
+            // API dan kelgan ma'lumotlarni default bilan birlashtirish.
+            // Muhim: server faqat elementi bor kategoriyalarni qaytarishi mumkin
+            // (masalan, faqat salads va drinks), shuning uchun defaultFoodData
+            // bilan birlashtiramiz — shunda barcha kategoriyalar mavjud bo'ladi
+            // va foodData[category] hech qachon undefined bo'lmaydi (xato oldini oladi).
             if (data.items) {
-                foodData = data.items;
+                foodData = { ...defaultFoodData, ...data.items };
             } else if (data.salads || data.mains1 || data.mains2 || data.drinks) {
-                foodData = data;
+                foodData = { ...defaultFoodData, ...data };
+            } else {
+                foodData = defaultFoodData;
             }
             menuLoaded = true;
             console.log('✅ Menu data loaded from API');
@@ -463,16 +469,18 @@ function showMainPage() {
 // Slaydni ko'rsatish funksiyasi (category uchun)
 function showSlideCategory(index) {
     const page = document.getElementById(currentCategory + 'Page');
+    if (!page) return;
     const slides = page.querySelectorAll('.slide');
     const thumbs = page.querySelectorAll('.thumb');
+    if (!slides.length) return;
 
     // Barcha slaydlarni va kichik rasmlarni o'chirish
     slides.forEach(slide => slide.classList.remove('active'));
     thumbs.forEach(thumb => thumb.classList.remove('active'));
 
     // Tanlanganini ko'rsatish
-    slides[index].classList.add('active');
-    thumbs[index].classList.add('active');
+    if (slides[index]) slides[index].classList.add('active');
+    if (thumbs[index]) thumbs[index].classList.add('active');
     currentIndexCategory = index;
 }
 
@@ -487,7 +495,8 @@ function currentSlideCategory(index, category) {
 // Avtomatik aylanish funksiyasi (category uchun)
 function startAutoSlideCategory() {
     autoSlide = setInterval(() => {
-        const items = foodData[currentCategory];
+        const items = foodData[currentCategory] || [];
+        if (items.length === 0) return;
         currentIndexCategory = (currentIndexCategory + 1) % items.length;
         showSlideCategory(currentIndexCategory);
     }, 4000);

@@ -1,0 +1,23 @@
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Access-Control-Allow-Headers: Content-Type, Authorization
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: *
+Age: 2247
+Cache-Control: public, max-age=86400
+Content-Length: 44450
+Content-Security-Policy: default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; img-src 'self' https: data:; connect-src 'self' https:;
+Content-Type: text/html; charset=UTF-8
+Date: Wed, 26 Aug 2026 14:32:10 GMT
+Etag: W/"ada2-1668f272800"
+Last-Modified: Sat, 20 Oct 2018 01:46:40 GMT
+Referrer-Policy: strict-origin-when-cross-origin
+Server: Vercel
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-Powered-By: Express
+X-Vercel-Cache: HIT
+X-Vercel-Id: hkg1::iad1::hb6td-1787756978244-fa93d9c31388
+X-Xss-Protection: 1; mode=block
+

@@ -14,9 +14,42 @@
 const fs = require('fs');
 const path = require('path');
 
+// ============================================
+// DEFAULT (FALLBACK) MA'LUMOTLAR
+// --------------------------------------------------
+// Vercel serverless (lambda) muhitida loyiha papkasi read-only bo'ladi va
+// `data/` papkasi nft tomonidan trace qilinmasa lambda ichida bo'lmaydi.
+// Shuning uchun `data/menu.json` va `data/orders.json` ni `require` orqali
+// chaqiramiz — bu nft ularni lambda ga qo'shishini TA'MINLAYDI va ularni
+// fallback sifatida ishlatamiz (fayl/KV o'qib bo'lmasa ham sayt ishlaydi).
+// ============================================
+let defaultMenuData = { categories: {}, items: {} };
+let defaultOrdersData = [];
+
+try {
+    defaultMenuData = require('./data/menu.json');
+    console.log('✅ Default menu ma\'lumotlari yuklandi (fallback)');
+} catch (e) {
+    console.warn('⚠️ data/menu.json require qilinmadi:', e.message);
+}
+
+try {
+    defaultOrdersData = require('./data/orders.json');
+    if (!Array.isArray(defaultOrdersData)) defaultOrdersData = [];
+} catch (e) {
+    console.warn('⚠️ data/orders.json require qilinmadi:', e.message);
+}
+
 const dataDir = path.join(__dirname, 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+try {
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
+} catch (e) {
+    // Vercel lambda da /var/task read-only bo'lishi mumkin — bu xato
+    // butun modulni yuklanishini to'xtatmasligi kerak (aksi holda server
+    // umuman ishga tushmaydi va barcha funksiyalar ishlamay qoladi).
+    console.warn('⚠️ data papkasini yaratib bo\'lmadi (ehtimol read-only):', e.message);
 }
 
 const menuDataPath = path.join(dataDir, 'menu.json');
@@ -84,16 +117,17 @@ async function loadMenuData() {
                 console.log('✅ Menu KV dan yuklandi');
                 return data;
             }
-            // KV bo'sh - fayldagi boshlang'ich ma'lumotni KV ga yozamiz (seed)
-            const fileData = readFileJSON(menuDataPath, { categories: {}, items: {} });
+            // KV bo'sh - boshlang'ich ma'lumotni KV ga yozamiz (seed).
+            // Fayl lambda da bo'lmasa ham bundled default ishlatiladi.
+            const fileData = readFileJSON(menuDataPath, defaultMenuData);
             await kv.set('menu', fileData);
-            console.log('✅ Menu fayldan KV ga seed qilindi');
+            console.log('✅ Menu boshlang\'ich ma\'lumotdan KV ga seed qilindi');
             return fileData;
         } catch (e) {
             console.error('❌ KV dan yuklash xatosi, fayl ishlatiladi:', e.message);
         }
     }
-    const fileData = readFileJSON(menuDataPath, { categories: {}, items: {} });
+    const fileData = readFileJSON(menuDataPath, defaultMenuData);
     if (!fs.existsSync(menuDataPath)) {
         writeFileJSON(menuDataPath, fileData);
     }
@@ -127,14 +161,14 @@ async function loadOrdersData() {
                 console.log('✅ Orders KV dan yuklandi');
                 return data;
             }
-            const fileData = readFileJSON(ordersDataPath, []);
+            const fileData = readFileJSON(ordersDataPath, defaultOrdersData);
             await kv.set('orders', fileData);
             return fileData;
         } catch (e) {
             console.error('❌ Orders KV xatosi, fayl ishlatiladi:', e.message);
         }
     }
-    return readFileJSON(ordersDataPath, []);
+    return readFileJSON(ordersDataPath, defaultOrdersData);
 }
 
 async function saveOrdersData(data) {

@@ -1,8 +1,8 @@
 // Service Worker - PWA uchun (cache-first strategiyasi)
-const CACHE_NAME = 'alsafar-menu-v4';
-const STATIC_CACHE = 'alsafar-static-v3';
-const IMAGE_CACHE = 'alsafar-images-v1';
-const API_CACHE = 'alsafar-api-cache-v2';
+const CACHE_NAME = 'alsafar-menu-v5';
+const STATIC_CACHE = 'alsafar-static-v4';
+const IMAGE_CACHE = 'alsafar-images-v2';
+const API_CACHE = 'alsafar-api-cache-v3';
 
 // Assets to cache immediately
 const staticAssets = [
