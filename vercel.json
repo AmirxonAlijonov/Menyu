@@ -16,6 +16,12 @@
             "dest": "/admin.html"
         },
         {
+            "src": "/sw.js",
+            "headers": {
+                "Cache-Control": "no-cache, no-store, must-revalidate"
+            }
+        },
+        {
             "handle": "filesystem"
         },
         {

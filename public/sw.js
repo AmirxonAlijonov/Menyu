@@ -53,8 +53,28 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+// ============================================
+// GLOBAL XATOLOLIKNI USHLASH
+// --------------------------------------------------
+// SW ichidagi kutilmagan xatoliklar (masalan, eski brauzer keshlari bilan
+// bog'liq) konsolga yoziladi va hech qachon sahifaning ishlashini
+// uzmaydi. Bu "sw.js da xatolik" ko'rinishidagi noto'g'ri xabarlardan
+// himoyalaydi.
+// ============================================
+self.addEventListener('error', (event) => {
+    console.error('[SW] Global xatolik:', event.message || event.error);
+});
+
+self.addEventListener('unhandledrejection', (event) => {
+    console.error('[SW] Promise xatoligi:', event.reason);
+});
+
 // Fetch event - cache-first for static, network-only for API
 self.addEventListener('fetch', (event) => {
+    // Butun handler ni try/catch bilan o'raymiz: agar kutilmagan xato
+    // yuz bersa, so'rovni to'g'ridan-to'g'ri tarmoqqa yuboramiz (SW xatosi
+    // sahifani sindirmasligi kerak).
+    try {
     const url = new URL(event.request.url);
     const pathname = url.pathname;
     const isImage = url.pathname.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i);
@@ -81,8 +101,11 @@ self.addEventListener('fetch', (event) => {
                 .then((apiCache) => {
                     return fetch(event.request)
                         .then((response) => {
-                            if (response && response.status === 200) {
-                                apiCache.put(event.request, response.clone());
+                            // Cache API faqat GET so'rovlarini qo'llab-quvvatlaydi.
+                            // Har qanday xatolik (masalan, "Request method 'DELETE'
+                            // is unsupported") konsolga chiqmasligi uchun .catch(()=>{}).
+                            if (response && response.status === 200 && event.request.method === 'GET') {
+                                apiCache.put(event.request, response.clone()).catch(() => {});
                             }
                             return response;
                         })
@@ -131,9 +154,9 @@ self.addEventListener('fetch', (event) => {
                             // Fetch from network in background
                             const fetchPromise = fetch(event.request)
                                 .then((networkResponse) => {
-                                    if (networkResponse && networkResponse.status === 200) {
-                                        imageCache.put(event.request, networkResponse.clone());
-                                    }
+                                if (networkResponse && networkResponse.status === 200 && event.request.method === 'GET') {
+                                    imageCache.put(event.request, networkResponse.clone()).catch(() => {});
+                                }
                                     return networkResponse;
                                 })
                                 .catch((err) => {
@@ -160,13 +183,12 @@ self.addEventListener('fetch', (event) => {
                         const fetchPromise = fetch(event.request)
                             .then((response) => {
                                 // Don't cache non-successful responses
-                                if (!response || response.status !== 200) {
+                                if (!response || response.status !== 200 || event.request.method !== 'GET') {
                                     return response;
                                 }
 
-                                // Clone and cache the new response
-                                const responseToCache = response.clone();
-                                cache.put(event.request, responseToCache);
+                                // Clone and cache the new response (xatolik bo'lsa e'tiborga olinmaydi)
+                                cache.put(event.request, response.clone()).catch(() => {});
 
                                 return response;
                             })
@@ -184,6 +206,13 @@ self.addEventListener('fetch', (event) => {
                     });
             })
     );
+    } catch (err) {
+        // Oxirgi himoya: har qanday kutilmagan xato bo'lsa, so'rovni
+        // to'g'ridan-to'g'ri tarmoqqa yuboramiz. Bu SW xatosining
+        // sahifani sindirishiga yo'l qo'ymaydi.
+        console.error('[SW] Fetch handler xatosi (network fallback):', err);
+        event.respondWith(fetch(event.request));
+    }
 });
 
 // Handle messages from the main app
