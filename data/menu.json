@@ -586,6 +586,21 @@
         "pricePerGram": 0,
         "minWeight": 300,
         "available": true
+      },
+      {
+        "id": "drinks_1787696167124",
+        "title": "TEST_ITEM_X",
+        "description": "",
+        "price": "10000",
+        "priceValue": 10000,
+        "image": "",
+        "hasSizes": false,
+        "sizes": {},
+        "hasWeight": false,
+        "baseWeight": 1000,
+        "pricePerGram": 0,
+        "minWeight": 300,
+        "available": true
       }
     ]
   },
