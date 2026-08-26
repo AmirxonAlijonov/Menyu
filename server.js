@@ -796,7 +796,9 @@ app.use(express.static(__dirname, staticOptions));
 app.get('/sw.js', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Content-Type', 'application/javascript');
-    res.sendFile(path.join(__dirname, 'sw.js'));
+    // public/sw.js ni beramiz (Vercelda ham shu fayl beriladi),
+    // shunda localhost va Vercel bir xil, mustahkam SW kodini ishlatadi.
+    res.sendFile(path.join(publicPath, 'sw.js'));
 });
 app.get('/manifest.json', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
