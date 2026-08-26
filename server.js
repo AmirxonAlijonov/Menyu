@@ -103,19 +103,30 @@ let ordersData = [];
 })();
 
 // ============================================
-// VERCEL SERVERLESS: har bir API so'rovida ma'lumotlarni
-// KV/fayldan yangilab olish (instance'lar o'rtasida sinxronlik uchun).
-// Admin panelida qilingan o'zgarish darhol asosiy saytda ko'rinishi uchun zarur.
+// VERCEL SERVERLESS: faqat KV (doimiy saqlash) yoqilgan bo'lsa, har bir
+// API so'rovida ma'lumotlarni KV dan yangilab olish kerak (instance'lar
+// o'rtasida sinxronlik uchun). Aks holda (lokal ishlab chiqish yoki KV
+// sozlanmagan muhit) xotira ichidagi `menuData` asosiy manba bo'ladi va
+// o'zgarishlar faylga yoziladi.
+//
+// MUHIM: har so'rovda fayldan qayta yuklash XATOLIKKA olib keladi! Masalan,
+// Vercel kabi muhitlarda fayl tizimi vaqtinchalik (ephemeral) bo'lib,
+// yozilgan o'zgarishlar keyingi so'rovda "o'chib" qoladi — natijada admin
+// panelda o'chirilgan mahsulot qayta paydo bo'ladi ("hechqayerdan o'chmaydi").
+// Shuning uchun KV yoqilmagan muhitda ma'lumotlar faqat xotira + fayl
+// orqali boshqariladi (startup da bir marta yuklanadi, yozishda saqlanadi).
 // ============================================
-app.use('/api/', async (req, res, next) => {
-    try {
-        menuData = await storage.loadMenuData();
-        ordersData = await storage.loadOrdersData();
-    } catch (err) {
-        console.error('❌ Ma\'lumotlarni yangilashda xato:', err.message);
-    }
-    next();
-});
+if (storage.kvEnabled) {
+    app.use('/api/', async (req, res, next) => {
+        try {
+            menuData = await storage.loadMenuData();
+            ordersData = await storage.loadOrdersData();
+        } catch (err) {
+            console.error('❌ Ma\'lumotlarni yangilashda xato:', err.message);
+        }
+        next();
+    });
+}
 
 // ============================================
 // KONFIGURATSIYA
@@ -757,10 +768,29 @@ app.post('/api/notify-offline', async (req, res) => {
 
 // Statik fayllarni serv qilish (API dan KEYIN)
 const publicPath = path.join(__dirname, 'public');
-if (fs.existsSync(publicPath)) {
-    app.use(express.static(publicPath, { maxAge: 86400000, etag: true, lastModified: true }));
+
+// Admin panel, service worker va manifest fayllari uchun keshni o'chirish.
+// Aks holda brauzer eski admin.js ni keshdan oladi va o'zgarishlar
+// (masalan, o'chirish tugmasi logikasi) ishlamay qoladi.
+function setNoCacheHeaders(res, filePath) {
+    if (/[\\/](admin|sw|manifest)(\.|$)/.test(filePath)) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    }
 }
-app.use(express.static(__dirname, { maxAge: 86400000, etag: true, lastModified: true }));
+
+const staticOptions = {
+    maxAge: 86400000,
+    etag: true,
+    lastModified: true,
+    setHeaders: setNoCacheHeaders
+};
+
+if (fs.existsSync(publicPath)) {
+    app.use(express.static(publicPath, staticOptions));
+}
+app.use(express.static(__dirname, staticOptions));
 
 // Explicit routes for PWA files (service worker and manifest)
 app.get('/sw.js', (req, res) => {
