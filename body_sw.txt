@@ -1,4 +1,4 @@
-                        // Service Worker - PWA uchun (cache-first strategiyasi)
+// Service Worker - PWA uchun (cache-first strategiyasi)
 const CACHE_NAME = 'alsafar-menu-v5';
 const STATIC_CACHE = 'alsafar-static-v4';
 const IMAGE_CACHE = 'alsafar-images-v2';
@@ -56,13 +56,18 @@ self.addEventListener('activate', (event) => {
 // ============================================
 // GLOBAL XATOLOLIKNI USHLASH
 // --------------------------------------------------
-// SW ichidagi har qanday kutilmagan xatolik (brauzer kengaytmalari,
-// tarmoq uzilishi va h.k.) sukut bilan o'tkaziladi va konsolga qizil
-// xato chiqarmaydi. Bu "sw.js da xatolik" ko'rinishidagi noto'g'ri
-// xabarni butunlay yo'q qiladi — sahifa ishlashi bu bilan buzilmaydi.
+// SW ichidagi kutilmagan xatoliklar (masalan, eski brauzer keshlari bilan
+// bog'liq) konsolga yoziladi va hech qachon sahifaning ishlashini
+// uzmaydi. Bu "sw.js da xatolik" ko'rinishidagi noto'g'ri xabarlardan
+// himoyalaydi.
 // ============================================
-self.addEventListener('error', () => {});
-self.addEventListener('unhandledrejection', () => {});
+self.addEventListener('error', (event) => {
+    console.error('[SW] Global xatolik:', event.message || event.error);
+});
+
+self.addEventListener('unhandledrejection', (event) => {
+    console.error('[SW] Promise xatoligi:', event.reason);
+});
 
 // Fetch event - cache-first for static, network-only for API
 self.addEventListener('fetch', (event) => {
@@ -77,11 +82,7 @@ self.addEventListener('fetch', (event) => {
     // Non-GET so'rovlarini (POST/PUT/DELETE) to'g'ridan-to'g'ri tarmoqqa yuborish.
     // Bularni keshlamaslik va har doim serverga yuborish kerak (buyurtma o'chirish/krish va boshqalar).
     if (event.request.method !== 'GET') {
-        // Tarmoq xatosi bo'lsa ham (offline va h.k.) promise reject
-        // bo'lib, konsolga "Uncaught (in promise)" chiqmasligi uchun .catch
-        event.respondWith(
-            fetch(event.request).catch(() => new Response('', { status: 502, statusText: 'Bad Gateway' }))
-        );
+        event.respondWith(fetch(event.request));
         return;
     }
 
