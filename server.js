@@ -188,6 +188,14 @@ function requireAdmin(req, res, next) {
     next();
 }
 
+// Async route lar uchun xato ushlash wrapper'i. Aks holda async funksiyadagi
+// reject Express tomonidan ushlanmaydi va so'rov "osilib" qoladi.
+function asyncHandler(fn) {
+    return (req, res, next) => {
+        Promise.resolve(fn(req, res, next)).catch(next);
+    };
+}
+
 // ============================================
 // API ROUTES
 // ============================================
@@ -444,7 +452,7 @@ app.get('/api/admin/menu/item/:id', requireAdmin, (req, res) => {
 });
 
 // Create new menu item
-app.post('/api/admin/menu', requireAdmin, async (req, res) => {
+app.post('/api/admin/menu', requireAdmin, asyncHandler(async (req, res) => {
     const { category, title, description, price, priceValue, image, hasSizes, sizes, hasWeight, baseWeight, pricePerGram, minWeight, available } = req.body;
     
     if (!category || !title || !price) {
@@ -476,10 +484,10 @@ app.post('/api/admin/menu', requireAdmin, async (req, res) => {
     
     console.log(`✅ New item created: ${title} in ${category}`);
     res.json({ success: true, item: newItem });
-});
+}));
 
 // Update menu item
-app.put('/api/admin/menu/:id', requireAdmin, async (req, res) => {
+app.put('/api/admin/menu/:id', requireAdmin, asyncHandler(async (req, res) => {
     const itemId = req.params.id;
     const updates = req.body;
     
@@ -511,10 +519,10 @@ app.put('/api/admin/menu/:id', requireAdmin, async (req, res) => {
     
     console.log(`✅ Item updated: ${foundItem.title}`);
     res.json({ success: true, item: foundItem });
-});
+}));
 
 // Delete menu item
-app.delete('/api/admin/menu/:id', requireAdmin, async (req, res) => {
+app.delete('/api/admin/menu/:id', requireAdmin, asyncHandler(async (req, res) => {
     const itemId = req.params.id;
     
     for (const category in menuData.items) {
@@ -528,7 +536,7 @@ app.delete('/api/admin/menu/:id', requireAdmin, async (req, res) => {
     }
     
     res.status(404).json({ error: 'Mahsulot topilmadi' });
-});
+}));
 
 // ============================================
 // ADMIN CATEGORIES API
@@ -540,7 +548,7 @@ app.get('/api/admin/categories', requireAdmin, (req, res) => {
 });
 
 // Create new category
-app.post('/api/admin/categories', requireAdmin, async (req, res) => {
+app.post('/api/admin/categories', requireAdmin, asyncHandler(async (req, res) => {
     const { id, name, icon } = req.body;
     
     if (!id || !name) {
@@ -557,10 +565,10 @@ app.post('/api/admin/categories', requireAdmin, async (req, res) => {
     
     console.log(`✅ Category created: ${name}`);
     res.json({ success: true, category: { id, ...menuData.categories[id] } });
-});
+}));
 
 // Update category
-app.put('/api/admin/categories/:id', requireAdmin, async (req, res) => {
+app.put('/api/admin/categories/:id', requireAdmin, asyncHandler(async (req, res) => {
     const categoryId = req.params.id;
     const { name, icon } = req.body;
     
@@ -573,10 +581,10 @@ app.put('/api/admin/categories/:id', requireAdmin, async (req, res) => {
     
     await storage.saveMenuData(menuData);
     res.json({ success: true, category: menuData.categories[categoryId] });
-});
+}));
 
 // Delete category
-app.delete('/api/admin/categories/:id', requireAdmin, async (req, res) => {
+app.delete('/api/admin/categories/:id', requireAdmin, asyncHandler(async (req, res) => {
     const categoryId = req.params.id;
     
     if (!menuData.categories[categoryId]) {
@@ -589,7 +597,7 @@ app.delete('/api/admin/categories/:id', requireAdmin, async (req, res) => {
     
     console.log(`✅ Category deleted: ${categoryId}`);
     res.json({ success: true });
-});
+}));
 
 // ============================================
 // ADMIN ORDERS API
@@ -611,7 +619,7 @@ app.get('/api/admin/orders/:id', requireAdmin, (req, res) => {
 });
 
 // Update order status
-app.put('/api/admin/orders/:id', requireAdmin, async (req, res) => {
+app.put('/api/admin/orders/:id', requireAdmin, asyncHandler(async (req, res) => {
     const { status } = req.body;
     const orderIndex = ordersData.findIndex(o => o.id === req.params.id);
     
@@ -624,10 +632,10 @@ app.put('/api/admin/orders/:id', requireAdmin, async (req, res) => {
     await storage.saveOrdersData(ordersData);
     
     res.json({ success: true, order: ordersData[orderIndex] });
-});
+}));
 
 // Delete order
-app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
+app.delete('/api/admin/orders/:id', requireAdmin, asyncHandler(async (req, res) => {
     const orderIndex = ordersData.findIndex(o => o.id === req.params.id);
 
     if (orderIndex === -1) {
@@ -639,13 +647,13 @@ app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
 
     console.log(`🗑️ Buyurtma o'chirildi: ${deleted.id}`);
     res.json({ success: true, order: deleted });
-});
+}));
 
 // ============================================
 // TELEGRAM WEBHOOK
 // ============================================
 
-app.post('/webhook', async (req, res) => {
+app.post('/webhook', asyncHandler(async (req, res) => {
     const message = req.body.message;
 
     if (!message || !message.text) {
@@ -718,7 +726,7 @@ app.post('/webhook', async (req, res) => {
     }
 
     res.send('OK');
-});
+}));
 
 // Offline buyurtma xabar endpointi - sayt offline rejimda buyurtma qilinganda telegram botga xabar yuboradi
 app.post('/api/notify-offline', async (req, res) => {
@@ -946,6 +954,16 @@ function getLocalIP() {
     }
     return 'localhost';
 }
+
+// Global xato ushlash middleware'i (asyncHandler orqali o'tkazilgan xatolar uchun).
+// Admin panelga tushunarli JSON xato qaytaradi (KV yozuv xatosi kabilar).
+app.use((err, req, res, next) => {
+    console.error('❌ Server xatosi:', err.message);
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(500).json({ success: false, error: err.message || 'Server xatosi' });
+});
 
 // Export the app for Vercel
 module.exports = app;

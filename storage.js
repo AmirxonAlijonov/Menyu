@@ -145,6 +145,9 @@ async function saveMenuData(data) {
             console.log('✅ Menu KV ga saqlandi');
         } catch (e) {
             console.error('❌ Menu KV ga saqlash xatosi:', e.message);
+            // Xatoni yuqoriga o'tkazamiz, shunda admin "muvaffaqiyat" deb
+            // adashmaydi va haqiqiy xato haqida xabardor bo'ladi.
+            throw new Error('KV ga saqlashda xatolik: ' + e.message);
         }
     }
 }
@@ -179,6 +182,7 @@ async function saveOrdersData(data) {
             await kv.set('orders', data);
         } catch (e) {
             console.error('❌ Orders KV saqlash xatosi:', e.message);
+            throw new Error('KV ga saqlashda xatolik: ' + e.message);
         }
     }
 }

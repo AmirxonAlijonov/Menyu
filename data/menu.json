@@ -33,6 +33,21 @@
         "hasSizes": false,
         "hasWeight": false,
         "available": true
+      },
+      {
+        "id": "salads_1787820609681",
+        "title": "Sezer salat",
+        "description": "Aysberg salat barglari, grilda pishirilgan yumshoq tovuq filyasi, cherri pomidorlari, qarsillama suxariklar va klassik Sezar sousi. Ustidan parmezan pishlog‘i sepiladi.",
+        "price": "30,000 so'm",
+        "priceValue": 30000,
+        "image": "https://tavsiyalar.uz/wp-content/uploads/2021/11/Sezar-salat.jpg",
+        "hasSizes": false,
+        "sizes": {},
+        "hasWeight": false,
+        "baseWeight": 1000,
+        "pricePerGram": 0,
+        "minWeight": 300,
+        "available": true
       }
     ],
     "mains1": [

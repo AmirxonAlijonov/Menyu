@@ -483,6 +483,10 @@ async function saveItem() {
         menuData = await apiRequest('/api/admin/menu');
         loadMenuItems(category);
         loadDashboard();
+        // O'zgarish darhol asosiy menyuda ko'rinishi uchun bir sondan keyin
+        // asosiy menyuga yo'naltiramiz.
+        showToast('🔄 O\'zgarish saqlandi. Asosiy menyuga o\'tilmoqda...');
+        setTimeout(() => { window.location.href = '/'; }, 1200);
     } catch (error) {
         showToast('Xatolik: ' + error.message, 'error');
     }
@@ -508,6 +512,10 @@ async function deleteItem(itemId) {
         menuData = await apiRequest('/api/admin/menu');
         loadMenuItems(item?.category || currentCategory);
         loadDashboard();
+        // O'zgarish darhol asosiy menyuda ko'rinishi uchun bir sondan keyin
+        // asosiy menyuga yo'naltiramiz.
+        showToast('🔄 O\'zgarish saqlandi. Asosiy menyuga o\'tilmoqda...');
+        setTimeout(() => { window.location.href = '/'; }, 1200);
     } catch (error) {
         showToast('Xatolik: ' + error.message, 'error');
     }
