@@ -401,10 +401,14 @@ app.post('/api/admin/logout', requireAdmin, (req, res) => {
 
 // Check admin session
 app.get('/api/admin/check', requireAdmin, (req, res) => {
+    // KV faqat production (Vercel) muhitida majburiy. Lokal ishlab chiqishda
+    // fayl saqlash yetarli, shuning uchun ogohlantirish ko'rsatilmaydi.
+    const kvRequired = !!(process.env.VERCEL || process.env.NODE_ENV === 'production');
     res.json({
         valid: true,
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        kvEnabled: storage.kvEnabled
+        kvEnabled: storage.kvEnabled,
+        kvRequired
     });
 });
 

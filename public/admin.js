@@ -128,7 +128,10 @@ async function checkSession() {
             if (res.ok) {
                 const data = await res.json();
                 currentSession = session;
-                if (data.kvEnabled === false) {
+                // Ogohlantirish faqat production (Vercel) muhitida, KV majburiy
+                // bo'lganda va u ulanmagan holatda ko'rsatiladi. Lokalda fayl
+                // saqlash yetarli, shuning uchun qizil banner chiqmaydi.
+                if (data.kvRequired && data.kvEnabled === false) {
                     showKvWarning();
                 } else {
                     hideKvWarning();
